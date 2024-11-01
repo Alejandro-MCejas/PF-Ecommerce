@@ -1,7 +1,11 @@
+import TeamMembers from "@/components/TeamMembers/TeamMembers";
 
 
 export default function Home() {
   return (
-   <div>home </div>
+   <div id="_next">
+    
+    <TeamMembers/>
+   </div>
   );
 }
