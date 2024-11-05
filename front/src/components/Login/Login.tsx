@@ -12,7 +12,7 @@ import validateRegisterForm from "@/helpers/validateRegister";
 import router from "next/router";
 import Link from "next/link";
 
-const Register = () => {
+const Login = () => {
   const router = useRouter();
   const initialState = {
     username: "",
@@ -88,53 +88,8 @@ const Register = () => {
           }}
         >
           <div className="bg-white rounded-3xl h-[80%] w-[70%] p-8 flex flex-col items-center space-y-4">
-            <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">Sign up</h1>
-            <p className="text-gray-700">Sign up to continue</p>
-
-            {/* Input para Email */}
-            <div className="relative w-[350px] mb-4">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={dataUser.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Email"
-                className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
-              />
-              {touched.email && errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
-            </div>
-
-            {/* Input para Contraseña */}
-            <div className="relative w-[350px] mb-4">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={dataUser.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Password"
-                className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
-              />
-              {touched.password && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
-            </div>
-
-            {/* Input para Repetir Contraseña */}
-            <div className="relative w-[350px] mb-4">
-              <input
-                id="passwordConfirm"
-                name="passwordConfirm"
-                type="password"
-                value={dataUser.passwordConfirm}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Repeat password"
-                className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
-              />
-              {touched.passwordConfirm && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
-            </div>
+            <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">Login</h1>
+            <p className="text-gray-700">Log in and dive into CyberGames</p>
 
             {/* Input para Nombre de Usuario */}
             <div className="relative w-[350px] mb-4">
@@ -150,31 +105,42 @@ const Register = () => {
               />
               {touched.username && errors.username && <span className="text-red-500 text-sm">{errors.username}</span>}
             </div>
-
-            {/* Input para Dirección */}
+            {/* Input para Contraseña */}
             <div className="relative w-[350px] mb-4">
               <input
-                id="address"
-                name="address"
-                type="text"
-                value={dataUser.address}
+                id="password"
+                name="password"
+                type="password"
+                value={dataUser.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="Address"
+                placeholder="Password"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {touched.address && errors.address && <span className="text-red-500 text-sm">{errors.address}</span>}
+              {touched.password && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
             </div>
-
+            
             {/* Botón de Registro */}
             <button className="w-[250px] h-[50px] bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50" type="submit" disabled={!isFormValid}>
-              Register
+             Login
             </button>
+            <div className="w-[1px] h-[20px] bg-white mx-2">o</div> 
+             {/* Botón de Registro */}
+             <button className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 flex items-center justify-center" type="submit" disabled={!isFormValid}>
+              Login
+                <img
+              src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
+             alt="Login Icon"
+             className="w-[20px] h-[20px] ml-2" // Ajusta el tamaño y margen según sea necesario
+             />
+             </button>
+
+
             {/* Mensaje de inicio de sesión */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
-              Already have an account?{' '}
-              <Link href="/login">
-                <span className="font-bold text-blue-500 cursor-pointer">Log in</span>
+              Don't have an account yet?{' '}
+              <Link href="/register">
+                <span className="font-bold text-blue-500 cursor-pointer">Sign up</span>
               </Link>
             </p>
           </div>
@@ -184,4 +150,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
