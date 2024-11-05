@@ -8,11 +8,11 @@ export class ProductsRepository{
     constructor(@InjectRepository(Products) private readonly productsRepository: Repository<Products>
 ){}
     async findAll(): Promise<Products[]>{
-        return this.productsRepository.find()
+        return await this.productsRepository.find()
     }
 
     async findOne(id:string): Promise<Products>{
-        return this.productsRepository.findOne({where:{id}})
+        return await this.productsRepository.findOne({where:{id}})
     }
     
     async create(products:Products): Promise<Products>{
@@ -22,8 +22,11 @@ export class ProductsRepository{
 
     async update(id:string ,product:Partial<Products>):Promise<Products>{
         await this.productsRepository.update(id, product)
-        return this.productsRepository.findOneBy({id});
+        return await this.productsRepository.findOneBy({id});
     }
 
+    async delete(id:string):Promise<void>{
+        await this.productsRepository.delete(id)
+    }
 
 }
