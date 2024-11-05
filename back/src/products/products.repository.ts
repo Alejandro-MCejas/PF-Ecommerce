@@ -10,4 +10,13 @@ export class ProductsRepository{
     async findAll(): Promise<Products[]>{
         return this.productsRepository.find()
     }
+
+    async findOne(id): Promise<Products>{
+        return this.productsRepository.findOne(id)
+    }
+    
+    async create(products:Products): Promise<Products>{
+        const newProduct = this.productsRepository.create(products)
+        return await this.productsRepository.save(newProduct)
+    }
 }

@@ -14,12 +14,12 @@ export class ProductsService {
     return this.productsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  findOne(id: string) {
+    return this.productsRepository.findOne(id);
   }
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  create(products: Products) {
+    return this.productsRepository.create(products);
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
