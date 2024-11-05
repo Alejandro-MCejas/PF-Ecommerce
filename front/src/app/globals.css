@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .shadow-glow {
+      text-shadow: 0px 0px 28.9px #D0B4FF;
+    }
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Tilt+Neon:wght@400&display=swap');
