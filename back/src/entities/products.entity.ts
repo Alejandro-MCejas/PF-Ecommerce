@@ -20,9 +20,9 @@ export class Products {
     @Column()
     stock: number;
 
-    // @ManyToOne(()=> Categories, (categories) => categories.products )
-    // categories: Categories;
+    @ManyToOne(()=> Categories, (categories) => categories.products )
+    categories: Categories;
 
-    // @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
-    // orderDetails: OrderDetails;
+    @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
+    orderDetails: OrderDetails;
 }
