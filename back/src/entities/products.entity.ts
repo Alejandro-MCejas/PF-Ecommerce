@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:'products'})
 export class Products {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id:string;
 
     @Column()
@@ -14,11 +14,14 @@ export class Products {
     @Column()
     description: string;
 
-    @Column()
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     price:number;
 
-    @Column()
+    @Column('int')
     stock: number;
+
+    // @Column()
+    // suscription:boolean;
 
     // @ManyToOne(()=> Categories, (categories) => categories.products )
     // categories: Categories;

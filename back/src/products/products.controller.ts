@@ -6,8 +6,6 @@ import { Products } from '../entities/products.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  
-
   @Get()
   findAll():Promise<Products[]> {
     return this.productsService.findAll();
