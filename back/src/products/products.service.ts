@@ -1,6 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
 
@@ -14,16 +12,22 @@ export class ProductsService {
     return this.productsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  findOne(id: string) {
+    return this.productsRepository.findOne(id);
   }
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  create(products: Products) {
+    return this.productsRepository.create(products);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  update(id:string, products:Partial<Products>){
+    const product = this.productsRepository.update(id, products)
+
+    if(!product){
+      throw new NotFoundException(`Products with ID ${id} not found`);
+    }
+    
+    return product;
   }
 
   remove(id: number) {
