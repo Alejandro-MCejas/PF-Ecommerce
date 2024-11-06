@@ -5,11 +5,12 @@ import { ProductsRepository } from './products.repository';
 import { Products } from 'src/entities/products.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsSeed } from 'src/seed/products/products.seed';
+import { CloudinaryConfig } from 'src/config/cloudinary';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Products])],
   controllers: [ProductsController],
-  providers: [ProductsService, ProductsRepository, ProductsSeed],
+  providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig],
   exports: [TypeOrmModule],
 })
 export class ProductsModule {}
