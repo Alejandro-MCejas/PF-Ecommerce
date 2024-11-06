@@ -1,6 +1,4 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrderDetails } from "./orderDetails.entity";
-// import { OrderDetails } from "./orderDetails.entity";
 
 @Entity({name:'products'})
 export class Products {
@@ -10,8 +8,8 @@ export class Products {
     @Column()
     name: string;
 
-    @Column()
-    image: string;
+    @Column('text', { array: true,  nullable: false  })
+    image: string[]| string;
 
     @Column()
     description: string;
