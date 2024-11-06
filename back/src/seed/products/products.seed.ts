@@ -9,7 +9,6 @@ export class ProductsSeed{
     constructor(@InjectRepository(Products) private readonly productsRepository:Repository<Products>){}
 
     async seed() {
-        // Obtener los nombres de los productos existentes de manera eficiente
         const existingProductNames = (
             await this.productsRepository.find({ select: ['name'] })
         ).map((product) => product.name);
@@ -20,7 +19,7 @@ export class ProductsSeed{
             if (!existingProductNames.includes(productData.name)) {
                 const product = new Products();
                 product.name = productData.name;
-                product.image = productData.image;
+                product.image = [productData.image];
                 product.description = productData.description;
                 product.price = productData.price;
                 product.stock = productData.stock;

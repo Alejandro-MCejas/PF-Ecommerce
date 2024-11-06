@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-// import { OrderDetails } from "./orderDetails.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { OrderDetails } from "./orderDetails.entity";
 
 @Entity({name:'products'})
 export class Products {
@@ -9,8 +9,8 @@ export class Products {
     @Column()
     name: string;
 
-    @Column()
-    image: string;
+    @Column('simple-array')
+    image: string[];
 
     @Column()
     description: string;
@@ -26,9 +26,7 @@ export class Products {
 
     // @ManyToOne(()=> Categories, (categories) => categories.products )
     // categories: Categories;
-    // @ManyToOne(()=> Categories, (categories) => categories.products )
-    // categories: Categories;
 
-    // @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
-    // orderDetails: OrderDetails;
+    @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
+    orderDetails: OrderDetails;
 }
