@@ -6,8 +6,6 @@ import { Products } from '../entities/products.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  
-
   @Get()
   findAll():Promise<Products[]> {
     return this.productsService.findAll();
@@ -29,7 +27,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.productsService.delete(id);
   }
 }
