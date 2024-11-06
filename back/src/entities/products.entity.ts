@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+// import { OrderDetails } from "./orderDetails.entity";
 
 @Entity({name:'products'})
 export class Products {
@@ -23,6 +24,8 @@ export class Products {
     // @Column()
     // suscription:boolean;
 
+    // @ManyToOne(()=> Categories, (categories) => categories.products )
+    // categories: Categories;
     // @ManyToOne(()=> Categories, (categories) => categories.products )
     // categories: Categories;
 
