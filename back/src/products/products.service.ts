@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly productsRepository: ProductsRepository){
-
-  }
+  constructor(private readonly productsRepository: ProductsRepository,
+    private readonly cloudinaryService:CloudinaryService,
+  )
+  {}
 
   findAll(): Promise<Products[]> {
     return this.productsRepository.findAll();
@@ -16,8 +18,17 @@ export class ProductsService {
     return this.productsRepository.findOne(id);
   }
 
-  create(products: Products) {
-    return this.productsRepository.create(products);
+  async create(products: Products, files: Express.Multer.File[]): Promise<Products> {
+    const imageUrls: string[] = [];
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const imageUrl = await this.cloudinaryService.uploadImage(file); 
+        imageUrls.push(imageUrl.secure_url); 
+      }
+    }
+
+    return this.productsRepository.create(products, imageUrls);
   }
 
   update(id:string, products:Partial<Products>){

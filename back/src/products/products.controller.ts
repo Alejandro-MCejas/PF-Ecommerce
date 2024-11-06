@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Products } from '../entities/products.entity';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
@@ -17,8 +18,9 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() products:Products) {
-    return this.productsService.create(products);
+  @UseInterceptors(FilesInterceptor('images', 1))
+  async create(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
+    return this.productsService.create(products, files);
   }
 
   @Put(':id')
