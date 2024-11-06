@@ -30,7 +30,11 @@ export class ProductsService {
     return product;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  delete(id: string) {
+    const product = this.productsRepository.delete(id);
+
+    if(!product){
+      throw new NotFoundException(`Products with ID ${id} not found`);
+    }
   }
 }
