@@ -8,28 +8,28 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll():Promise<Products[]> {
-    return this.productsService.findAll();
+  async findAll():Promise<Products[]> {
+    return  await this.productsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.productsService.findOne(id);
   }
 
   @Post()
   @UseInterceptors(FilesInterceptor('images', 1))
   async create(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
-    return this.productsService.create(products, files);
+    return await this.productsService.create(products, files);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() products:Products) {
-    return this.productsService.update(id,products);
+  async update(@Param('id') id: string, @Body() products:Products) {
+    return await this.productsService.update(id,products);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.productsService.delete(id);
+  async delete(@Param('id') id: string) {
+    return await this.productsService.delete(id);
   }
 }

@@ -10,12 +10,12 @@ export class ProductsService {
   )
   {}
 
-  findAll(): Promise<Products[]> {
-    return this.productsRepository.findAll();
+  async findAll(): Promise<Products[]> {
+    return await this.productsRepository.findAll();
   }
 
-  findOne(id: string) {
-    return this.productsRepository.findOne(id);
+  async findOne(id: string) {
+    return await this.productsRepository.findOne(id);
   }
 
   async create(products: Products, files: Express.Multer.File[]): Promise<Products> {
@@ -28,11 +28,11 @@ export class ProductsService {
       }
     }
 
-    return this.productsRepository.create(products, imageUrls);
+    return await this.productsRepository.create(products, imageUrls);
   }
 
-  update(id:string, products:Partial<Products>){
-    const product = this.productsRepository.update(id, products)
+  async update(id:string, products:Partial<Products>){
+    const product = await this.productsRepository.update(id, products)
 
     if(!product){
       throw new NotFoundException(`Products with ID ${id} not found`);
@@ -41,11 +41,13 @@ export class ProductsService {
     return product;
   }
 
-  delete(id: string) {
-    const product = this.productsRepository.delete(id);
-
+  async delete(id: string):Promise<Products> {
+    const product = await this.productsRepository.findOne(id)
+    
     if(!product){
       throw new NotFoundException(`Products with ID ${id} not found`);
     }
+
+    return this.productsRepository.delete(id);
   }
 }

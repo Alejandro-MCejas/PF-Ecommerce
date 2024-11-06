@@ -30,8 +30,10 @@ export class ProductsRepository{
         return await this.productsRepository.findOneBy({id});
     }
 
-    async delete(id:string):Promise<void>{
-        await this.productsRepository.delete(id)
+    async delete(id:string):Promise<Products>{
+        const product = await this.productsRepository.findOne({where:{id}})
+        await this.productsRepository.delete(product)
+        return product
     }
 
 }
