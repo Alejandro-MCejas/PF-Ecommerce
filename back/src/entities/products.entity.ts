@@ -10,8 +10,8 @@ export class Products {
     @Column()
     name: string;
 
-    @Column()
-    image: string;
+    @Column('text', { array: true,  nullable: false  })
+    image: string[]| string;
 
     @Column()
     description: string;
