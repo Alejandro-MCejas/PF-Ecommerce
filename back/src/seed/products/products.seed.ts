@@ -19,7 +19,7 @@ export class ProductsSeed{
             if (!existingProductNames.includes(productData.name)) {
                 const product = new Products();
                 product.name = productData.name;
-                product.image = [productData.image];
+                product.image = productData.image;
                 product.description = productData.description;
                 product.price = productData.price;
                 product.stock = productData.stock;
