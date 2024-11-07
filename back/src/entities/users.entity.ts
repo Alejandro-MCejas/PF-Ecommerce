@@ -23,6 +23,6 @@ export class Users {
     @Column({ type: 'varchar' })
     phone: string
 
-    @OneToMany(()=> Orders, orders => orders.user )
+    @OneToMany(() => Orders, order => order.user)
     orders: Orders[]
 }

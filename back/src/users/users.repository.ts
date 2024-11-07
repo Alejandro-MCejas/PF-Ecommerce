@@ -6,8 +6,6 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 
 
-
-
 @Injectable()
 export class UsersRepository {
     constructor(@InjectRepository(Users) private readonly usersRepository: Repository<Users>) { }
@@ -27,7 +25,7 @@ export class UsersRepository {
     async findOneUserRepository(id: string) {
         const user = await this.usersRepository.findOneBy({ id })
 
-        return await user
+        return user
     }
 
     async updateUserRepository(id: string, user: UpdateUserDto) {

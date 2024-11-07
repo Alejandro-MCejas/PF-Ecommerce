@@ -7,10 +7,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @Post()
-  async createUserController(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.createUserService(createUserDto);
-  }
 
   @Get()
   async findAllUsersController() {
@@ -22,13 +18,18 @@ export class UsersController {
     return await this.usersService.findOneUserService(id);
   }
 
+  @Post()
+  async createUserController(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUserService(createUserDto);
+  }
+
   @Put(':id')
   async updateUserController(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUserService(id, updateUserDto);
   }
 
   @Delete(':id')
-  async removeUserController(@Param('id') id: string) {
-    return await this.usersService.removeUserService(id);
+  async deleteUserController(@Param('id') id: string) {
+    return await this.usersService.deleteUserService(id);
   }
 }
