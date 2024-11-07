@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Products } from "../entities/products.entity";
-import { Repository} from "typeorm";
+import { In, MoreThan, Repository} from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
@@ -34,6 +34,16 @@ export class ProductsRepository{
         const product = await this.productsRepository.findOne({where:{id}})
         await this.productsRepository.delete(product)
         return product
+    }
+
+    async findByIds(ids: string[]){
+        return await this.productsRepository.find({
+            where: {
+                id: In(ids),
+                stock: MoreThan(0)
+            },
+            select: ['id', 'price', 'stock']
+        })
     }
 
 }
