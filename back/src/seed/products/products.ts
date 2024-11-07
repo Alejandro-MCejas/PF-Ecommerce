@@ -1,7 +1,7 @@
 export const productsMock = [
     {
         name: "The Legend of Zelda: Breath of the Wild",
-        image: "https://example.com/images/zelda.jpg",
+        image: ["https://example.com/images/zelda.jpg"],
         description: "Un juego de aventura en mundo abierto para Nintendo Switch.",
         price: 59.99,
         stock: 25,
@@ -9,7 +9,7 @@ export const productsMock = [
     },
     {
         name: "God of War: Ragnarok",
-        image: "https://example.com/images/godofwar.jpg",
+        image: ["https://example.com/images/godofwar.jpg"],
         description: "Juego de acción y aventura épico para PlayStation.",
         price: 69.99,
         stock: 30,
@@ -17,7 +17,8 @@ export const productsMock = [
     },
     {
         name: "Minecraft",
-        image: "https://example.com/images/minecraft.jpg",
+        image: ["https://res.cloudinary.com/dvpenabty/image/upload/v1730924299/oh1nhzyqhe42rz469fpn.png",
+        "https://res.cloudinary.com/dvpenabty/image/upload/v1730924299/wgvbotbkzlphp9vch9ff.jpg"],
         description: "Un juego de construcción y exploración en un mundo infinito.",
         price: 26.99,
         stock: 100,
@@ -25,7 +26,7 @@ export const productsMock = [
     },
     {
         name: "Cyberpunk 2077",
-        image: "https://example.com/images/cyberpunk.jpg",
+        image: ["https://example.com/images/cyberpunk.jpg"],
         description: "Juego de rol futurista en un mundo abierto.",
         price: 39.99,
         stock: 45,
@@ -33,7 +34,7 @@ export const productsMock = [
     },
     {
         name: "FIFA 23",
-        image: "https://example.com/images/fifa23.jpg",
+        image: ["https://example.com/images/fifa23.jpg"],
         description: "El juego de simulación de fútbol más popular.",
         price: 59.99,
         stock: 70,
@@ -41,7 +42,7 @@ export const productsMock = [
     },
     {
         name: "Elden Ring",
-        image: "https://example.com/images/eldenring.jpg",
+        image: ["https://example.com/images/eldenring.jpg"],
         description: "Aventura épica en un mundo abierto con combates desafiantes.",
         price: 59.99,
         stock: 20,
@@ -49,7 +50,7 @@ export const productsMock = [
     },
     {
         name: "Red Dead Redemption 2",
-        image: "https://example.com/images/rdr2.jpg",
+        image: ["https://example.com/images/rdr2.jpg"],
         description: "Juego de aventura en el salvaje oeste.",
         price: 49.99,
         stock: 35,
@@ -57,7 +58,7 @@ export const productsMock = [
     },
     {
         name: "Among Us",
-        image: "https://example.com/images/amongus.jpg",
+        image: ["https://example.com/images/amongus.jpg"],
         description: "Juego de deducción social para grupos.",
         price: 4.99,
         stock: 500,
@@ -65,7 +66,7 @@ export const productsMock = [
     },
     {
         name: "Horizon Forbidden West",
-        image: "https://example.com/images/horizon.jpg",
+        image: ["https://example.com/images/horizon.jpg"],
         description: "Aventura postapocalíptica en un mundo abierto.",
         price: 59.99,
         stock: 40,
@@ -73,7 +74,7 @@ export const productsMock = [
     },
     {
         name: "Fortnite",
-        image: "https://example.com/images/fortnite.jpg",
+        image: ["https://example.com/images/fortnite.jpg"],
         description: "Juego de batalla real multijugador gratuito.",
         price: 0.00,
         stock: 9999,

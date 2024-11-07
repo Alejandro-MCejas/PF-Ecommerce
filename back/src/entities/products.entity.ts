@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
-// import { OrderDetails } from "./orderDetails.entity";
+
 
 @Entity({ name: 'products' })
 export class Products {
@@ -10,8 +11,8 @@ export class Products {
     @Column()
     name: string;
 
-    @Column()
-    image: string;
+    @Column('text', { array: true,  nullable: false  })
+    image: string[]| string;
 
     @Column()
     description: string;
@@ -25,9 +26,10 @@ export class Products {
     // @Column()
     // suscription:boolean;
 
-    @ManyToOne(() => Categories, category => category.products)
-    category: Categories;
+   
+    @ManyToOne(()=> Categories, (categories) => categories.products )
+    categories: Categories;
 
-    // @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
-    // orderDetails: OrderDetails;
+    @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
+    orderDetails: OrderDetails;
 }

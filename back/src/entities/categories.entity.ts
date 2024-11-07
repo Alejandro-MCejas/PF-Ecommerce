@@ -12,6 +12,6 @@ export class Categories{
     @Column()
     name:string
 
-    @OneToMany(() => Products, product => product.category)
+    @OneToMany(() => Products, product => product.categories)
     products: Products[]
 }
