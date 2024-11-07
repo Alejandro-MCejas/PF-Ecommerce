@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
+import { ProductId } from 'src/orders/dto/create-order.dto';
 
 @Injectable()
 export class ProductsService {
@@ -37,4 +38,26 @@ export class ProductsService {
       throw new NotFoundException(`Products with ID ${id} not found`);
     }
   }
+
+  async getProductsWithStock(productsIds: Array<ProductId>){
+    const ids = productsIds.map(product => product.id)
+    return await this.productsRepository.findByIds(ids)
+  }
+
+  async reduceProductStockService(id: string) {
+    const product = await this.findOne(id)
+
+    if (!product) {
+        throw new Error('El producto no existe')
+    }
+
+    if (product.stock === 0) {
+        throw new Error('El producto no tiene stock')
+    }
+
+    await this.productsRepository.update(id, {
+        stock: product.stock - 1
+    })
+
+}
 }
