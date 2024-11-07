@@ -43,7 +43,7 @@ const NavBar = () => {
         <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Subscription
         </Link>
-        <Link href="/games" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
         <Link href="/consoles" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">

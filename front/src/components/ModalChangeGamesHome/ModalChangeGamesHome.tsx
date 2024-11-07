@@ -46,7 +46,6 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ role, games }) => 
 
     if (role !== 'admin') {
         return (
-
             <div className="w-[1500px] flex justify-evenly items-center">
                 <div className="w-full flex justify-evenly items-center">
                     {selectedGames.map((game, index) => (
