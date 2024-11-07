@@ -8,28 +8,29 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  async findAll():Promise<Products[]> {
-    return  await this.productsService.findAll();
+  async findProducts():Promise<Products[]> {
+    return  await this.productsService.findProducts();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.productsService.findOne(id);
+  async findOneProducts(@Param('id') id: string) {
+    return await this.productsService.findOneProducts(id);
   }
 
   @Post()
   @UseInterceptors(FilesInterceptor('images', 1))
-  async create(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
-    return await this.productsService.create(products, files);
+  async createProducts(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
+    return await this.productsService.createProducts(products, files);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() products:Products) {
-    return await this.productsService.update(id,products);
+  @UseInterceptors(FilesInterceptor('images', 3))
+  async updateProducts(@Param('id') id: string, @Body() products:Products, @UploadedFiles() files: Express.Multer.File[]) {
+    return await this.productsService.updateProducts(id,products, files);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.productsService.delete(id);
+  async deleteProducts(@Param('id') id: string) {
+    return await this.productsService.deleteProducts(id);
   }
 }
