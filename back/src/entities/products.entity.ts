@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Categories } from "./categories.entity";
 // import { OrderDetails } from "./orderDetails.entity";
 
-@Entity({name:'products'})
+@Entity({ name: 'products' })
 export class Products {
     @PrimaryGeneratedColumn('uuid')
-    id:string;
+    id: string;
 
     @Column()
     name: string;
@@ -16,7 +17,7 @@ export class Products {
     description: string;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
-    price:number;
+    price: number;
 
     @Column('int')
     stock: number;
@@ -24,10 +25,8 @@ export class Products {
     // @Column()
     // suscription:boolean;
 
-    // @ManyToOne(()=> Categories, (categories) => categories.products )
-    // categories: Categories;
-    // @ManyToOne(()=> Categories, (categories) => categories.products )
-    // categories: Categories;
+    @ManyToOne(() => Categories, category => category.products)
+    category: Categories;
 
     // @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
     // orderDetails: OrderDetails;
