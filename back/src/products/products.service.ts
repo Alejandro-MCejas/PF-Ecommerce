@@ -10,12 +10,19 @@ export class ProductsService {
   )
   {}
 
-  async findAll(): Promise<Products[]> {
+  async findProducts(): Promise<Products[]> {
     return await this.productsRepository.findProductsData();
   }
 
-  async findOne(id: string) {
-    return await this.productsRepository.findOneByProductsId(id);
+  async findOneProducts(id: string) {
+    const ProductId =  await this.productsRepository.findOneByProductsId(id);
+
+    if(!ProductId){
+      throw new NotFoundException(`Product with ID ${id} not found`)
+    }
+
+    return this.productsRepository.findOneByProductsId(id);
+    
   }
 
   async createProducts(products: Products, files: Express.Multer.File[]): Promise<Products> {
