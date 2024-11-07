@@ -20,10 +20,10 @@ export default function RootLayout({
       <body 
         className="antialiased flex flex-col min-h-screen"
       >
-        <main className="flex-grow ">
-          {children}
-        </main>
-        <Footer />
+
+        {children}
+
+        <Footer/>
       </body>
     </html>
   );

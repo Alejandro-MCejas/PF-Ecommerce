@@ -79,7 +79,7 @@ const Register = () => {
   }, [dataUser]);
 
   return (
-    <div className="flex flex-col justify-center items-center bg-backgroundLayout min-h-screen">
+    <div className="flex flex-col justify-center items-center bg-black min-h-screen">
       <form onSubmit={handleSubmit}>
         <div
           className="w-[700px] h-[770px] rounded-lg p-6 flex items-center justify-center bg-cover bg-center"

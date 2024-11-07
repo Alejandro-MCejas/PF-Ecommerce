@@ -50,12 +50,7 @@ const products = () => {
                     <p className="second-text text-sm">Additional info</p>
                 </div>
             </div>
-
-
         </div>
-
-
-
     )
 }
 export default products
