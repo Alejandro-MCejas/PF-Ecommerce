@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Orders } from './orders.entity'
 
 
 @Entity({ name: 'users' })
@@ -22,6 +23,6 @@ export class Users {
     @Column({ type: 'varchar' })
     phone: string
 
-    // @OneToMany()
-    // orders: Orders[]
+    @OneToMany(() => Orders, order => order.user)
+    orders: Orders[]
 }

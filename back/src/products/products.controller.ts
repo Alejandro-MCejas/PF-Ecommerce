@@ -1,33 +1,36 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Products } from '../entities/products.entity';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll():Promise<Products[]> {
-    return this.productsService.findAll();
+  async findProducts():Promise<Products[]> {
+    return  await this.productsService.findProducts();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+  async findOneProducts(@Param('id') id: string) {
+    return await this.productsService.findOneProducts(id);
   }
 
   @Post()
-  create(@Body() products:Products) {
-    return this.productsService.create(products);
+  @UseInterceptors(FilesInterceptor('images', 1))
+  async createProducts(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
+    return await this.productsService.createProducts(products, files);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() products:Products) {
-    return this.productsService.update(id,products);
+  @UseInterceptors(FilesInterceptor('images', 3))
+  async updateProducts(@Param('id') id: string, @Body() products:Products, @UploadedFiles() files: Express.Multer.File[]) {
+    return await this.productsService.updateProducts(id,products, files);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.productsService.delete(id);
+  async deleteProducts(@Param('id') id: string) {
+    return await this.productsService.deleteProducts(id);
   }
 }
