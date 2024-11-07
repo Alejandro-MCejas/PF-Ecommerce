@@ -11,14 +11,14 @@ export class ProductsService {
   {}
 
   async findAll(): Promise<Products[]> {
-    return await this.productsRepository.findAll();
+    return await this.productsRepository.findProductsData();
   }
 
   async findOne(id: string) {
-    return await this.productsRepository.findOne(id);
+    return await this.productsRepository.findOneByProductsId(id);
   }
 
-  async create(products: Products, files: Express.Multer.File[]): Promise<Products> {
+  async createProducts(products: Products, files: Express.Multer.File[]): Promise<Products> {
     const imageUrls: string[] = [];
 
     if (files && files.length > 0) {
@@ -28,26 +28,37 @@ export class ProductsService {
       }
     }
 
-    return await this.productsRepository.create(products, imageUrls);
+    return await this.productsRepository.createProductsData(products, imageUrls);
   }
 
-  async update(id:string, products:Partial<Products>){
-    const product = await this.productsRepository.update(id, products)
+  async updateProducts(id:string, products:Partial<Products>, files: Express.Multer.File[]): Promise<Products>{
+    const product = await this.productsRepository.findOneByProductsId(id);
 
     if(!product){
       throw new NotFoundException(`Products with ID ${id} not found`);
     }
     
-    return product;
+    const imageUrls: string[] = Array.isArray(product.image) ? [...product.image] : []
+    if(files && files.length > 0){
+      for (const file of files) {
+        const imageUrl = await this.cloudinaryService.uploadImage(file); 
+        imageUrls.push(imageUrl.secure_url); 
+      }
+    }
+    const updatedData = {
+      ...products,
+      image: imageUrls,
+    };
+    return await this.productsRepository.updateProductsData(id, updatedData)
   }
 
-  async delete(id: string):Promise<Products> {
-    const product = await this.productsRepository.findOne(id)
+  async deleteProducts(id: string):Promise<Products> {
+    const product = await this.productsRepository.findOneByProductsId(id)
     
     if(!product){
       throw new NotFoundException(`Products with ID ${id} not found`);
     }
 
-    return this.productsRepository.delete(id);
+    return this.productsRepository.deleteProductsData(id);
   }
 }
