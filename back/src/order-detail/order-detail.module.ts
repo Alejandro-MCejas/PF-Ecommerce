@@ -9,5 +9,6 @@ import { OrderDetailRepository } from './order-detail.repository';
   imports: [TypeOrmModule.forFeature([OrderDetails])],
   controllers: [OrderDetailController],
   providers: [OrderDetailService, OrderDetailRepository],
+  exports: [OrderDetailService]
 })
 export class OrderDetailModule {}
