@@ -18,7 +18,7 @@ interface IUser {
 export const exampleProduct: IProduct = {
     id:1,
     name: 'Mario Bross',
-    imagenBannerUrl: 'Example string',
+    imagenesGaleria: ['Example string'],
     category: 'Example category',
     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     stock:4,
@@ -30,7 +30,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:1,
         name: 'It takes two',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg','https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg','https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg'],
         category: 'Example category',
         price:60,
         stock:4,
@@ -40,7 +40,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:2,
         name: 'Dragon Ball Z',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg',"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQDwDCsGkzzPamCHzP9MeQoZN22-VcVhuv7A&s",'https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg'],
         category: 'Shooter',
         price:60,
         stock:2,
@@ -50,7 +50,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:3,
         name: 'God of War',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg','https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg','https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg'],
         category: 'Action',
         price:60,
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -60,7 +60,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:4,
         name: 'Rayman',
-        imagenBannerUrl: 'https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg',
+        imagenesGaleria: ['https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg','https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg','https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg'],
         category: 'Adventure',        
         price:60,
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -70,7 +70,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:5,
         name: 'It takes two',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg','https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg','https://i.pinimg.com/originals/50/c9/32/50c932da1c89102a7efbcfdf8a39a0b0.jpg'],
         category: 'Example category',
         price:60,
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -80,7 +80,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:6,
         name: 'Dragon Ball Z',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg','https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg','https://i.pinimg.com/originals/cb/4d/5f/cb4d5f5d42ea7cb3f5ddef8f29408128.jpg'],
         category: 'Shooter',
         price:60,
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -90,7 +90,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:7,
         name: 'God of War',
-        imagenBannerUrl: 'https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg',
+        imagenesGaleria: ['https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg','https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg','https://i.pinimg.com/originals/05/b5/59/05b55910e492663c34a7a7409138171f.jpg'],
         category: 'Action',
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         price:60,
@@ -100,7 +100,7 @@ export const exampleArrayProducs: IProduct[] = [
     {
         id:8,
         name: 'Rayman',
-        imagenBannerUrl: 'https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg',
+        imagenesGaleria: ['https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg','https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg','https://cdn.mobygames.com/covers/3887468-rayman-3-hoodlum-havoc-playstation-2-front-cover.jpg'],
         category: 'Adventure',
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         price:60,
