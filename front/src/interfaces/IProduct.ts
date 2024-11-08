@@ -2,7 +2,7 @@
 export interface IProduct {
     id:number,
     name: string,
-    imagenBannerUrl: string,
+    imagenesGaleria: string[],
     category: string,
     price:number,
     stock:number,
