@@ -5,6 +5,8 @@ import { Products } from '../entities/products.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UUIDValidationPipe } from 'src/validator/uuid-validation.pipes';
 import { HttpExceptionFilter } from 'src/validator/manejoErrores';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 @UseFilters(HttpExceptionFilter)
@@ -23,13 +25,13 @@ export class ProductsController {
 
   @Post()
   @UseInterceptors(FilesInterceptor('images', 3))
-  async createProducts(@Body() products: Products, @UploadedFiles() files: Express.Multer.File[]) {
+  async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
     return await this.productsService.createProducts(products, files);
   }
 
   @Put(':id')
   @UseInterceptors(FilesInterceptor('images', 3))
-  async updateProducts(@Param('id') id: string, @Body() products:Products, @UploadedFiles() files: Express.Multer.File[]) {
+  async updateProducts(@Param('id') id: string, @Body() products:UpdateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
     return await this.productsService.updateProducts(id,products, files);
   }
 

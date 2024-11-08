@@ -3,6 +3,8 @@ import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
 import { ProductId } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -26,7 +28,7 @@ export class ProductsService {
     
   }
 
-  async createProducts(products: Products, files: Express.Multer.File[]): Promise<Products> {
+  async createProducts(products: CreateProductDto, files: Express.Multer.File[]): Promise<Products> {
     const imageUrls: string[] = [];
 
     if (files && files.length > 0) {
@@ -39,7 +41,7 @@ export class ProductsService {
     return await this.productsRepository.createProductsData(products, imageUrls);
   }
 
-  async updateProducts(id:string, products:Partial<Products>, files: Express.Multer.File[]): Promise<Products>{
+  async updateProducts(id:string, products:UpdateProductDto, files: Express.Multer.File[]): Promise<Products>{
     const product = await this.productsRepository.findOneByProductsId(id);
 
     if(!product){
