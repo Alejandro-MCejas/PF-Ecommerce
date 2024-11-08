@@ -20,8 +20,23 @@ export class OrdersService {
   }
 
   async findOneOrderService(id: string) {
-    return await this.ordersRepository.findOneOrderRepository(id);
+    const order = await this.ordersRepository.findOneOrderRepository(id)
+
+    if(!order){
+      throw new Error('La orden no existe')
+    }
+
+    const orderDetail = await this.orderDetailService.findOneOrderDetailService(order.id)
+
+    const orderResponse = {
+      order,
+      orderDetail: orderDetail.products
+    }
+
+    return orderResponse
   }
+
+
 
   async createOrderService(createOrderDto: CreateOrderDto) {
     const { userId, products } = createOrderDto

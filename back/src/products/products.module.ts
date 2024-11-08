@@ -13,6 +13,6 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
   imports: [TypeOrmModule.forFeature([Products]), CloudinaryModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig, CloudinaryController],
-  exports: [TypeOrmModule],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
