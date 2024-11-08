@@ -49,7 +49,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ role, games }) => 
             <div className="w-[1500px] flex justify-evenly items-center">
                 <div className="w-full flex justify-evenly items-center">
                     {selectedGames.map((game, index) => (
-                        <HomeCardGame key={index} imagenUrl={game.imagenBannerUrl} />
+                        <HomeCardGame key={index} imagenUrl={game.imagenesGaleria[0]} />
                     ))}
                 </div>
             </div>
@@ -61,7 +61,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ role, games }) => 
             <div className="flex flex-col w-[1500px] justify-center items-center">
                 <div className="w-full flex justify-evenly items-center">
                     {selectedGames.map((game, index) => (
-                        <HomeCardGame key={index} imagenUrl={game.imagenBannerUrl} />
+                        <HomeCardGame key={index} imagenUrl={game.imagenesGaleria[0]} />
                     ))}
                 </div>
                 <div className="mt-10">
