@@ -6,9 +6,11 @@ import Search from '../Search';
 import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '@/context/Authcontext';
 
 const NavBar = () => {
   const { cartCount } = useCart();
+  //const { role } = useAuth(); // Assuming you have an auth context
 
   const role = "admin"
   return (
@@ -68,7 +70,7 @@ const NavBar = () => {
               Subscription
             </Link>
             <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              {
+             {
                 cartCount === 0 ? (
                   <FontAwesomeIcon icon={faCartShopping} />
                 ) : (
@@ -78,6 +80,8 @@ const NavBar = () => {
                   </>
                 )
               }
+                <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
+  {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-black">{cartCount}</span>}
             </Link>
           </div>
         )

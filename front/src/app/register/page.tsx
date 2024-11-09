@@ -9,30 +9,35 @@ import { IRegisterProps } from "@/interfaces/IRegisterProp";
 import { IRegisterError } from "@/interfaces/IRegisterError";
 import { useAuth } from "@/context/Authcontext";
 import validateRegisterForm from "@/helpers/validateRegister";
-import router from "next/router";
 import Link from "next/link";
 
 const Register = () => {
   const router = useRouter();
+
+  // Estado inicial del formulario
   const initialState = {
     username: "",
     email: "",
     password: "",
     passwordConfirm: "", 
     address: "",
+    phone: ""
   };
+
   const [dataUser, setDataUser] = useState<IRegisterProps>(initialState);
   const [errors, setErrors] = useState<IRegisterError>(initialState);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+  const [touched, setTouched] = useState<{ [key in keyof IRegisterProps]?: boolean }>({});
 
+  // Validación del formulario en cada cambio
   useEffect(() => {
     setIsFormValid(
       dataUser.username.trim() !== '' &&
       dataUser.email.trim() !== '' &&
       dataUser.address.trim() !== '' &&
       dataUser.password?.trim() !== '' &&
-      dataUser.passwordConfirm?.trim() !== ''  
+      dataUser.passwordConfirm?.trim() !== '' && 
+      dataUser.phone?.trim() !== ''
     );
   }, [dataUser]);
 
@@ -42,44 +47,60 @@ const Register = () => {
       ...dataUser,
       [name]: value,
     });
+
     // Validación de la repetición de la contraseña
-  if (name === "passwordConfirm") {
-    if (value !== dataUser.password) {
-      setErrors({
-        ...errors,
-        passwordConfirm: "Las contraseñas no coinciden"
-      });
-    } else {
-      setErrors({
-        ...errors,
-        passwordConfirm: ""
-      });
+    if (name === "passwordConfirm") {
+      if (value !== dataUser.password) {
+        setErrors({
+          ...errors,
+          passwordConfirm: "Las contraseñas no coinciden"
+        });
+      } else {
+        setErrors({
+          ...errors,
+          passwordConfirm: ""
+        });
+      }
     }
-  }
   };
 
-
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = event.target as { name: keyof IRegisterProps };
+    const { name } = event.target;
     setTouched({ ...touched, [name]: true });
     const fieldErrors = validateRegisterForm(dataUser);
-    setErrors({ ...errors, [name]: fieldErrors[name] });
+    setErrors({ ...errors, ...fieldErrors });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await register(dataUser);
-    alert("You have registered successfully");
-    router.push("/login");
+    
+    try {
+      await register(dataUser); // Intentar registrar el usuario
+      Swal.fire({
+        icon: 'success',
+        title: 'You have registered successfully!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      router.push("/login"); // Redirigir solo si el registro es exitoso
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration failed',
+        text: error.message || 'An unknown error occurred'
+      });
+      console.error("Registration error:", error);
+    }
   };
 
+  // Validación completa del formulario al cambiar datos
   useEffect(() => {
     const errors = validateRegisterForm(dataUser);
     setErrors(errors);
   }, [dataUser]);
 
   return (
-    <div className="flex flex-col  items-center bg-[#232323] min-h-screen">
+    <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
         <div
           className="w-[700px] h-[770px] rounded-3xl p-6 flex items-center justify-center bg-cover bg-center"
@@ -133,7 +154,7 @@ const Register = () => {
                 placeholder="Repeat password"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {touched.passwordConfirm && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
+              {touched.passwordConfirm && errors.passwordConfirm && <span className="text-red-500 text-sm">{errors.passwordConfirm}</span>}
             </div>
 
             {/* Input para Nombre de Usuario */}
@@ -165,11 +186,27 @@ const Register = () => {
               />
               {touched.address && errors.address && <span className="text-red-500 text-sm">{errors.address}</span>}
             </div>
+            
+            {/* Input para Phone */}
+            <div className="relative w-[350px] mb-4">
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={dataUser.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Phone"
+                className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
+              />
+              {touched.phone && errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+            </div>
 
             {/* Botón de Registro */}
             <button className="w-[250px] h-[50px] bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50" type="submit" disabled={!isFormValid}>
               Register
             </button>
+            
             {/* Mensaje de inicio de sesión */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
               Already have an account?{' '}
