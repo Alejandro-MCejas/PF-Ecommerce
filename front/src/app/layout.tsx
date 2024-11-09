@@ -4,6 +4,9 @@ import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import NavBar from "@/components/NavBar/NavBar";
 
+//Contexto
+import { CartProvider } from "@/context/CartContext";
+
 
 
 export const metadata: Metadata = {
@@ -18,10 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <NavBar/>
-        {children}
-       <Footer/>
+      <body className="bg-backgroundLayout">
+        <CartProvider>
+          <NavBar/>
+          {children}
+          <Footer/>
+        </CartProvider>
       </body>
     </html>
   );

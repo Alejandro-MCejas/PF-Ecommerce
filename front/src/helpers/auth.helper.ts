@@ -2,9 +2,10 @@ import { IRegisterProps } from "@/interfaces/IRegisterProp";
 
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
+console.log(APIURL)
 export async function register(userData: IRegisterProps, parentId?: string) {
     try {
-      const url = new URL(`${APIURL}/auth/sigUp`);
+      const url = new URL(`${APIURL}/users`);
       // Añadir parentId como parámetro de consulta si está disponible
       if (parentId) {
         url.searchParams.append("parentId", parentId);

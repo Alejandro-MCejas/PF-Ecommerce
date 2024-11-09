@@ -1,8 +1,18 @@
+"use client"
+
 import Image from 'next/image';
 import Link from 'next/link';
 import Search from '../Search';
+import { useCart } from '@/context/CartContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '@/context/Authcontext';
 
 const NavBar = () => {
+  const { cartCount } = useCart();
+  //const { role } = useAuth(); // Assuming you have an auth context
+
+  const role = "admin"
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
@@ -39,20 +49,55 @@ const NavBar = () => {
       <div className="mt-4 w-full max-w-[1500px] mx-auto h-[3px] bg-[#A065FF] rounded-3xl" />
 
       {/* Links distribuidos en el ancho del contenedor */}
-      <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
-        <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-          Subscription
-        </Link>
-        <Link href="/games" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-          Games
-        </Link>
-        <Link href="/consoles" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-          Consoles
-        </Link>
-        <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-          Dashboard
-        </Link>
-      </div>
+      {role !== "admin" ? (
+        role !== "user" ? (
+          // Mostrar solo botón de comprar si el rol no es admin ni user
+          <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+            <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+              Games
+            </Link>
+            <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+              Subscription
+            </Link>
+          </div>
+        ) : (
+          // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
+          <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+            <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+              Games
+            </Link>
+            <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+              Subscription
+            </Link>
+            <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+             {
+                cartCount === 0 ? (
+                  <FontAwesomeIcon icon={faCartShopping} />
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faCartShopping} bounce />
+                    {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-black">{cartCount}</span>}
+                  </>
+                )
+              }
+                <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
+  {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-black">{cartCount}</span>}
+            </Link>
+          </div>
+        )
+      ) : (
+        <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+          <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+            Games
+          </Link>
+          <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+            Subscription
+          </Link>
+          <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+            Admin configuration
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
