@@ -9,7 +9,7 @@ import { IRegisterError } from "@/interfaces/IRegisterError";
 import validateRegisterForm from "@/helpers/validateRegister";
 import Link from "next/link";
 
-const Register = () => {
+const  Register = () => {
   const router = useRouter();
   const initialState = {
     name: "",
