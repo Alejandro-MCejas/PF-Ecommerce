@@ -14,6 +14,9 @@ export class CreateUserDto {
     password: string
 
     @IsString()
+    confirmPassword: string
+
+    @IsString()
     address: string
 
     @IsString()

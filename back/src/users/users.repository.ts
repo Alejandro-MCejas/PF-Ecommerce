@@ -10,7 +10,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UsersRepository {
     constructor(@InjectRepository(Users) private readonly usersRepository: Repository<Users>) { }
 
-    async findUsersRepository() {
+    async findUsersRepository() { 
         return await this.usersRepository.find()
     }
 
@@ -29,7 +29,17 @@ export class UsersRepository {
     }
 
     async updateUserRepository(id: string, user: UpdateUserDto) {
-        return await this.usersRepository.update(id, user)
+        const existingUser = await this.usersRepository.findOne({ where: { id } })
+
+        if (!existingUser) {
+            return null
+        }
+
+        Object.assign(existingUser, user)
+
+        await this.usersRepository.save(existingUser)
+
+        return existingUser
     }
 
     async deleteUserRepository(id: string) {

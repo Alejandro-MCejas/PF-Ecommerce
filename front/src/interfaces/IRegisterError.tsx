@@ -5,4 +5,5 @@ export interface IRegisterError {
     email?: string;
     username?: string;
     address?: string;
+    phone?: string;
 }

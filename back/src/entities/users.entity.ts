@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Orders } from './orders.entity'
+import { Exclude } from 'class-transformer'
 
 
 @Entity({ name: 'users' })
@@ -13,9 +14,12 @@ export class Users {
 
     @Column({ type: 'varchar', length: 50, unique: true })
     email: string
-
+    
     @Column({ type: 'varchar' })
     password: string
+
+    @Column({ type: 'varchar' })
+    confirmPassword: string
 
     @Column({ type: 'text' })
     address: string
