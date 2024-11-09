@@ -1,12 +1,12 @@
 
 export interface IProduct {
-    id:number,
+    id:string,
     name: string,
-    imagenesGaleria: string[],
-    category: string,
+    image: string[],
+    category?: string,
     price:number,
     stock:number,
-    cyberGamer: boolean,
+    suscription: boolean,
     description:string
 }
 
@@ -22,4 +22,13 @@ export interface AddProductProps{
 
 export interface ProductDetail {
     product : IProduct;
+}
+
+export interface EditGameInformationProps{
+    id:string,
+    name:string,
+    price:number,
+    stock:number,
+    // suscription:boolean,
+    description:string
 }

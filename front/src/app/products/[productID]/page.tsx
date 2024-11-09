@@ -1,20 +1,20 @@
 
 import { exampleArrayProducs } from "@/app/backHelper";
 import ProductDetail from "@/components/ProductDetail/ProductDetail";
+import { fetchingProductByID } from "@/helpers/productHelper";
 import { IProduct } from "@/interfaces/IProduct";
 
 
-const productId = async ({ params, products }: { params: { productID: string }, products: IProduct[] }) => {
+const productId = async ({params}: { params: { productID: string }}) => {
 
-    const ID = parseInt(params.productID);
-    const product: IProduct = await exampleArrayProducs.filter((product) => product.id === ID)[0];
-
+    const productByID = await fetchingProductByID(params.productID)
+    console.log(productByID)
     const role = "admin"
     return (
         <div className="max-w-[1500px] w-full mx-auto flex flex-col justify-center items-center">
             <ProductDetail
                 role={role}
-                product={product}
+                product={productByID}
             />
         </div>
     )
