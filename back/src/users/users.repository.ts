@@ -29,15 +29,7 @@ export class UsersRepository {
     }
 
     async updateUserRepository(id: string, user: UpdateUserDto) {
-        const existingUser = await this.usersRepository.findOne({where: {id}})
-
-        if (!existingUser) {
-            return null
-        }
-
-        Object.assign(existingUser, user)
-
-        return await this.usersRepository.save(existingUser)
+       return await this.usersRepository.update(id, user)
         
 
     }
