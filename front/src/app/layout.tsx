@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
+import NavBar from "@/components/NavBar/NavBar";
+
+//Contexto
+import { CartProvider } from "@/context/CartContext";
 
 
 
@@ -17,9 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
-       <Footer/>
+      <body className="bg-backgroundLayout">
+        <CartProvider>
+          <NavBar/>
+          {children}
+          <Footer/>
+        </CartProvider>
       </body>
     </html>
   );
