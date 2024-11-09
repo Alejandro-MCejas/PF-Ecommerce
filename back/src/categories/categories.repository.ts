@@ -26,10 +26,24 @@ export class CategoriesRepository {
     }
 
     async updateCategoryRepository(id: string, category: { name: string }) {
-        return await this.categoriesRepository.update(id, category)
-    }
+        const existingCategory = await this.categoriesRepository.findOne({ where: { id } })
 
+        if (!existingCategory) {
+            return null
+        }
+
+        Object.assign(existingCategory, category)
+
+        await this.categoriesRepository.save(existingCategory)
+
+        return existingCategory
+    }
     async deleteCategoryRepository(id: string) {
-        return await this.categoriesRepository.delete(id)
+
+        const deletedCetegory = await this.categoriesRepository.findOne({ where: { id } })
+
+        await this.categoriesRepository.delete(id)
+
+        return deletedCetegory
     }
 }
