@@ -59,6 +59,10 @@ export class OrdersService {
 
     const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder)
 
+    if(!newOrder){
+      throw new Error('La orden no pudo ser creada')
+    }
+
 
     for (const product of productsWithStock) {
       await this.productsService.reduceProductStockService(product.id)
