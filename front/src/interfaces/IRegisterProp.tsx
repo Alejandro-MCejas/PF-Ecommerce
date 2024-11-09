@@ -5,5 +5,6 @@ export interface IRegisterProps {
     email: string;
     username: string;
     address: string;
+    phone: string;
     [key: string]: string; 
 }

@@ -8,13 +8,13 @@ export class Products {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column({type:'varchar', length:200})
     name: string;
 
     @Column('text', { array: true,  nullable: false  })
     image: string[]| string;
 
-    @Column()
+    @Column({type:'varchar', length:200})
     description: string;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
@@ -26,7 +26,6 @@ export class Products {
     // @Column()
     // suscription:boolean;
 
-   
     @ManyToOne(()=> Categories, (categories) => categories.products )
     categories: Categories;
 
