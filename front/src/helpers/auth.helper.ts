@@ -123,4 +123,52 @@ export async function getAllUsers() {
     return []; // Devuelve un array vacío en caso de error
   }
 }
+/*
+// Login
+export async function login(userData:ILoginProps) {
+  try {
+    const res = await fetch(`${APIURL}/users/login`,{
+      method:"POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(userData)
+       });
+       if(res.ok){
+          return res.json()
+       } else {
+          throw Error("faild to login")
+       }
+ 
+} catch (error: any) {
+  throw new Error(error)  }
+}
+*/
+// auth.helper.ts
 
+
+const mockUsers = [
+  { name: "admin", password: "admin123", role: "administrator" },
+  { name: "user", password: "user123", role: "user" },
+  { name: "controller", password: "controller123", role: "controller" },
+];
+
+export async function login(userData: ILoginProps) {
+  const user = mockUsers.find(
+    (u) => u.name === userData.name && u.password === userData.password
+  );
+  
+  if (user) {
+    const mockResponse = {
+      token: "fake-jwt-token",
+      user: {
+        id: Date.now(),
+        name: user.name,
+        role: user.role,
+      },
+    };
+    return mockResponse;
+  } else {
+    throw new Error("Failed to login: Incorrect username or password");
+  }
+}

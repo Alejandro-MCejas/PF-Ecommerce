@@ -1,11 +1,62 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ILoginError, ILoginProps } from "./TypesLogin";
+import { login } from "@/helpers/auth.helper";
+import { validateLoginform } from "@/helpers/validateLogin";
 
 const Login = () => {
+  const router = useRouter();
+  const initialState = {
+    name: "",
+    password: "",
+  };
+  const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
+  const [errors, setErrors] = useState<ILoginError>({});
+  const [generalError, setGeneralError] = useState<string>("");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setDataUser({
+      ...dataUser,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event: React.FocusEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setGeneralError(""); // Limpiar error general antes de intentar el login
+
+    try {
+      const response = await login(dataUser);
+      const { token, user } = response;
+      const clearUser = {
+        id: user.id,
+        name: user.name,
+        address: user.address,
+        phone: user.phone,
+        email: user.email,
+        orders: user.orders,
+      };
+
+      localStorage.setItem("userSession", JSON.stringify({ token, userData: clearUser }));
+      alert("You have logged in successfully");
+      router.push("/");
+    } catch (error: any) {
+      setGeneralError(error.message);
+    }
+  };
+
+  useEffect(() => {
+    const errors = validateLoginform(dataUser);
+    setErrors(errors);
+  }, [dataUser]);
+
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div
           className="w-[700px] h-[770px] rounded-3xl p-6 flex items-center justify-center bg-cover bg-center"
           style={{
@@ -17,25 +68,35 @@ const Login = () => {
             <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">Login</h1>
             <p className="text-gray-700">Log in and dive into CyberGames</p>
 
+            {/* Mostrar error general si existe */}
+            {generalError && <span className="text-red-500">{generalError}</span>}
+
             {/* Input para Nombre de Usuario */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="name"
                 name="name"
                 type="text"
+                value={dataUser.name}
+                onChange={handleChange}
                 placeholder="name"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
+              {errors.name && <span className="text-red-500">{errors.name}</span>}
             </div>
+
             {/* Input para Contraseña */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="password"
                 name="password"
                 type="password"
-                placeholder="Password"
+                value={dataUser.password}
+                onChange={handleChange}
+                placeholder="*******"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
+              {errors.password && <span className="text-red-500">{errors.password}</span>}
             </div>
 
             {/* Botón de Inicio de Sesión */}
@@ -45,7 +106,7 @@ const Login = () => {
             >
               Login
             </button>
-            
+
             {/* Login adicional con ícono */}
             <button
               className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"

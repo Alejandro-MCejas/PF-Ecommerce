@@ -8,4 +8,4 @@ export interface IRegisterProps {
     phone: string;
     [key: string]: string; 
 }
-export type ILoginProps = Partial <IRegisterProps>
+export type ILoginProps = Pick<IRegisterProps, "name" | "password">;
