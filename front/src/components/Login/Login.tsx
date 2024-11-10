@@ -35,10 +35,7 @@ const Login = () => {
       const clearUser = {
         id: user.id,
         name: user.name,
-        address: user.address,
-        phone: user.phone,
-        email: user.email,
-        orders: user.orders,
+        rol: user.role,
       };
 
       localStorage.setItem("userSession", JSON.stringify({ token, userData: clearUser }));
