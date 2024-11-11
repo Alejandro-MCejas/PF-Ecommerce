@@ -6,16 +6,20 @@ import StarRating from "../StarRating/StarRating";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
+import AddToCart from "../AddToCart/AddToCart";
 
 interface ProductDetail {
     product:IProduct;
     role: string;
 }
 
-const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IProduct, role: string })=> {
+const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct})=> {
 
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
+
+    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const role: string = userSession.userData?.rol
 
     function handleDeleteGame (){
         Swal.fire({
@@ -117,16 +121,23 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                             {/* Verificacion de rol. Si el rol es distinto de admin entonces preguntar si es distinto de user mostrar un solo boton de comprar, 
                             si es user entonces mostrar add to cart o buy now y si es admin mostrar edit, suscription y delete */}
                             {/* Lógica de botones según el rol */}
-                            {role !== "admin" ? (
+                            {role !== "administrator" ? (
                                 role !== "user" ? (
                                     // Mostrar solo botón de comprar si el rol no es admin ni user
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
                                 ) : (
                                     // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
-                                    <>
-                                        <button className="bg-green-500 text-white px-4 py-2 rounded">Add to Cart</button>
-                                        <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
-                                    </>
+                                    <div className="w-full flex items-center flex-col bg-red-50 gap-3">
+                                        <AddToCart
+                                            id={product.id}
+                                            name={product.name}
+                                            description={product.description}
+                                            stock={product.stock}
+                                            price={product.price}
+                                            image={product.image}
+                                        />
+                                        <button className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded">Buy Now</button>
+                                    </div>
                                 )
                             ) : (
                                 // Mostrar botones de "Edit", "Subscription" y "Delete" si el rol es admin

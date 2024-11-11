@@ -6,19 +6,18 @@ export interface IProduct {
     category?: string,
     price:number,
     stock:number,
-    suscription: boolean,
+    suscription?: boolean,
     description:string
 }
 
 export interface EditGameModalProps {
     games: IProduct[];
-    role: string;
 }
 
-export interface AddProductProps{
-    role:string;
-    // game:IProduct;
-}
+// export interface AddProductProps{
+//     role:string;
+//     // game:IProduct;
+// }
 
 export interface ProductDetail {
     product : IProduct;
@@ -31,4 +30,14 @@ export interface EditGameInformationProps{
     stock:number,
     // suscription:boolean,
     description:string
+}
+
+
+export interface CardCartProp { 
+    id:string
+    name:string,
+    image:string[],
+    stock:number,
+    price:number,
+    onDelete: () => void
 }

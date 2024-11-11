@@ -2,13 +2,16 @@
 
 
 import { useState } from 'react';
-import { AddProductProps } from '@/interfaces/IProduct';
+// import { AddProductProps } from '@/interfaces/IProduct';
 
-const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
+const AddProductModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+
+    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const role: string = userSession.userData?.rol
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -54,7 +57,7 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
-    if (role !== "admin") return null;
+    if (role !== "administrator") return null;
 
     return (
         <div className="mt-10">
