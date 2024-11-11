@@ -38,7 +38,7 @@ export class ProductsSeed{
                 product.stock = productData.stock;
     
                 const category = await this.findCategoryByName(productData.categories);
-                product.categories = category;
+                product.categories = [category];
     
                 newProducts.push(product);
             }
