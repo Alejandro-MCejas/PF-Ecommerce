@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
 
@@ -26,8 +26,9 @@ export class Products {
     // @Column()
     // suscription:boolean;
 
-    @ManyToOne(()=> Categories, (categories) => categories.products )
-    categories: Categories;
+    @ManyToMany(()=> Categories, (categories) => categories.products )
+    @JoinTable()
+    categories: Categories[];
 
     @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
     @JoinTable()
