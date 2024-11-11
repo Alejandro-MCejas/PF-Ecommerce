@@ -16,12 +16,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlaystation } from "@fortawesome/free-brands-svg-icons/faPlaystation";
 import { faXbox } from "@fortawesome/free-brands-svg-icons";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { fetchingProducts } from "@/helpers/productHelper";
+import { IProduct } from "@/interfaces/IProduct";
 
 
-const home = () => {
+const home = async () => {
 
+    const products = await fetchingProducts()
 
-    const role = "admin";
     return (
         <div className="w-full min-h-screen bg-backgroundLayout">
 
@@ -35,8 +37,7 @@ const home = () => {
                 <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
                     <div>
                         <EditGameModal
-                            role={role}
-                            games={exampleArrayProducs}
+                            games={products}
                         />
                     </div>
                 </div>

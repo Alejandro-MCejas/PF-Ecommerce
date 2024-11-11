@@ -7,7 +7,6 @@ import { fetchingProducts } from "@/helpers/productHelper"
 
 const products = async () => {
     const products = await fetchingProducts();
-    const role = "admin"
     return (
         <div>
             <div className="w-full h-[70px] bg-white flex justify-center items-center shadow-inner">
@@ -15,7 +14,6 @@ const products = async () => {
             </div>
             <div className="max-w-[1500px] w-full mx-auto flex justify-center items-center">
                 <AddGame
-                    role={role}
                 />
             </div>
             <div className="max-w-[1500px] w-full mx-auto mt-5">
