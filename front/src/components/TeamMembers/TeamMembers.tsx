@@ -30,13 +30,13 @@ const TeamMembers = () => {
                             <h2 className='text-2xl font-bold'>{member.name}</h2>
                             <p>{member.profession}</p>
                             <div className='flex gap-4 mt-2'>
-                                <Link href={member.linkFacebook} target="_blank" className="hover:text-primaryColor text-gray-300">
+                                <Link href={member.linkFacebook} target="_blank" className="hover:text-blue-500 text-gray-300">
                                     <i className="fab fa-facebook fa-2x"></i>
                                 </Link>
                                 <Link href={member.linkGitHub} target="_blank" className="hover:text-black text-gray-300">
                                     <i className="fab fa-github fa-2x"></i>
                                 </Link>
-                                <Link href={member.linkLinkedIn} target="_blank" className="hover:text-primaryColor text-gray-300">
+                                <Link href={member.linkLinkedIn} target="_blank" className="hover:text-blue-800 text-gray-300">
                                     <i className="fab fa-linkedin fa-2x"></i>
                                 </Link>
                             </div>

@@ -30,7 +30,7 @@ export class UsersController {
   @Put(':id')
   async updateUserController(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
     const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
-    return res.status(200).json({ message: `Al usuario con el id: ${updatedUser.id} ha sido actualizado` });
+    return res.status(200).json({ message: `El usuario con el id: ${updatedUser.id} ha sido actualizado` });
   }
 
   @Delete(':id')

@@ -3,10 +3,10 @@ import { CardProductsView } from "@/components/CardProductsView/CardProductsView
 import { exampleArrayProducs } from "../backHelper"
 import { FilterForm } from "@/components/FilterForm/FilterForm"
 import AddGame from "@/components/ModalAddGame/ModalAddGame"
+import { fetchingProducts } from "@/helpers/productHelper"
 
-const products = () => {
-
-    const role = "admin"
+const products = async () => {
+    const products = await fetchingProducts();
     return (
         <div>
             <div className="w-full h-[70px] bg-white flex justify-center items-center shadow-inner">
@@ -14,8 +14,6 @@ const products = () => {
             </div>
             <div className="max-w-[1500px] w-full mx-auto flex justify-center items-center">
                 <AddGame
-                    role={role}
-                // game={}
                 />
             </div>
             <div className="max-w-[1500px] w-full mx-auto mt-5">
@@ -25,7 +23,7 @@ const products = () => {
                     </div>
                     <div className="w-10/12 flex flex-wrap justify-center gap-3">
                         {
-                            exampleArrayProducs.map((game, index) => (
+                            products.map((game, index) => (
                                 <CardProductsView
                                     key={index}
                                     product={game}

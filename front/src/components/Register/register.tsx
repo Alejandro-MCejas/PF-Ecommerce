@@ -1,25 +1,23 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Tooltip } from 'react-tooltip';
 import { register } from "@/helpers/auth.helper";
 import { IRegisterProps } from "@/interfaces/IRegisterProp";
 import { IRegisterError } from "@/interfaces/IRegisterError";
-import { useAuth } from "@/context/Authcontext";
 import validateRegisterForm from "@/helpers/validateRegister";
-import router from "next/router";
 import Link from "next/link";
 
 const Register = () => {
   const router = useRouter();
   const initialState = {
-    username: "",
+    name: "",
     email: "",
     password: "",
     passwordConfirm: "", 
     address: "",
+    phone: "",
   };
   const [dataUser, setDataUser] = useState<IRegisterProps>(initialState);
   const [errors, setErrors] = useState<IRegisterError>(initialState);
@@ -28,11 +26,12 @@ const Register = () => {
 
   useEffect(() => {
     setIsFormValid(
-      dataUser.username.trim() !== '' &&
+      dataUser.name.trim() !== '' &&
       dataUser.email.trim() !== '' &&
       dataUser.address.trim() !== '' &&
       dataUser.password?.trim() !== '' &&
-      dataUser.passwordConfirm?.trim() !== ''  
+      dataUser.passwordConfirm?.trim() !== '' &&
+      dataUser.phone?.trim() !== ''
     );
   }, [dataUser]);
 
@@ -42,22 +41,23 @@ const Register = () => {
       ...dataUser,
       [name]: value,
     });
-    // Validación de la repetición de la contraseña
-  if (name === "passwordConfirm") {
-    if (value !== dataUser.password) {
-      setErrors({
-        ...errors,
-        passwordConfirm: "Las contraseñas no coinciden"
-      });
-    } else {
-      setErrors({
-        ...errors,
-        passwordConfirm: ""
-      });
-    }
-  }
-  };
 
+    setErrors({ ...errors, [name]: "" });
+
+    if (name === "passwordConfirm") {
+      if (value !== dataUser.password) {
+        setErrors({
+          ...errors,
+          passwordConfirm: "Las contraseñas no coinciden"
+        });
+      } else {
+        setErrors({
+          ...errors,
+          passwordConfirm: ""
+        });
+      }
+    }
+  };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target as { name: keyof IRegisterProps };
@@ -69,17 +69,17 @@ const Register = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await register(dataUser);
-    alert("You have registered successfully");
+    Swal.fire({
+      title: "Registration Successful",
+      text: "You have registered successfully!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
     router.push("/login");
   };
 
-  useEffect(() => {
-    const errors = validateRegisterForm(dataUser);
-    setErrors(errors);
-  }, [dataUser]);
-
   return (
-    <div className="flex flex-col  items-center bg-[#232323] min-h-screen">
+    <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
         <div
           className="w-[700px] h-[770px] rounded-3xl p-6 flex items-center justify-center bg-cover bg-center"
@@ -91,7 +91,7 @@ const Register = () => {
             <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">Sign up</h1>
             <p className="text-gray-700">Sign up to continue</p>
 
-            {/* Input para Email */}
+            {/* Email Input */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="email"
@@ -106,7 +106,7 @@ const Register = () => {
               {touched.email && errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
             </div>
 
-            {/* Input para Contraseña */}
+            {/* Password Input */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="password"
@@ -121,7 +121,7 @@ const Register = () => {
               {touched.password && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
             </div>
 
-            {/* Input para Repetir Contraseña */}
+            {/* Password Confirm Input */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="passwordConfirm"
@@ -133,25 +133,25 @@ const Register = () => {
                 placeholder="Repeat password"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {touched.passwordConfirm && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
+              {touched.passwordConfirm && errors.passwordConfirm && <span className="text-red-500 text-sm">{errors.passwordConfirm}</span>}
             </div>
 
-            {/* Input para Nombre de Usuario */}
+            {/* Username Input */}
             <div className="relative w-[350px] mb-4">
               <input
-                id="username"
-                name="username"
+                id="name"
+                name="name"
                 type="text"
-                value={dataUser.username}
+                value={dataUser.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Username"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {touched.username && errors.username && <span className="text-red-500 text-sm">{errors.username}</span>}
+              {touched.name && errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
             </div>
 
-            {/* Input para Dirección */}
+            {/* Address Input */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="address"
@@ -165,12 +165,28 @@ const Register = () => {
               />
               {touched.address && errors.address && <span className="text-red-500 text-sm">{errors.address}</span>}
             </div>
+              
+            {/* Phone Input */}
+            <div className="relative w-[350px] mb-4">
+              <input
+                id="phone"
+                name="phone"
+                type="text"
+                value={dataUser.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Phone"
+                className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
+              />
+              {touched.phone && errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+            </div>
 
-            {/* Botón de Registro */}
+            {/* Register Button */}
             <button className="w-[250px] h-[50px] bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50" type="submit" disabled={!isFormValid}>
               Register
             </button>
-            {/* Mensaje de inicio de sesión */}
+
+            {/* Login Link */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
               Already have an account?{' '}
               <Link href="/login">

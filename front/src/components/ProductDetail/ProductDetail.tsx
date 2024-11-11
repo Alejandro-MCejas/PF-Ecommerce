@@ -5,16 +5,21 @@ import React, { useState } from "react";
 import StarRating from "../StarRating/StarRating";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import ModalEditGame from "../ModalEditGame/ModalEditGame";
+import AddToCart from "../AddToCart/AddToCart";
 
 interface ProductDetail {
-    product: IProduct;
+    product:IProduct;
     role: string;
 }
 
-const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IProduct, role: string }) => {
+const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct})=> {
 
     const [rating, setRating] = useState(0);
-    const [activeImage, setActiveImage] = useState(product.imagenesGaleria[0]);
+    const [activeImage, setActiveImage] = useState(product.image[0]);
+
+    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const role: string = userSession.userData?.rol
 
     function handleDeleteGame (){
         Swal.fire({
@@ -69,7 +74,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                 {/* Imagen */}
                 < div className="w-1/2 min-w-[550px] min-h-[700px] max-w-[550px] max-h-[750px] flex justify-between items-center" >
                     <div className="h-[600px] flex flex-col justify-evenly items-center w-[150px]">
-                        {product.imagenesGaleria.map((image, index) => (
+                        {product.image.map((image, index) => (
                             <div
                                 key={index}
                                 className="cursor-pointer m-1 border-2 border-transparent hover:border-blue-500"
@@ -116,22 +121,31 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                             {/* Verificacion de rol. Si el rol es distinto de admin entonces preguntar si es distinto de user mostrar un solo boton de comprar, 
                             si es user entonces mostrar add to cart o buy now y si es admin mostrar edit, suscription y delete */}
                             {/* Lógica de botones según el rol */}
-                            {role !== "admin" ? (
+                            {role !== "administrator" ? (
                                 role !== "user" ? (
                                     // Mostrar solo botón de comprar si el rol no es admin ni user
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
                                 ) : (
                                     // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
-                                    <>
-                                        <button className="bg-green-500 text-white px-4 py-2 rounded">Add to Cart</button>
-                                        <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
-                                    </>
+                                    <div className="w-full flex items-center flex-col bg-red-50 gap-3">
+                                        <AddToCart
+                                            id={product.id}
+                                            name={product.name}
+                                            description={product.description}
+                                            stock={product.stock}
+                                            price={product.price}
+                                            image={product.image}
+                                        />
+                                        <button className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded">Buy Now</button>
+                                    </div>
                                 )
                             ) : (
                                 // Mostrar botones de "Edit", "Subscription" y "Delete" si el rol es admin
                                 <div className="w-full flex items-center gap-4">
                                     <div className="flex flex-col gap-4">
-                                        <button className="w-[300px] h-[50px] bg-purple-600 text-white px-4 py-2 rounded">Edit game</button>
+                                        <ModalEditGame
+                                            product={product}
+                                        />
                                         <button className="w-[300px] h-[50px] bg-purple-400 text-violet-700 px-4 py-2 rounded">Add discount</button>
                                     </div>
                                     <div className="flex flex-col gap-4">
@@ -157,22 +171,22 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
             <div className="max-w-[1500px] w-full flex justify-evenly items-center">
                 <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
                     <Link href={`/products/${product.id}`}>
-                        <img src={product.imagenesGaleria[0]} alt="" className="w-full h-full rounded-xl" />
+                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
                     </Link>
                 </div>
                 <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
                     <Link href={`/products/${product.id}`}>
-                        <img src={product.imagenesGaleria[0]} alt="" className="w-full h-full rounded-xl" />
+                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
                     </Link>
                 </div>
                 <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
                     <Link href={`/products/${product.id}`}>
-                        <img src={product.imagenesGaleria[0]} alt="" className="w-full h-full rounded-xl" />
+                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
                     </Link>
                 </div>
                 <div className="max-w-[200px] max-h-[270] flex justify-evenly items-center my-3 hover:scale-[1.05]">
                     <Link href={`/products/${product.id}`}>
-                        <img src={product.imagenesGaleria[0]} alt="" className="w-full h-full rounded-xl" />
+                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
                     </Link>
                 </div>
             </div >
@@ -183,7 +197,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                 <div className="flex flex-col justify-evenly gap-7">
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
                         <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.imagenesGaleria[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
+                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -191,7 +205,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
                         <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.imagenesGaleria[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
+                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -199,7 +213,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
                         <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.imagenesGaleria[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
+                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -207,7 +221,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product, role }: { product: IP
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
                         <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.imagenesGaleria[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
+                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."

@@ -27,12 +27,13 @@ export class CategoriesController {
   @Put(':id')
   async updateCategoryController(@Param('id') id: string, @Body() category: { name: string }, @Res() res: Response) {
     const updatedCategory = await this.categoriesService.updateCategoryService(id, category);
-    return res.status(200).json(updatedCategory);
+    return res.status(200).json({ message: `La categoria con el id: ${updatedCategory.id} ha sido actualizada` });
+
   }
 
   @Delete(':id')
   async deleteCategoryController(@Param('id') id: string, @Res() res: Response) {
     const deletedCategory = await this.categoriesService.deleteCategoryService(id);
-    return res.status(200).json(deletedCategory)
+    return res.status(200).json({ message: `La categoria con el id: ${deletedCategory.id} ha sido eliminada` })
   }
 }

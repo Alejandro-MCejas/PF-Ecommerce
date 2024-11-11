@@ -31,5 +31,6 @@ export class Products {
     categories: Categories[];
 
     @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
+    @JoinTable()
     orderDetails: OrderDetails;
 }

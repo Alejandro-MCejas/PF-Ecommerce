@@ -1,9 +1,15 @@
-import { IRegisterProps } from "@/interfaces/IRegisterProp";
+import { ILoginProps, IRegisterProps } from "@/interfaces/IRegisterProp";
 
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
 console.log(APIURL)
+
+
+
+//CREAR USUARIO
 export async function register(userData: IRegisterProps, parentId?: string) {
+  console.log(userData);
+  
     try {
       const url = new URL(`${APIURL}/users`);
       // Añadir parentId como parámetro de consulta si está disponible
@@ -33,3 +39,136 @@ export async function register(userData: IRegisterProps, parentId?: string) {
       );
     }
   }
+
+ //USUARIO POR ID
+ export async function getUser(userId: string) {
+  try {
+    const res = await fetch(`${APIURL}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Error ${res.status}: ${errorData.message || "Failed to fetch user"}`);
+    }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Fetch user error:", error.message);
+    throw new Error(error.message || `Unknown error occurred during fetching user.`);
+  }
+}
+
+//ACTUALIZAR USUARIO
+export async function updateUser(userId: string, updateData: Partial<IRegisterProps>) {
+  try {
+    const res = await fetch(`${APIURL}/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Error ${res.status}: ${errorData.message || "Failed to update user"}`);
+    }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Update user error:", error.message);
+    throw new Error(error.message || `Unknown error occurred during updating user.`);
+  }
+}
+//ELIMINAR USUARIO
+export async function deleteUser(userId: string) {
+  try {
+    const res = await fetch(`${APIURL}/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Error ${res.status}: ${errorData.message || "Failed to delete user"}`);
+    }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Delete user error:", error.message);
+    throw new Error(error.message || `Unknown error occurred during deleting user.`);
+  }
+}
+// Obtener todos los usuarios
+export async function getAllUsers() {
+  try {
+    const res = await fetch(`${APIURL}/users`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error(`Error ${res.status}: ${errorData.message || "Failed to fetch users"}`);
+      return []; // Devuelve un array vacío en caso de error
+    }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Fetch users error:", error.message);
+    return []; // Devuelve un array vacío en caso de error
+  }
+}
+/*
+// Login
+export async function login(userData:ILoginProps) {
+  try {
+    const res = await fetch(`${APIURL}/users/login`,{
+      method:"POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(userData)
+       });
+       if(res.ok){
+          return res.json()
+       } else {
+          throw Error("faild to login")
+       }
+ 
+} catch (error: any) {
+  throw new Error(error)  }
+}
+*/
+// auth.helper.ts
+
+
+const mockUsers = [
+  { name: "admin", password: "admin123", role: "administrator" },
+  { name: "user", password: "user123", role: "user" },
+  { name: "controller", password: "controller123", role: "controller" },
+];
+
+export async function login(userData: ILoginProps) {
+  const user = mockUsers.find(
+    (u) => u.name === userData.name && u.password === userData.password
+  );
+  
+  if (user) {
+    const mockResponse = {
+      token: "fake-jwt-token",
+      user: {
+        id: Date.now(),
+        name: user.name,
+        role: user.role,
+      },
+    };
+    return mockResponse;
+  } else {
+    throw new Error("Failed to login: Incorrect username or password");
+  }
+}
