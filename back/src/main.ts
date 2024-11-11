@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ProductsSeed } from './seed/products/products.seed';
+import { CategoriesSeed } from './seed/products/categories/categories.seed';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +14,11 @@ async function bootstrap() {
   });
 
   // Ejecuta el seeding después de configurar CORS
+  const cateoriesSeed = app.get(CategoriesSeed);
+  await cateoriesSeed.categoriesSeed();
+  
   const productsSeed = app.get(ProductsSeed);
-  await productsSeed.seed();
+  await productsSeed.seedProducts();
   
   await app.listen(3000);
 }
