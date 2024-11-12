@@ -9,7 +9,7 @@ import { OrdersModule } from './orders/orders.module';
 import { OrderDetailModule } from './order-detail/order-detail.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { ReviewsModule } from './reviews/reviews.module';
+import { AuthModule } from './auth/auth.module';
 import typeOrmConfig from './config/typeorm';
 
 @Module({
@@ -19,7 +19,7 @@ import typeOrmConfig from './config/typeorm';
   }), TypeOrmModule.forRootAsync({
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => configService.get('typeorm'),
-  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, ReviewsModule],
+  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
