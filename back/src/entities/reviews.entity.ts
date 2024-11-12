@@ -11,7 +11,7 @@ export class Reviews{
     rating: number;
 
     @Column()
-    coment:string;
+    comment:string;
 
     @OneToMany(()=> Users, (user) => user.reviews)
     user:Users;
