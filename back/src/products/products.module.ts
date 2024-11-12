@@ -14,7 +14,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Products]), CloudinaryModule, forwardRef(() => CategoriesModule)],
   controllers: [ProductsController],
-  providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig, CloudinaryController,],
-  exports: [ProductsService, ProductsService,ProductsSeed],
+  providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig, CloudinaryController],
+  exports: [ProductsService, ProductsSeed],
 })
-export class ProductsModule {}
+export class ProductsModule { }

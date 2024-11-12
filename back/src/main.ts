@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Nest Api Proyecto Final')
     .setDescription('Ecommerce de proyecto final 2024')
     .setVersion('1.0')
+    .addBearerAuth()
     .build()
 
   const document = SwaggerModule.createDocument(app, swaggerConfig)
