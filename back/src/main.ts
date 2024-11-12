@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ProductsSeed } from './seed/products/products.seed';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { UsersSeed } from './seed/users/users.seed';
 import { CategoriesSeed } from './seed/categories/categories.seed';
 
 async function bootstrap() {
@@ -29,8 +30,16 @@ async function bootstrap() {
   
   const productsSeed = app.get(ProductsSeed);
   await productsSeed.seedProducts();
+
+  const userSeed = app.get(UsersSeed)
+  await userSeed.seedUsers()
+  console.log('Usuarios Cargados');
+
   
   await app.listen(3000);
+
+
+
 }
 
 bootstrap();
