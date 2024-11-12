@@ -21,7 +21,7 @@ export const AuthContext = createContext<AuthContextProps>({
 //pasa el context a sus hijos (AuthProvide en Layout)
 export const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}: { children: React.ReactNode}) => {
   const [userData, setUserData] = useState<userSession | null>(null)
-  const [auth0UserData, setAuth0UserData] = useState<{ name: string; email: string } | null>(null)
+ // const [auth0UserData, setAuth0UserData] = useState<{ name: string; email: string } | null>(null)
   
       //sincroniza con localstorage
     useEffect(()=>{

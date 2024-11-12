@@ -6,23 +6,27 @@ import Search from '../Search';
 import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '@/context/Authcontext';
+import React from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  //const { role } = useAuth(); // Assuming you have an auth context
+  const [role, setRole] = React.useState<string | undefined>(undefined);
 
-  //Remplazo provicional del useAuth()
-  const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-  const role: string = userSession.userData?.rol;
-  console.log(userSession)
+  // Asegurarse de acceder a localStorage solo en el cliente
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+      setRole(userSession.userData?.rol); // Establecer el rol
+    }
+  }, []);  // Solo se ejecuta una vez después del renderizado en el cliente
+
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
         {/* Logo y Nombre */}
         <Link href="/">
           <div className="flex items-center justify-center md:justify-start">
-            <img
+            <Image
               src="https://s3-alpha-sig.figma.com/img/9b24/ab51/4afde8507a88429e72fe3362ccbebe43?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dRsBfIogFmR3yUGOV6dEjMC0MH7NFtW4-NXo6eeUhCZ3JbHKzWNMKHYg08~IiruoGURhyL1PcSY~phZaTgFvbBsq7DxAE0LJF3UNRglelYEi4dt7GPmHhDSk-LbBkQ6to1ddesbQGtU4m-jfMaaT3ShKm82V0aFOFJoT9ng8chimHLKaxz5qYkZC1JCP158GzA3worP-RIqK9QObZ3gjouw2-9MYaRKhnpuS9CSIbOCoAZaGZskMAlo~KjXAs3-q03rEtEeTW~J3eAeUhU-Xmwt5ruo7KEkOG1Arycn-wCaLsDBkyWbWegXNEqgKj8LcDCD2GFSQyHjKeHg9X6DX3Q__"
               alt="Logo"
               className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
@@ -39,7 +43,6 @@ const NavBar = () => {
         </div>
 
         {/* Login/Register */}
-
         <div className="flex justify-center md:justify-end">
           {
             role === undefined ? (

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
 import { validateLoginform } from "@/helpers/validateLogin";
+import Image from "next/image";
 
 const Login = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const Login = () => {
       const clearUser = {
         id: user.id,
         name: user.name,
-        rol: user.role,
+        rol: user.role, 
       };
 
       localStorage.setItem("userSession", JSON.stringify({ token, userData: clearUser }));
@@ -110,7 +111,7 @@ const Login = () => {
               type="button"
             >
               Login
-              <img
+              <Image
                 src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
