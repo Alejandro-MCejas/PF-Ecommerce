@@ -24,9 +24,6 @@ export class Products {
 
     @Column('int')
     stock: number;
-
-    @Column('init')
-    rating:number;
     
     // @Column()
     // suscription:boolean;
