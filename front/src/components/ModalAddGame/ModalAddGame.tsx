@@ -1,21 +1,71 @@
 "use client"
 
-
+import { IProduct } from '@/interfaces/IProduct';
 import { useState } from 'react';
 import { AddProductProps } from '@/interfaces/IProduct';
+import { addProduct } from '@/helpers/productHelper';
+import AddNewGameButton from '../AddNewGameButton/AddNewGameButton';
 
-const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
+const AddProductForm = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+
+    // const initialState = 
+
+    const [newGame, setNewGame] = useState<AddProductProps>({
+        name: "",
+        price: 0,
+        images: [],
+        stock: 0,
+        description: "",
+        suscription: false,
+    })
+
+    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+    const role: string = userSession.userData?.rol;
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
             const newFiles = Array.from(files);
             setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            setNewGame((prevGame) => ({
+                ...prevGame,
+                images: [...prevGame.images, ...newFiles],
+            }));
         }
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = event.target;
+        setNewGame((prevGame) => ({
+            ...prevGame,
+            [name]: type === 'number' ? parseFloat(value) || 0 : value,
+        }));
+    };
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, checked } = event.target;
+        setNewGame((prevGame) => ({
+            ...prevGame,
+            [name]: checked,
+        }));
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log("New game submitted:", newGame);
+        try {
+            const newProduct = await addProduct(newGame);
+            console.log('Product added:', newProduct);
+            // Puedes agregar más lógica aquí, como mostrar un mensaje de éxito
+        } catch (error) {
+            console.error('Error adding product:', error);
+            // Manejo de errores si la llamada falla
+        }
+        // Lógica de envío al backend o manejo de datos
     };
 
     const openModal = () => {
@@ -54,7 +104,7 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
-    if (role !== "admin") return null;
+    if (role !== "administrator") return null;
 
     return (
         <div className="mt-10">
@@ -67,7 +117,7 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
 
             {isOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-3xl">
+                    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-3xl">
                         <h2 className="w-full flex justify-center items-center text-xl font-bold mb-4">Add New Product</h2>
                         <div className="w-full max-w-[1500px] flex gap-4">
                             <div className='w-1/2'>
@@ -88,32 +138,33 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
                                 <div className="mt-4 gap-2">
                                     {selectedFiles.length > 2 ? (
                                         <button
+                                            type="button"
                                             onClick={() => openPreviewModal(0)}
-                                            className="w-full mt-4 bg-violet-500 text-white px-4 py-2 rounded hover:bg-violet-600 "
+                                            className="w-full mt-4 bg-violet-500 text-white px-4 py-2 rounded hover:bg-violet-600"
                                         >
                                             Open Preview
                                         </button>
                                     ) : (
                                         <div className='flex justify-evenly w-full'>
                                             {selectedFiles.map((file, index) => (
-                                            <div key={index} className="relative">
-                                                <img
-                                                    src={URL.createObjectURL(file)}
-                                                    alt={`Preview ${index}`}
-                                                    className="w-full gap-1 h-20 object-cover rounded cursor-pointer"
-                                                    onClick={() => openPreviewModal(index)}
-                                                />
-                                                <button
-                                                    onClick={() => removeImage(index)}
-                                                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                                                >
-                                                    ✕
-                                                </button>
-                                            </div>
-                                        ))}
-                                        </div> 
+                                                <div key={index} className="relative">
+                                                    <img
+                                                        src={URL.createObjectURL(file)}
+                                                        alt={`Preview ${index}`}
+                                                        className="w-full gap-1 h-20 object-cover rounded cursor-pointer"
+                                                        onClick={() => openPreviewModal(index)}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(index)}
+                                                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     )}
-
                                 </div>
                             </div>
                             <div className='flex flex-col justify-evenly items-center w-1/2'>
@@ -121,16 +172,25 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
                                 <input
                                     type="text"
                                     placeholder="Product title"
+                                    name='name'
+                                    value={newGame.name}
+                                    onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Quantity Stock"
+                                    name='stock'
+                                    value={newGame.stock}
+                                    onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
                                 <input
                                     type="text"
                                     placeholder="Price"
+                                    name='price'
+                                    value={newGame.price}
+                                    onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
                                 <select className="p-2 border border-gray-500 rounded w-full">
@@ -146,7 +206,13 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
                         <div className='flex flex-col w-full justify-evenly items-start my-3 p-3'>
                             {/* Checkbox and Select options */}
                             <label className="flex items-center w-2/4 gap-4">
-                                <input type="checkbox" className="hidden peer" />
+                                <input 
+                                    type="checkbox" 
+                                    className="hidden peer" 
+                                    name="suscription"
+                                    checked={newGame.suscription}
+                                    onChange={handleCheckboxChange}
+                                />
                                 <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span>
                                 Is in CyberGamer?
                             </label>
@@ -179,26 +245,29 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
                             {/* Product description */}
                             <textarea
                                 placeholder="Product description"
+                                name='description'
+                                value={newGame.description}
+                                onChange={handleInputChange}
                                 className="w-full mt-4 p-2 border border-gray-300 rounded"
                             ></textarea>
                         </div>
                         <div className='w-full flex justify-evenly'>
                             <button
+                                type="button"
                                 onClick={closeModal}
                                 className="mt-4 bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
                             >
                                 Cancel
                             </button>
                             <button
-                                onClick={closeModal}
+                                type="submit"
                                 className="mt-4 bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
                             >
                                 Add product
                             </button>
-
+                            {/* <AddNewGameButton product={newGame} /> */}
                         </div>
-                        {/* Add product button */}
-                    </div>
+                    </form>
                 </div>
             )}
 
@@ -225,6 +294,7 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
                                 Prev
                             </button>
                             <button
+                                type="button"
                                 onClick={() => removeImage(currentImageIndex)}
                                 className=" bg-red-500 text-white rounded-sm flex items-center justify-center text-xs hover:bg-red-600"
                             >
@@ -243,6 +313,5 @@ const AddProductModal: React.FC<AddProductProps> = ({ role }) => {
         </div>
     );
 };
-export default AddProductModal;
 
-
+export default AddProductForm;

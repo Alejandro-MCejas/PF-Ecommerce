@@ -1,3 +1,5 @@
+// import { categories } from "./categories/categoriesMock";
+
 export const productsMock = [
     {
         name: "The Legend of Zelda: Breath of the Wild",
@@ -6,6 +8,7 @@ export const productsMock = [
         price: 59.99,
         stock: 25,
         suscription: false,
+        categories:"Acción",
     },
     {
         name: "God of War: Ragnarok",
@@ -14,6 +17,7 @@ export const productsMock = [
         price: 69.99,
         stock: 30,
         suscription: false,
+        categories:"Acción",
     },
     {
         name: "Minecraft",
@@ -31,6 +35,7 @@ export const productsMock = [
         price: 39.99,
         stock: 45,
         suscription: false,
+        categories:"Acción",
     },
     {
         name: "FIFA 23",
@@ -39,6 +44,7 @@ export const productsMock = [
         price: 59.99,
         stock: 70,
         suscription: true,
+        categories:"Acción",
     },
     {
         name: "Elden Ring",

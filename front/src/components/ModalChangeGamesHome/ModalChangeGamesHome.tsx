@@ -6,17 +6,23 @@ import { HomeCardGame } from '../HomeCardGame/HomeCardGame';
 
 
 
-export const EditGameModal: React.FC<EditGameModalProps> = ({ role, games }) => {
+export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedGames, setSelectedGames] = useState<IProduct[]>([]);
     const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]);
 
+    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const role: string = userSession.userData?.rol
+
+    console.log(role)
     useEffect(() => {
         const storedGames = localStorage.getItem('selectedGames');
         if (storedGames) {
-          setSelectedGames(JSON.parse(storedGames));
+            setSelectedGames(JSON.parse(storedGames));
+        } else if (games.length > 0) {
+            setSelectedGames(games.slice(0, 4)); // Toma los primeros 4 elementos de games
         }
-      }, []);
+    }, [games]);
 
     const openModal = () => {
         // Copia la selección actual para modificarla en el modal
@@ -44,12 +50,15 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ role, games }) => 
         }
     };
 
-    if (role !== 'admin') {
+    if (role !== 'administrator') {
         return (
             <div className="w-[1500px] flex justify-evenly items-center">
                 <div className="w-full flex justify-evenly items-center">
                     {selectedGames.map((game, index) => (
-                        <HomeCardGame key={index} imagenUrl={game.image[0]} />
+                        <HomeCardGame 
+                        key={index} 
+                        imagenUrl={game.image && Array.isArray(game.image) && game.image.length > 0 ? game.image[0] : undefined
+                        } />
                     ))}
                 </div>
             </div>

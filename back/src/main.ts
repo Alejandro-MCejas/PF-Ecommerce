@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ProductsSeed } from './seed/products/products.seed';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UsersSeed } from './seed/users/users.seed';
+import { CategoriesSeed } from './seed/categories/categories.seed';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,13 +25,17 @@ async function bootstrap() {
 
 
   // Ejecuta el seeding después de configurar CORS
+  const cateoriesSeed = app.get(CategoriesSeed);
+  await cateoriesSeed.seedCategories();
+  
   const productsSeed = app.get(ProductsSeed);
-  await productsSeed.seed();
+  await productsSeed.seedProducts();
 
   const userSeed = app.get(UsersSeed)
   await userSeed.seedUsers()
   console.log('Usuarios Cargados');
 
+  
   await app.listen(3000);
 
 

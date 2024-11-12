@@ -5,7 +5,7 @@ import { IProduct } from '@/interfaces/IProduct';
 interface CartContextType {
   cart: IProduct[];
   addToCart: (product: IProduct) => void;
-  removeFromCart: (productId: number) => void;
+  removeFromCart: (productId: string) => void;
   clearCart: () => void;
   cartCount: number;
 }
@@ -30,14 +30,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: string) => {
     setCart((prevCart) => {
-      const updatedCart = prevCart.filter((product) => product.id !== productId);
+      const updatedCart = prevCart.filter((product) => product.id.toString() !== productId);
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       return updatedCart;
     });
   };
-
+  
   const clearCart = () => {
     setCart([]);
     localStorage.setItem('cart', '[]');
