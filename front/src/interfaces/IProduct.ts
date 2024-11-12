@@ -14,10 +14,14 @@ export interface EditGameModalProps {
     games: IProduct[];
 }
 
-// export interface AddProductProps{
-//     role:string;
-//     // game:IProduct;
-// }
+export interface AddProductProps{
+    name:string,
+    images: File[],
+    description:string,
+    stock:number,
+    suscription:boolean,
+    price:number
+}
 
 export interface ProductDetail {
     product : IProduct;
@@ -28,7 +32,7 @@ export interface EditGameInformationProps{
     name:string,
     price:number,
     stock:number,
-    // suscription:boolean,
+    suscription:boolean,
     description:string
 }
 
