@@ -1,6 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
+import { Reviews } from "./reviews.entity";
+// import { Users } from "./users.entity";
 
 
 @Entity({ name: 'products' })
@@ -23,9 +25,13 @@ export class Products {
     @Column('int')
     stock: number;
 
+    @Column('init')
+    rating:number;
+    
     // @Column()
     // suscription:boolean;
 
+    
     @ManyToMany(()=> Categories, (categories) => categories.products )
     @JoinTable()
     categories: Categories[];
@@ -33,4 +39,7 @@ export class Products {
     @ManyToMany(() => OrderDetails, (orderDetails) => orderDetails.products)
     @JoinTable()
     orderDetails: OrderDetails;
+
+    @OneToMany(() => Reviews, (reviews) => reviews.products)
+    reviews: Reviews;
 }
