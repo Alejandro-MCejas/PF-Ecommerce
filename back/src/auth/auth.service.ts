@@ -15,9 +15,8 @@ export class AuthService {
     async signUpService(user: CreateUserDto) {
         user.password = await bcrypt.hash(user.password, 10)
         const newUser = await this.usersService.createUserService(user)
-        const { password, confirmPassword, ...userWithoutSensitiveInfo } = newUser
 
-        return userWithoutSensitiveInfo
+        return newUser
     }
 
     async signInService(email: string, password: string) {
