@@ -12,6 +12,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AuthModule } from './auth/auth.module';
 import typeOrmConfig from './config/typeorm';
 import { ReviewsModule } from './reviews/reviews.module';
+import { SharedModule } from './shared-module/shared-module.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,7 +21,7 @@ import { ReviewsModule } from './reviews/reviews.module';
   }), TypeOrmModule.forRootAsync({
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => configService.get('typeorm'),
-  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, AuthModule, ReviewsModule],
+  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, AuthModule, ReviewsModule, SharedModule],
   controllers: [AppController],
   providers: [AppService],
 })
