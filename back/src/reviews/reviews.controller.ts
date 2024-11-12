@@ -19,7 +19,7 @@ export class ReviewsController {
       @Param('userId') userId: string
   ): Promise<{ rating: number; comment?: string } | null> {
       const review = await this.reviewsService.ratingUser(productId, userId);
-      return review ? { rating: review.rating, comment: review.coment } : null;
+      return review ? { rating: review.rating, comment: review.comment } : null;
   }
 
   @Get(':productId/average')

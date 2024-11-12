@@ -7,12 +7,12 @@ import { Repository } from 'typeorm';
 export class ReviewsService {
   constructor(@InjectRepository(Reviews) private readonly reviewsRpository: Repository<Reviews>){}
   
-  async addReviews(productsId:string, userId:string, rating:number, coment:string): Promise<Reviews> {
+  async addReviews(productsId:string, userId:string, rating:number, comment:string): Promise<Reviews> {
     const newReview = this.reviewsRpository.create({
       products: {id: productsId},
       user: {id: userId},
       rating,
-      coment,
+      comment,
     });
     return await this.reviewsRpository.save(newReview);
   }
