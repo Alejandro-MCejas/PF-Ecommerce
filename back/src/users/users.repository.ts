@@ -10,8 +10,10 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UsersRepository {
     constructor(@InjectRepository(Users) private readonly usersRepository: Repository<Users>) { }
 
-    async findUsersRepository() { 
-        return await this.usersRepository.find()
+    async findUsersRepository() {
+        return await this.usersRepository.find({
+            select: ['id', 'name', 'email', 'address', 'phone', 'admin']
+        })
     }
 
     async createUserRepository(user: CreateUserDto) {
@@ -23,7 +25,11 @@ export class UsersRepository {
 
 
     async findOneUserRepository(id: string) {
-        const user = await this.usersRepository.findOneBy({ id })
+        const user = await this.usersRepository.findOne({
+            where: { id },
+            select: ['id', 'name', 'email', 'address', 'phone']
+        })
+
 
         return user
     }
