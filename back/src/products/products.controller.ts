@@ -17,13 +17,11 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
   async findProducts():Promise<Products[]> {
     return  await this.productsService.findProducts();
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   async findOneProducts(@Param('id',UUIDValidationPipe) id: string) {
     return await this.productsService.findOneProducts(id);
   }
