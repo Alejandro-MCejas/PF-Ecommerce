@@ -127,6 +127,7 @@ export async function getAllUsers() {
 }
 
 // Login
+console.log(APIURL)
 export async function login(userData:ILoginProps) {
   try {
     const res = await fetch(`${APIURL}/auth/signin`,{
@@ -135,7 +136,10 @@ export async function login(userData:ILoginProps) {
         "Content-type": "application/json"
       },
       body: JSON.stringify(userData)
-       });
+    });
+    console.log(res);
+    console.log(userData);
+    
        if(res.ok){
           return res.json()
        } else {
