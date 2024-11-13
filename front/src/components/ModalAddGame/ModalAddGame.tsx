@@ -5,12 +5,14 @@ import { useState } from 'react';
 import { AddProductProps } from '@/interfaces/IProduct';
 import { addProduct } from '@/helpers/productHelper';
 import AddNewGameButton from '../AddNewGameButton/AddNewGameButton';
+import { useRouter } from 'next/navigation';
 
 const AddProductForm = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+    const router = useRouter()
 
     // const initialState = 
 
@@ -59,11 +61,10 @@ const AddProductForm = () => {
         console.log("New game submitted:", newGame);
         try {
             const newProduct = await addProduct(newGame);
+            window.location.reload();
             console.log('Product added:', newProduct);
-            // Puedes agregar más lógica aquí, como mostrar un mensaje de éxito
         } catch (error) {
             console.error('Error adding product:', error);
-            // Manejo de errores si la llamada falla
         }
         // Lógica de envío al backend o manejo de datos
     };
