@@ -9,10 +9,11 @@ import { CloudinaryConfig } from 'src/config/cloudinary';
 import { CloudinaryController } from 'src/cloudinary/cloudinary.controller';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { CategoriesModule } from 'src/categories/categories.module';
+import { UsersModule } from 'src/users/users.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Products]), CloudinaryModule, forwardRef(() => CategoriesModule)],
+  imports: [TypeOrmModule.forFeature([Products]), CloudinaryModule, forwardRef(() => CategoriesModule), UsersModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig, CloudinaryController],
   exports: [ProductsService, ProductsSeed],

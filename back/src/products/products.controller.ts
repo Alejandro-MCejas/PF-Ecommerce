@@ -51,4 +51,9 @@ export class ProductsController {
     const deleteId = await this.productsService.deleteProducts(id);
     return res.status(200).json({message:`The product with id ${deleteId.id} was successfully deleted`})
   }
+
+  @Get('suscription/:userId')
+  async suscription(@Param('userId') userId:string): Promise<Products[]>{
+    return await this.productsService.getSuscription(userId)
+  }
 }

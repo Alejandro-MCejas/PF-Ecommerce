@@ -12,7 +12,7 @@ export class UsersRepository {
 
     async findUsersRepository() {
         return await this.usersRepository.find({
-            select: ['id', 'name', 'email', 'address', 'phone', 'admin']
+            select: ['id', 'name', 'email', 'address', 'phone', 'admin', 'isSuscription']
         })
     }
 

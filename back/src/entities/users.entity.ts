@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Orders } from './orders.entity'
 import { UserRole } from 'src/users/enum/role.enum'
 import { Reviews } from './reviews.entity'
+import { Products } from './products.entity'
 
 
 
@@ -29,8 +30,15 @@ export class Users {
     @Column({ type: 'varchar' })
     phone: string
 
+    @Column({default:false})
+    isSuscription:boolean;
+
     @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
     admin: UserRole
+
+    @ManyToMany(()=> Products, (products) => products.suscriptionUser)
+    @JoinTable()
+    suscriptionProducts:Products[];
 
     @OneToMany(() => Orders, order => order.user)
     orders: Orders[]

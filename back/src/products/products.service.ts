@@ -5,16 +5,18 @@ import { ProductId } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository,
     private readonly cloudinaryService:CloudinaryService,
+    private readonly userService:UsersService,
   )
   {}
 
   async findProducts(): Promise<Products[]> {
-    return await this.productsRepository.findProductsData();
+    return await this.productsRepository.findProductsPreview();
   }
 
   async findOneProducts(id: string) {
@@ -91,5 +93,20 @@ export class ProductsService {
     await this.productsRepository.updateProductsData(id, {
         stock: product.stock - 1
     })
-  }  
+  }
+  
+  async getSuscription(userId:string):Promise<Products[]>{
+    const user = await this.userService.findOneUserService(userId)
+
+    if (user.isSuscription) {
+      console.log('Mostrando productos completos (con suscripción)');
+      // Si el usuario está suscrito, se devuelven los productos completos (con todos los detalles)
+      return await this.productsRepository.findProductsData();
+    // } else {
+    //   console.log('Mostrando productos limitados (sin suscripción)');
+    //   // Si el usuario NO está suscrito, se devuelven solo los productos con información básica
+    //   return await this.productsRepository.findProductsPreview();
+    }
+  }
+
 }

@@ -14,6 +14,11 @@ export class ProductsRepository{
         return await this.productsRepository.find({relations:['categories']});
     }
 
+    async findProductsPreview(): Promise<Products[]>{
+        return await this.productsRepository.find({select: ['id','name','image','description', 'stock', 'price'], 
+            relations:['categories'], where: { suscription: false } })
+    }
+
     async findOneByProductsId(id:string): Promise<Products>{
         return await this.productsRepository.findOne({where:{id}})
     }
