@@ -6,7 +6,7 @@ const mockUsers = [
   { name: "user", password: "user123", role: "user" },
   { name: "controller", password: "controller123", role: "controller" },
 ];
-
+/*
 export async function login(userData: ILoginProps) {
   const user = mockUsers.find(
     (u) => u.name === userData.name && u.password === userData.password
@@ -26,3 +26,4 @@ export async function login(userData: ILoginProps) {
     throw new Error("Failed to login: Incorrect username or password");
   }
 }
+*/
