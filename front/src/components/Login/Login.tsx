@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
-import { validateLoginform } from "@/helpers/validateLogin";
+//import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 
 const Login = () => {
   const router = useRouter();
   const initialState = {
-    name: "",
+    email: "",
     password: "",
   };
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
@@ -36,7 +36,7 @@ const Login = () => {
       const { token, user } = response;
       const clearUser = {
         id: user.id,
-        name: user.name,
+       email: user.email,
         rol: user.role, 
       };
 
@@ -48,11 +48,11 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
+ /* useEffect(() => {
     const errors = validateLoginform(dataUser);
     setErrors(errors);
   }, [dataUser]);
-
+*/
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
@@ -73,15 +73,15 @@ const Login = () => {
             {/* Input para Nombre de Usuario */}
             <div className="relative w-[350px] mb-4">
               <input
-                id="name"
-                name="name"
+                id="email"
+                name="email"
                 type="text"
-                value={dataUser.name}
+                value={dataUser.email}
                 onChange={handleChange}
-                placeholder="name"
+                placeholder="email"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {errors.name && <span className="text-red-500">{errors.name}</span>}
+              {errors.email && <span className="text-red-500">{errors.email}</span>}
             </div>
 
             {/* Input para Contraseña */}

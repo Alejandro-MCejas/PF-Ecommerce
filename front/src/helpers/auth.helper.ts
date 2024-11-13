@@ -16,6 +16,7 @@ export async function register(userData: IRegisterProps, parentId?: string) {
       if (parentId) {
         url.searchParams.append("parentId", parentId);
       }
+  console.log(url);
   
       const res = await fetch(url.toString(), {
         method: "POST",
@@ -24,6 +25,7 @@ export async function register(userData: IRegisterProps, parentId?: string) {
         },
         body: JSON.stringify(userData),
       });
+  console.log(res);
   
       if (!res.ok) {
         const errorData = await res.json(); // Obtener los detalles del error
