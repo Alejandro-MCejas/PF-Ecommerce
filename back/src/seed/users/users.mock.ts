@@ -3,7 +3,7 @@ import { UserRole } from "src/users/enum/role.enum";
 export const usersMock = [
     {
         "name": "Ana Martínez",
-        "email": "prueba123@gmail.com",
+        "email": "user1@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "Rivadavia 101",
@@ -12,7 +12,7 @@ export const usersMock = [
     },
     {
         "name": "Carlos Gomez",
-        "email": "prueba123@gmail.com",
+        "email": "admin1@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "San Martin 789",
@@ -21,7 +21,7 @@ export const usersMock = [
     },
     {
         "name": "Jorge Ramírez",
-        "email": "prueba123@gmail.com",
+        "email": "user2@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "Corrientes 234",
@@ -30,7 +30,7 @@ export const usersMock = [
     },
     {
         "name": "Laura Torres",
-        "email": "prueba123@gmail.com",
+        "email": "user3@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "Alsina 789",
@@ -39,7 +39,7 @@ export const usersMock = [
     },
     {
         "name": "Mariana López",
-        "email": "prueba123@gmail.com",
+        "email": "admin2@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "Belgrano 678",
@@ -48,7 +48,7 @@ export const usersMock = [
     },
     {
         "name": "Santiago Pérez",
-        "email": "prueba123@gmail.com",
+        "email": "admin3@gmail.com",
         "password": "prueba",
         "confirmPassword": "prueba",
         "address": "Av. Libertador 1234",
