@@ -50,8 +50,8 @@ const home = async () => {
                         <h2 className="text-center font-black text-[30px] font-serif">Choose where you like to play the most</h2>
                     </div>
                     <div className="w-1/2 flex justify-evenly items-center">
-                        <FontAwesomeIcon icon={faPlaystation} className="w-[50px] h-[50px] flex justify-end" />
-                        <FontAwesomeIcon icon={faXbox} className="w-[50px] h-[50px] flex justify-end" />
+                        <FontAwesomeIcon icon={faPlaystation} className="text-[50px] flex justify-end" />
+                        <FontAwesomeIcon icon={faXbox} className="text-[50px] flex justify-end" />
                         <Image src={logoNintendo} alt={"logo"} className="w-[150px] h-[50px] flex justify-end" ></Image>
                     </div>
 

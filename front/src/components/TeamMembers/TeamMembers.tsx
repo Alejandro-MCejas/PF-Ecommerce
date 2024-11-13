@@ -10,9 +10,9 @@ const TeamMembers = () => {
 
     return (
         <div className='bg-primaryColor pb-6'>
-            <div className='text-white flex flex-col items-center text-center mb-6 px-8'>
-                <h1 className='text-4xl font-bold py-8'>Nuestro Equipo de Programadores</h1>
-                <p>Somos un grupo de estudiantes apasionados por la programación y el desarrollo de software. Nuestro objetivo es crear soluciones innovadoras y efectivas que aborden los desafíos actuales en el ámbito tecnológico. Cada miembro aporta sus habilidades únicas y su creatividad para contribuir al éxito de nuestros proyectos.</p>
+            <div className='text-white max-w-[1500px] mx-auto flex flex-col items-center text-center mb-6 px-8'>
+                <h1 className='text-4xl font-bold py-8'>Our Team of Programmers</h1>
+                <p>We are a group of students passionate about programming and software development. Our goal is to create innovative and effective solutions that address current challenges in the technological field. Each member brings their unique skills and creativity to contribute to the success of our projects.</p>
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-6'>
                 {

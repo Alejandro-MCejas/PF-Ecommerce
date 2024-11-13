@@ -1,13 +1,14 @@
+
 const teamMembers = [
 
     {
         "id": 1,
         "name": "Valentino Sparvoli",
         "profession":"FrontEnd Developer",
-        "image":"https://st4.depositphotos.com/29453910/37778/v/380/depositphotos_377785406-stock-illustration-hand-drawn-modern-man-avatar.jpg",
+        "image":"https://res.cloudinary.com/dvpenabty/image/upload/v1731453364/jp2eznkd6eqkp4mpnz0b.jpg",
         "linkFacebook":"",
-        "linkGitHub":"",
-        "linkLinkedIn":""
+        "linkGitHub":"https://github.com/SparvoliValentino",
+        "linkLinkedIn":"https://www.linkedin.com/in/valentino-sparvoli-088846219/"
     },
     {
         "id": 2,
