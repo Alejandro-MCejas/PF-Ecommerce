@@ -7,21 +7,22 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
+import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 
 interface ProductDetail {
-    product:IProduct;
+    product: IProduct;
     role: string;
 }
 
-const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct})=> {
+const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
 
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
 
-    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
     const role: string = userSession.userData?.rol
 
-    function handleDeleteGame (){
+    const handleDeleteGame = () => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -30,19 +31,21 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
-              });
+                await deleteProductByID(product.id);
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
             }
-          });
-    }
+        });
+    };
 
-    function handleAddCyberGamer (){
-        Swal.fire({
+
+    const handleAddCyberGamer = async () => {
+        const result = await Swal.fire({
             title: "Are you sure?",
             text: "You will add this game to CyberGamer",
             icon: "question",
@@ -50,22 +53,27 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, add it!"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "Add it succesfully!",
-                text: "The game is now in CyberGamer",
-                icon: "success"
-              });
-            }else{
+        });
+        if (result.isConfirmed) {
+            // Crear una copia del producto y cambiar la propiedad `suscription` a true
+            const updatedProduct = { ...product, suscription: true };
+            try {
+                await editProductInformationByID(updatedProduct);
+                Swal.fire({
+                    title: "Added successfully!",
+                    text: "The game is now in CyberGamer",
+                    icon: "success"
+                });
+            } catch (error) {
                 Swal.fire({
                     title: "Ups, something went wrong!",
-                    text: "The game couldnt be added",
+                    text: "The game couldn't be added",
                     icon: "error"
                 });
             }
-          });
-    }
+        }
+    };
+    
 
     return (
         <div>
@@ -118,8 +126,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             )
                         }
                         <div className="w-full">
-                            {/* Verificacion de rol. Si el rol es distinto de admin entonces preguntar si es distinto de user mostrar un solo boton de comprar, 
-                            si es user entonces mostrar add to cart o buy now y si es admin mostrar edit, suscription y delete */}
                             {/* Lógica de botones según el rol */}
                             {role !== "administrator" ? (
                                 role !== "user" ? (
