@@ -93,3 +93,15 @@ export const addProduct = async (product:AddProductProps): Promise<EditGameInfor
         );
     }
 }
+
+export const deleteProductByID = async(id:string) =>{
+    try {
+        const response = await fetch(`${API_URL}/products/${id}`, {
+            method:"DELETE"
+        })
+        const productByID = await response.json()
+        return productByID;
+    } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+    }
+}

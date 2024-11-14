@@ -1,11 +1,8 @@
 import Image from "next/image";
 
 //Importaciones de imagenes  
-import gifImage from "./gif.gif"
+import gifImage from "../../../public/gif.gif"
 import logoNintendo from "./LogoNintendo.png"
-
-//Helppers
-import { exampleArrayProducs } from "../backHelper";
 
 //Componentes
 import { HomeCardGame } from "@/components/HomeCardGame/HomeCardGame";
