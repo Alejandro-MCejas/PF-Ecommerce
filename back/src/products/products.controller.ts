@@ -10,6 +10,7 @@ import { AuthGuard } from 'src/auth/authGuard.guard';
 import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from 'src/users/enum/role.enum';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('products')
 // @UseFilters(HttpExceptionFilter)
@@ -26,6 +27,7 @@ export class ProductsController {
     return await this.productsService.findOneProducts(id);
   }
 
+  @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
@@ -34,6 +36,7 @@ export class ProductsController {
     return await this.productsService.createProducts(products, files);
   }
 
+  @ApiBearerAuth()
   @Put(':id')
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
@@ -42,6 +45,7 @@ export class ProductsController {
     return await this.productsService.updateProducts(id,products, files);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
