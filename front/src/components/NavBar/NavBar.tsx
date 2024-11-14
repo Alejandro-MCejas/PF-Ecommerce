@@ -7,15 +7,25 @@ import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '@/context/Authcontext';
+import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
   //const { role } = useAuth(); // Assuming you have an auth context
 
   //Remplazo provicional del useAuth()
-  const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-  const role: string = userSession.userData?.rol;
-  console.log(userSession)
+  // const [role, setRole] = useState<string | undefined>(undefined);
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+  //     setRole(userSession.userData?.rol);
+  //     console.log(userSession);
+  //   }
+  // }, []);
+  const role:string = "user"
+  const suscription = true;
+
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
@@ -67,7 +77,7 @@ const NavBar = () => {
       {role !== "administrator" ? (
         role !== "user" ? (
           // Mostrar solo botón de comprar si el rol no es admin ni user
-          <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+          <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-evenly mt-4 px-4 md:px-8">
             <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Games
             </Link>
@@ -76,7 +86,7 @@ const NavBar = () => {
             </Link>
           </div>
         ) : (
-          // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
+          // Mostrar botones de navegación si el rol es user
           <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
             <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Home
@@ -84,8 +94,11 @@ const NavBar = () => {
             <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Games
             </Link>
-            <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              Subscription
+            <Link
+              href={suscription ? "/cybergamer" : "/subscription"}
+              className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]"
+            >
+              {suscription ? "Cybergamer" : "Subscription"}
             </Link>
             <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               {
@@ -114,6 +127,7 @@ const NavBar = () => {
           </Link>
         </div>
       )}
+
     </div>
   );
 };
