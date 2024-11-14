@@ -5,7 +5,6 @@ export const usersMock = [
         "name": "Ana Martínez",
         "email": "user1@gmail.com",
         "password": "prueba",
-        "confirmPassword": "prueba",
         "address": "Rivadavia 101",
         "phone": "2211334455",
         "admin": UserRole.USER
@@ -13,8 +12,7 @@ export const usersMock = [
     {
         "name": "Carlos Gomez",
         "email": "admin1@gmail.com",
-        "password": "prueba",
-        "confirmPassword": "prueba",
+        "password": "admin123",
         "address": "San Martin 789",
         "phone": "0987654321",
         "admin": UserRole.ADMIN
@@ -23,7 +21,6 @@ export const usersMock = [
         "name": "Jorge Ramírez",
         "email": "user2@gmail.com",
         "password": "prueba",
-        "confirmPassword": "prueba",
         "address": "Corrientes 234",
         "phone": "3344556677",
         "admin": UserRole.USER
@@ -32,7 +29,6 @@ export const usersMock = [
         "name": "Laura Torres",
         "email": "user3@gmail.com",
         "password": "prueba",
-        "confirmPassword": "prueba",
         "address": "Alsina 789",
         "phone": "6677889900",
         "admin": UserRole.USER
@@ -41,7 +37,6 @@ export const usersMock = [
         "name": "Mariana López",
         "email": "admin2@gmail.com",
         "password": "prueba",
-        "confirmPassword": "prueba",
         "address": "Belgrano 678",
         "phone": "1234567890",
         "admin": UserRole.ADMIN
@@ -50,7 +45,6 @@ export const usersMock = [
         "name": "Santiago Pérez",
         "email": "admin3@gmail.com",
         "password": "prueba",
-        "confirmPassword": "prueba",
         "address": "Av. Libertador 1234",
         "phone": "1122334455",
         "admin": UserRole.ADMIN

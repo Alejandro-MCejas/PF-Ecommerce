@@ -20,9 +20,6 @@ export class Users {
     @Column({ type: 'varchar' })
     password: string
 
-    @Column({ type: 'varchar' })
-    confirmPassword: string
-
     @Column({ type: 'text' })
     address: string
 
