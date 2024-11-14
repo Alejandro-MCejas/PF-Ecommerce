@@ -13,7 +13,8 @@ const NavBar = () => {
   //const { role } = useAuth(); // Assuming you have an auth context
 
   //Remplazo provicional del useAuth()
-  const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+  const userSession = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("userSession") || "{}") : {};
+ //const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
   const role: string = userSession.userData?.rol;
   console.log(userSession)
   return (
