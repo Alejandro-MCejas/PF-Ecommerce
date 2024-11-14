@@ -15,8 +15,10 @@ export class ProductsRepository{
     }
 
     async findProductsSuscription(): Promise<Products[]>{
-        return await this.productsRepository.find({select: ['id','name','image','description', 'stock', 'price','suscription'], 
-            relations:['categories']})
+        return await this.productsRepository.find({
+            select: ['id','name','image','description', 'stock', 'price','suscription'], 
+            relations:['categories']
+        })
     }
 
     async findOneByProductsId(id:string): Promise<Products>{

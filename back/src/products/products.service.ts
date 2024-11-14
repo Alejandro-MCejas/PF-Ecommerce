@@ -16,7 +16,7 @@ export class ProductsService {
   {}
 
   async findProducts(): Promise<Products[]> {
-    return await this.productsRepository.findProductsSuscription();
+    return await this.productsRepository.findProductsData();
   }
 
   async findOneProducts(id: string) {
