@@ -14,17 +14,11 @@ const NavBar = () => {
   //const { role } = useAuth(); // Assuming you have an auth context
 
   //Remplazo provicional del useAuth()
-  // const [role, setRole] = useState<string | undefined>(undefined);
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-  //     setRole(userSession.userData?.rol);
-  //     console.log(userSession);
-  //   }
-  // }, []);
-  const role:string = "user"
-  const suscription = true;
+  const userSession = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("userSession") || "{}") : {};
+ //const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+  const role: string = userSession.userData?.rol;
+  console.log(userSession)
 
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">

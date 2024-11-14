@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
-
+import Swal from "sweetalert2";
 const Login = () => {
   const router = useRouter();
   const initialState = {
@@ -32,27 +32,34 @@ const Login = () => {
 
     try {
       const response = await login(dataUser);
-      console.log(response)
-      const { token, user } = response;
-      const clearUser = {
-        id: user.id,
-       email: user.email,
-        rol: user.role, 
-      };
+      
+  // Verifica la estructura de la respuesta
+      const { token, user } = response;  // Desestructuración
+      console.log("Token:", token);
+      console.log("User:", user);
+      localStorage.setItem("userSession", JSON.stringify({ token, user }));
+      Swal.fire({
+        title: "Login Successful",
+        text: "You have Login successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
 
-      localStorage.setItem("userSession", JSON.stringify({ token, userData: clearUser }));
-      alert("You have logged in successfully");
-      router.push("/");
+    
+
+      // Redirigir según el admin
+      if (user.admin === "admin") {
+        router.push("/dashboardAdmin");
+      } else if (user.admin === "user") {
+        router.push("/dashboardLayout");
+      } else {
+        router.push("/"); // En caso de que no tenga un admin específico
+      }
     } catch (error: any) {
       setGeneralError(error.message);
     }
   };
 
- /* useEffect(() => {
-    const errors = validateLoginform(dataUser);
-    setErrors(errors);
-  }, [dataUser]);
-*/
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
@@ -70,7 +77,7 @@ const Login = () => {
             {/* Mostrar error general si existe */}
             {generalError && <span className="text-red-500">{generalError}</span>}
 
-            {/* Input para Nombre de Usuario */}
+            {/* Input para Email */}
             <div className="relative w-[350px] mb-4">
               <input
                 id="email"
@@ -119,7 +126,7 @@ const Login = () => {
               />
             </button>
 
-            {/* Mensaje de inicio de sesión */}
+            {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
               Don't have an account yet?{" "}
               <Link href="/register">
