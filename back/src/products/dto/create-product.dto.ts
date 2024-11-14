@@ -21,8 +21,8 @@ export class CreateProductDto {
     @IsPositive()
     stock:number
 
-    @IsString()
-    @IsOptional()
-    @Length(1, 50)
-    categoryName?: string;
+    // @IsString()
+    // @IsOptional()
+    // @Length(1, 50)
+    // categoryName?: string;
 }

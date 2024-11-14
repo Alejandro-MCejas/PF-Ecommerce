@@ -1,5 +1,4 @@
 
-import { exampleArrayProducs } from "@/app/backHelper";
 import ProductDetail from "@/components/ProductDetail/ProductDetail";
 import { fetchingProductByID } from "@/helpers/productHelper";
 import { IProduct } from "@/interfaces/IProduct";
