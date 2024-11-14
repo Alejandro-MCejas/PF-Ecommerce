@@ -27,7 +27,7 @@ export class UsersRepository {
     async findOneUserRepository(id: string) {
         const user = await this.usersRepository.findOne({
             where: { id },
-            select: ['id', 'name', 'email', 'address', 'phone']
+            select: ['id', 'name', 'email', 'address', 'phone', 'isSuscription',]
         })
 
 

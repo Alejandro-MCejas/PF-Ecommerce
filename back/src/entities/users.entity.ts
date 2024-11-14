@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinTable, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Orders } from './orders.entity'
 import { UserRole } from 'src/users/enum/role.enum'
 import { Reviews } from './reviews.entity'
@@ -36,7 +36,7 @@ export class Users {
     @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
     admin: UserRole
 
-    @ManyToMany(()=> Products, (products) => products.suscriptionUser)
+    @OneToOne(()=> Products, (products) => products.suscriptionUser)
     @JoinTable()
     suscriptionProducts:Products[];
 
