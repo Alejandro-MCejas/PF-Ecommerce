@@ -206,7 +206,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione corrupti numquam obcaecati eaque soluta suscipit, eum, rem, possimus hic qui labore aliquid debitis iure aspernatur illo culpa? Saepe, repudiandae eveniet!
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -214,7 +214,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate dolorum corrupti quas perspiciatis molestiae voluptas repellendus sequi quisquam eaque deleniti laborum delectus at, nulla veritatis mollitia doloribus maxime itaque inventore?
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -222,7 +222,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil enim corrupti sint obcaecati quidem. Placeat facere quis excepturi fuga eius, fugit consequatur culpa. Harum id odio nam unde, voluptas tempora.
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -230,7 +230,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi deleniti minima sed voluptatem vitae illo tempore. Consequuntur corrupti ullam aut possimus vel facilis aperiam quam minima tempore veritatis? Quibusdam, quaerat!
                         </p>
                     </div>
                 </div>

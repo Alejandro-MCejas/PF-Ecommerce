@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
-declare var Landbot: any;
+declare let Landbot: any;
 let myLandbot: any;
 
 const Footer = () => {

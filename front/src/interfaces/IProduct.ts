@@ -32,7 +32,7 @@ export interface EditGameInformationProps{
     name:string,
     price:number,
     stock:number,
-    suscription:boolean,
+    suscription?:boolean,
     description:string
 }
 

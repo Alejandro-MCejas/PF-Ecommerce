@@ -37,7 +37,7 @@ const MyInformation =()=>{
                 <button className="bg-red-500 text-white px-4 py-2 rounded-lg">Cancel subscription</button>
             </div>
             <div className="text-sm text-gray-600">
-                Don't remember your password? <Link href="/login" className="text-blue-500">Change your password</Link>
+                Don&apos;t remember your password?  <Link href="/login" className="text-blue-500">Change your password</Link>
             </div>
             <div className="flex justify-center">
                 <button className="bg-purple-500 text-white px-6 py-3 rounded-lg font-semibold mt-4">

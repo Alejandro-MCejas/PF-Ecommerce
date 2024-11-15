@@ -6,12 +6,15 @@ import { AddProductProps } from '@/interfaces/IProduct';
 import { addProduct } from '@/helpers/productHelper';
 import AddNewGameButton from '../AddNewGameButton/AddNewGameButton';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/Authcontext';
 
 const AddProductForm = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+
+    const {userData} = useAuth()
     const router = useRouter()
 
     // const initialState = 
@@ -25,8 +28,8 @@ const AddProductForm = () => {
         suscription: false,
     })
 
-    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-    const role: string = userSession.userData?.rol;
+    // const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
+    // const role: string = userSession.userData?.rol;
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -105,7 +108,7 @@ const AddProductForm = () => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
-    if (role !== "administrator") return null;
+    if (userData?.user.admin !== "administrator") return null;
 
     return (
         <div className="mt-10">

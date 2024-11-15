@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { IProduct, EditGameModalProps } from '@/interfaces/IProduct';
 import { HomeCardGame } from '../HomeCardGame/HomeCardGame';
+import { useAuth } from '@/context/Authcontext';
 
 
 
@@ -10,11 +11,8 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedGames, setSelectedGames] = useState<IProduct[]>([]);
     const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]);
+    const {userData} = useAuth()
 
-    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
-    const role: string = userSession.userData?.rol
-
-    console.log(role)
     useEffect(() => {
         const storedGames = localStorage.getItem('selectedGames');
         if (storedGames) {
@@ -50,7 +48,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
         }
     };
 
-    if (role !== 'administrator') {
+    if (userData?.user.admin !== 'administrator') {
         return (
             <div className="w-[1500px] flex justify-evenly items-center">
                 <div className="w-full flex justify-evenly items-center">
