@@ -3,11 +3,14 @@
 import { useCart } from "@/context/CartContext";
 import Swal from "sweetalert2";
 import CardCart from "../CartCard/CardCart";
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 
 export const CartView = () => {
 
+    // initMercadoPago('TESTUSER1895086326');
+
     //remplazo provisional useAuth()
-    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}")
+    // const userSession = JSON.parse(localStorage.getItem("userSession") || "{}")
     // const role = userSession.user.id
 
     const { cart, removeFromCart, clearCart } = useCart();
@@ -97,6 +100,11 @@ export const CartView = () => {
                         </div>
                     )
                 }
+                <div>
+
+                {/* <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} customization={{ texts:{ valueProp: 'smart_option'}}} /> */}
+
+                </div>
 
             </div>
 

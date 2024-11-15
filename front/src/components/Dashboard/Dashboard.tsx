@@ -30,7 +30,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="bg-black min-h-screen flex flex-col items-center py-10">
+        <div className="min-h-screen flex flex-col items-center py-10">
             <div className="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6">
                 <div className="flex border-b border-gray-300 pb-4 mb-4">
                     <div className="flex flex-col w-1/4 pr-4">

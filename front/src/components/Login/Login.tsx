@@ -8,7 +8,10 @@ import { login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { useAuth } from "@/context/Authcontext";
 const Login = () => {
+
+  const {setUserData} = useAuth()
   const router = useRouter();
   const initialState = {
     email: "",
@@ -32,21 +35,21 @@ const Login = () => {
 
     try {
       const response = await login(dataUser);
-      
-  // Verifica la estructura de la respuesta
+
+      // Verifica la estructura de la respuesta
       const { token, user } = response;  // Desestructuración
       console.log("Token:", token);
       console.log("User:", user);
-      localStorage.setItem("userSession", JSON.stringify({ token, user }));
+      setUserData({token,user})
+
+      
+      // localStorage.setItem("userSession", JSON.stringify({ token, user }));
       Swal.fire({
         title: "Login Successful",
         text: "You have Login successfully!",
         icon: "success",
         confirmButtonText: "OK",
       });
-
-    
-
       // Redirigir según el admin
       if (user.admin === "admin") {
         router.push("/dashboardAdmin");
@@ -128,7 +131,7 @@ const Login = () => {
 
             {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
-              Don't have an account yet?{" "}
+              Don&apos;t have an account yet?{" "}
               <Link href="/register">
                 <span className="font-bold text-blue-500 cursor-pointer">Sign up</span>
               </Link>

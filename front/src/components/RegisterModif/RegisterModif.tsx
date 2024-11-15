@@ -8,19 +8,20 @@ import { IRegisterProps } from "@/interfaces/IRegisterProp";
 import { IRegisterError } from "@/interfaces/IRegisterError";
 import validateRegisterForm from "@/helpers/validateRegister";
 import Link from "next/link";
-import { AuthContext } from "@/context/Authcontext";
+import { AuthContext, useAuth } from "@/context/Authcontext";
 
 const Register = () => {
   const router = useRouter();
-  const { userData } = useContext(AuthContext);
+  // const { userData } = useContext(AuthContext);
+  const {userData} = useAuth()
 
   const initialState = {
-    name: userData?.userData.name || "",
-    email: userData?.userData.email || "",
+    name: userData?.user.name || "",
+    email: userData?.user.email || "",
     password: "",
-    passwordConfirm: "",
-    address: userData?.userData.address || "",
-    phone: userData?.userData.phone || "",
+    confirmPassword: "",
+    address: userData?.user.address || "",
+    phone: userData?.user.phone || "",
   };
 
   const [dataUser, setDataUser] = useState<IRegisterProps>(initialState);
@@ -82,7 +83,7 @@ const Register = () => {
             value={dataUser.name}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder={userData?.userData.name || "Username"}
+            placeholder={userData?.user.name || "Username"}
             className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
           />
           {touched.name && errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
