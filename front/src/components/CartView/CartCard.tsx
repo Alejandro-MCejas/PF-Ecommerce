@@ -7,7 +7,9 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 
 export const CartView = () => {
 
-    // initMercadoPago('TESTUSER1895086326');
+    initMercadoPago('APP_USR-82a8c747-15af-4cce-ad00-69ab877f14ad');
+
+    console.log(initMercadoPago("APP_USR-82a8c747-15af-4cce-ad00-69ab877f14ad"))
 
     //remplazo provisional useAuth()
     // const userSession = JSON.parse(localStorage.getItem("userSession") || "{}")
@@ -102,7 +104,7 @@ export const CartView = () => {
                 }
                 <div>
 
-                {/* <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} customization={{ texts:{ valueProp: 'smart_option'}}} /> */}
+                <Wallet initialization={{ preferenceId: 'wy9alYnxti0XI72y9zlseHC9ZZHNB6Vo' }} customization={{ texts:{ valueProp: 'smart_option'}}} />
 
                 </div>
 

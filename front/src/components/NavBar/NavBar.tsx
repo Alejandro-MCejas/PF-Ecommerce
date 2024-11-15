@@ -13,10 +13,7 @@ import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  // const [role, setRole] = useState<string | undefined>(undefined);
-  // const [subscription, setSubscription] = useState<boolean | undefined>(undefined);
   const { userData } = useAuth();
-
   const [clientRendered, setClientRendered] = useState(false);
 
   useEffect(() => {
@@ -25,16 +22,10 @@ const NavBar = () => {
   }, []);
 
   if (!clientRendered) {
-    // Renderiza un estado de carga o vacío para evitar problemas de hidratación
     return null;
   }
-
-
-
- //const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-  // const role: string = userSession.userData?.rol;
   const suscription = true
-  // console.log(userSession)
+
 
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">

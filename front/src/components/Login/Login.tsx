@@ -42,7 +42,7 @@ const Login = () => {
       console.log("User:", user);
       setUserData({token,user})
 
-      
+
       // localStorage.setItem("userSession", JSON.stringify({ token, user }));
       Swal.fire({
         title: "Login Successful",
@@ -54,7 +54,7 @@ const Login = () => {
       if (user.admin === "admin") {
         router.push("/dashboardAdmin");
       } else if (user.admin === "user") {
-        router.push("/dashboardLayout");
+        router.push("/dashboard");
       } else {
         router.push("/"); // En caso de que no tenga un admin específico
       }
