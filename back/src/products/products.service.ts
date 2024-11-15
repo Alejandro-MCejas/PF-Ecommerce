@@ -5,13 +5,11 @@ import { ProductId } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository,
     private readonly cloudinaryService:CloudinaryService,
-    private readonly userService:UsersService,
   )
   {}
 
@@ -94,38 +92,4 @@ export class ProductsService {
         stock: product.stock - 1
     })
   }
-  
-  async getSuscription(userId: string): Promise<Products[]> {
-    // Obtener usuario
-    const user = await this.userService.findOneUserService(userId);
-    console.log('Usuario:', user); // Verifica que el usuario tiene el campo isSuscription
-  
-    // Verificar si el usuario tiene el campo isSuscription correctamente definido
-    if (user.isSuscription === undefined || user.isSuscription === null) {
-      throw new Error('El campo isSuscription del usuario no está definido correctamente');
-    }
-  
-    // Obtener lista de productos
-    const products = await this.productsRepository.findProductsSuscription();
-    console.log('Productos recuperados:', products); // Verifica los productos y suscripciones
-  
-    // Verifica que los productos tengan el campo suscription correctamente asignado
-    if (products.length === 0) {
-      console.log('No se encontraron productos.');
-      return []; // Si no hay productos, retorna un array vacío
-    }
-  
-    // Filtrar productos dependiendo de la suscripción del usuario
-    if (user.isSuscription) {
-      console.log('Mostrando productos completos (con suscripción)');
-      // Si el usuario está suscrito, devolver todos los productos con suscripción
-      return products.filter(product => product.suscription === true); // Asegúrate que el campo suscription existe y es un booleano
-    } else {
-      console.log('Mostrando productos limitados (sin suscripción)');
-      // Si el usuario no está suscrito, devolver solo los productos sin suscripción
-      return products.filter(product => product.suscription === false); // Asegúrate que el campo suscription existe y es un booleano
-    }
-  }
-  
-
 }

@@ -1,9 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
 import { Reviews } from "./reviews.entity";
-import { Users } from "./users.entity";
-// import { Users } from "./users.entity";
+import { Suscription } from "./suscription.entity";
+
 
 
 @Entity({ name: 'products' })
@@ -29,8 +29,8 @@ export class Products {
     @Column({default: false})
     suscription:boolean;
 
-    @OneToOne(()=> Users, (user) => user.suscriptionProducts)
-    suscriptionUser:Users[]
+    @OneToMany(() => Suscription, (subscription) => subscription.product)
+    suscriptions: Suscription[];
 
     @ManyToMany(()=> Categories, (categories) => categories.products )
     @JoinTable()
