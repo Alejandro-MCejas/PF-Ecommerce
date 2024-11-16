@@ -1,11 +1,8 @@
 import Image from "next/image";
 
 //Importaciones de imagenes  
-import gifImage from "./gif.gif"
+import gifImage from "../../../public/gif.gif"
 import logoNintendo from "./LogoNintendo.png"
-
-//Helppers
-import { exampleArrayProducs } from "../backHelper";
 
 //Componentes
 import { HomeCardGame } from "@/components/HomeCardGame/HomeCardGame";
@@ -28,12 +25,12 @@ const home = async () => {
         <div className="w-full min-h-screen bg-backgroundLayout">
 
             <h2 className="text-[64px] font-black text-center neon-text mb-4">Latest releases</h2>
-            <div className="relative w-full h-[700px] mb-3">
+            <div className="relative w-full h-[700px] mb-3 md:w-[500px]">
                 <Image
                     src={gifImage}
                     alt={"fondo"}
                     layout="fill"
-                    className="w-full h-[700px] blur-md" ></Image>
+                    className="w-full h-[700px] blur-md md:w-full" ></Image>
                 <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
                     <div>
                         <EditGameModal
@@ -50,8 +47,8 @@ const home = async () => {
                         <h2 className="text-center font-black text-[30px] font-serif">Choose where you like to play the most</h2>
                     </div>
                     <div className="w-1/2 flex justify-evenly items-center">
-                        <FontAwesomeIcon icon={faPlaystation} className="w-[50px] h-[50px] flex justify-end" />
-                        <FontAwesomeIcon icon={faXbox} className="w-[50px] h-[50px] flex justify-end" />
+                        <FontAwesomeIcon icon={faPlaystation} className="text-[50px] flex justify-end" />
+                        <FontAwesomeIcon icon={faXbox} className="text-[50px] flex justify-end" />
                         <Image src={logoNintendo} alt={"logo"} className="w-[150px] h-[50px] flex justify-end" ></Image>
                     </div>
 

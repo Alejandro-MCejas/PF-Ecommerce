@@ -1,6 +1,5 @@
 
 import { CardProductsView } from "@/components/CardProductsView/CardProductsView"
-import { exampleArrayProducs } from "../backHelper"
 import { FilterForm } from "@/components/FilterForm/FilterForm"
 import AddGame from "@/components/ModalAddGame/ModalAddGame"
 import { fetchingProducts } from "@/helpers/productHelper"

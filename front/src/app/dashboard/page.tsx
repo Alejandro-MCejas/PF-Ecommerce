@@ -1,8 +1,10 @@
-const Dashboard=()=>{
+import Dashboard from "@/components/Dashboard/Dashboard"
+
+const dashboardForm =()=>{
     return(
-        <div>
-            Dashboard
-        </div>
+    <div>
+        <Dashboard/>
+    </div>
     )
 }
-export default Dashboard
+export default dashboardForm

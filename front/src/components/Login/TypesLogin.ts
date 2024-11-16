@@ -1,12 +1,12 @@
 import { IRegisterProps } from "@/interfaces/IRegisterProp";
 
 export interface ILoginProps{
-name: string;
+email: string;
 password: string
 
 }
 export interface ILoginError {
-    name?: string;
+    email?: string;
     password?: string
 }
 

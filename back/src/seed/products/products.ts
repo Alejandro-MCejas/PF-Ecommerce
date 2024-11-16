@@ -8,7 +8,7 @@ export const productsMock = [
         price: 59.99,
         stock: 25,
         suscription: false,
-        categories:"Acción",
+        categories: "Acción",
     },
     {
         name: "God of War: Ragnarok",
@@ -17,12 +17,12 @@ export const productsMock = [
         price: 69.99,
         stock: 30,
         suscription: false,
-        categories:"Acción",
+        categories: "Acción",
     },
     {
         name: "Minecraft",
         image: ["https://res.cloudinary.com/dvpenabty/image/upload/v1730924299/oh1nhzyqhe42rz469fpn.png",
-        "https://res.cloudinary.com/dvpenabty/image/upload/v1730924299/wgvbotbkzlphp9vch9ff.jpg"],
+            "https://res.cloudinary.com/dvpenabty/image/upload/v1730924299/wgvbotbkzlphp9vch9ff.jpg"],
         description: "Un juego de construcción y exploración en un mundo infinito.",
         price: 26.99,
         stock: 100,
@@ -35,7 +35,7 @@ export const productsMock = [
         price: 39.99,
         stock: 45,
         suscription: false,
-        categories:"Acción",
+        categories: "Acción",
     },
     {
         name: "FIFA 23",
@@ -44,7 +44,7 @@ export const productsMock = [
         price: 59.99,
         stock: 70,
         suscription: true,
-        categories:"Acción",
+        categories: "Acción",
     },
     {
         name: "Elden Ring",
@@ -82,8 +82,8 @@ export const productsMock = [
         name: "Fortnite",
         image: ["https://example.com/images/fortnite.jpg"],
         description: "Juego de batalla real multijugador gratuito.",
-        price: 0.00,
-        stock: 9999,
+        price: 55.99,
+        stock: 40,
         suscription: true,
     }
 ];

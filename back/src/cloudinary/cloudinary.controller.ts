@@ -2,7 +2,9 @@ import { Controller, Post, UploadedFiles, UseGuards, UseInterceptors } from '@ne
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from './cloudinary.service';
 import { AuthGuard } from 'src/auth/authGuard.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('cloudinary')
 export class CloudinaryController {
     constructor(private readonly cloudinaryService: CloudinaryService) {}

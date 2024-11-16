@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
-import { validateLoginform } from "@/helpers/validateLogin";
-
+//import { validateLoginform } from "@/helpers/validateLogin";
+import Image from "next/image";
+import Swal from "sweetalert2";
+import { useAuth } from "@/context/Authcontext";
 const Login = () => {
+
+  const {setUserData} = useAuth()
   const router = useRouter();
   const initialState = {
-    name: "",
+    email: "",
     password: "",
   };
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
@@ -31,25 +35,33 @@ const Login = () => {
 
     try {
       const response = await login(dataUser);
-      const { token, user } = response;
-      const clearUser = {
-        id: user.id,
-        name: user.name,
-        rol: user.role,
-      };
 
-      localStorage.setItem("userSession", JSON.stringify({ token, userData: clearUser }));
-      alert("You have logged in successfully");
-      router.push("/");
+      // Verifica la estructura de la respuesta
+      const { token, user } = response;  // Desestructuración
+      console.log("Token:", token);
+      console.log("User:", user);
+      setUserData({token,user})
+
+
+      // localStorage.setItem("userSession", JSON.stringify({ token, user }));
+      Swal.fire({
+        title: "Login Successful",
+        text: "You have Login successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      // Redirigir según el admin
+      if (user.admin === "admin") {
+        router.push("/dashboardAdmin");
+      } else if (user.admin === "user") {
+        router.push("/dashboard");
+      } else {
+        router.push("/"); // En caso de que no tenga un admin específico
+      }
     } catch (error: any) {
       setGeneralError(error.message);
     }
   };
-
-  useEffect(() => {
-    const errors = validateLoginform(dataUser);
-    setErrors(errors);
-  }, [dataUser]);
 
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
@@ -68,18 +80,18 @@ const Login = () => {
             {/* Mostrar error general si existe */}
             {generalError && <span className="text-red-500">{generalError}</span>}
 
-            {/* Input para Nombre de Usuario */}
+            {/* Input para Email */}
             <div className="relative w-[350px] mb-4">
               <input
-                id="name"
-                name="name"
+                id="email"
+                name="email"
                 type="text"
-                value={dataUser.name}
+                value={dataUser.email}
                 onChange={handleChange}
-                placeholder="name"
+                placeholder="email"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {errors.name && <span className="text-red-500">{errors.name}</span>}
+              {errors.email && <span className="text-red-500">{errors.email}</span>}
             </div>
 
             {/* Input para Contraseña */}
@@ -117,9 +129,9 @@ const Login = () => {
               />
             </button>
 
-            {/* Mensaje de inicio de sesión */}
+            {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
-              Don't have an account yet?{" "}
+              Don&apos;t have an account yet?{" "}
               <Link href="/register">
                 <span className="font-bold text-blue-500 cursor-pointer">Sign up</span>
               </Link>

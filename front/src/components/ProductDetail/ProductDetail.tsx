@@ -7,21 +7,22 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
+import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 
 interface ProductDetail {
-    product:IProduct;
+    product: IProduct;
     role: string;
 }
 
-const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct})=> {
+const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
 
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
 
-    const userSession = JSON.parse(localStorage.getItem('userSession')|| "{}");
+    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
     const role: string = userSession.userData?.rol
 
-    function handleDeleteGame (){
+    const handleDeleteGame = () => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -30,19 +31,21 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
-              });
+                await deleteProductByID(product.id);
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
             }
-          });
-    }
+        });
+    };
 
-    function handleAddCyberGamer (){
-        Swal.fire({
+
+    const handleAddCyberGamer = async () => {
+        const result = await Swal.fire({
             title: "Are you sure?",
             text: "You will add this game to CyberGamer",
             icon: "question",
@@ -50,22 +53,27 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, add it!"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "Add it succesfully!",
-                text: "The game is now in CyberGamer",
-                icon: "success"
-              });
-            }else{
+        });
+        if (result.isConfirmed) {
+            // Crear una copia del producto y cambiar la propiedad `suscription` a true
+            const updatedProduct = { ...product, suscription: true };
+            try {
+                await editProductInformationByID(updatedProduct);
+                Swal.fire({
+                    title: "Added successfully!",
+                    text: "The game is now in CyberGamer",
+                    icon: "success"
+                });
+            } catch (error) {
                 Swal.fire({
                     title: "Ups, something went wrong!",
-                    text: "The game couldnt be added",
+                    text: "The game couldn't be added",
                     icon: "error"
                 });
             }
-          });
-    }
+        }
+    };
+    
 
     return (
         <div>
@@ -118,8 +126,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             )
                         }
                         <div className="w-full">
-                            {/* Verificacion de rol. Si el rol es distinto de admin entonces preguntar si es distinto de user mostrar un solo boton de comprar, 
-                            si es user entonces mostrar add to cart o buy now y si es admin mostrar edit, suscription y delete */}
                             {/* Lógica de botones según el rol */}
                             {role !== "administrator" ? (
                                 role !== "user" ? (
@@ -200,7 +206,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione corrupti numquam obcaecati eaque soluta suscipit, eum, rem, possimus hic qui labore aliquid debitis iure aspernatur illo culpa? Saepe, repudiandae eveniet!
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -208,7 +214,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate dolorum corrupti quas perspiciatis molestiae voluptas repellendus sequi quisquam eaque deleniti laborum delectus at, nulla veritatis mollitia doloribus maxime itaque inventore?
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -216,7 +222,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil enim corrupti sint obcaecati quidem. Placeat facere quis excepturi fuga eius, fugit consequatur culpa. Harum id odio nam unde, voluptas tempora.
                         </p>
                     </div>
                     <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
@@ -224,7 +230,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product}: { product: IProduct}
                             <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
                         <p className="w-10/12 text-[16px]">
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi deleniti minima sed voluptatem vitae illo tempore. Consequuntur corrupti ullam aut possimus vel facilis aperiam quam minima tempore veritatis? Quibusdam, quaerat!
                         </p>
                     </div>
                 </div>

@@ -11,11 +11,12 @@ export async function register(userData: IRegisterProps, parentId?: string) {
   console.log(userData);
   
     try {
-      const url = new URL(`${APIURL}/users`);
+      const url = new URL(`${APIURL}/auth/signup`);
       // Añadir parentId como parámetro de consulta si está disponible
       if (parentId) {
         url.searchParams.append("parentId", parentId);
       }
+  console.log(url);
   
       const res = await fetch(url.toString(), {
         method: "POST",
@@ -24,6 +25,7 @@ export async function register(userData: IRegisterProps, parentId?: string) {
         },
         body: JSON.stringify(userData),
       });
+  console.log(res);
   
       if (!res.ok) {
         const errorData = await res.json(); // Obtener los detalles del error
@@ -123,17 +125,21 @@ export async function getAllUsers() {
     return []; // Devuelve un array vacío en caso de error
   }
 }
-/*
+
 // Login
+console.log(APIURL)
 export async function login(userData:ILoginProps) {
   try {
-    const res = await fetch(`${APIURL}/users/login`,{
+    const res = await fetch(`${APIURL}/auth/signin`,{
       method:"POST",
       headers: {
         "Content-type": "application/json"
       },
       body: JSON.stringify(userData)
-       });
+    });
+    console.log(res);
+    console.log(userData);
+    
        if(res.ok){
           return res.json()
        } else {
@@ -143,10 +149,10 @@ export async function login(userData:ILoginProps) {
 } catch (error: any) {
   throw new Error(error)  }
 }
-*/
+
 // auth.helper.ts
 
-
+/*
 const mockUsers = [
   { name: "admin", password: "admin123", role: "administrator" },
   { name: "user", password: "user123", role: "user" },
@@ -171,4 +177,4 @@ export async function login(userData: ILoginProps) {
   } else {
     throw new Error("Failed to login: Incorrect username or password");
   }
-}
+}*/

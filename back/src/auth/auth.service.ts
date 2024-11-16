@@ -32,7 +32,11 @@ export class AuthService {
             throw new UnauthorizedException('Email o contraseña incorrectos')
         }
 
+
+
         const token = await this.createToken(user)
+
+        delete user.password
 
         return { token, user }
     }

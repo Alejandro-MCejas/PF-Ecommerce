@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar/NavBar";
 
 //Contexto
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/Authcontext";
 
 
 
@@ -22,11 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-backgroundLayout">
-        <CartProvider>
-          <NavBar/>
-          {children}
-          <Footer/>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <NavBar />
+            {children}
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

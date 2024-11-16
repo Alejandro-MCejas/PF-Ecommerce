@@ -15,7 +15,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    passwordConfirm: "", 
+    confirmPassword: "", 
     address: "",
     phone: "",
   };
@@ -30,7 +30,7 @@ const Register = () => {
       dataUser.email.trim() !== '' &&
       dataUser.address.trim() !== '' &&
       dataUser.password?.trim() !== '' &&
-      dataUser.passwordConfirm?.trim() !== '' &&
+      dataUser.confirmPassword.trim() !== '' &&
       dataUser.phone?.trim() !== ''
     );
   }, [dataUser]);
@@ -44,16 +44,16 @@ const Register = () => {
 
     setErrors({ ...errors, [name]: "" });
 
-    if (name === "passwordConfirm") {
+    if (name === "confirmPassword") {
       if (value !== dataUser.password) {
         setErrors({
           ...errors,
-          passwordConfirm: "Las contraseñas no coinciden"
+          confirmPassword: "Las contraseñas no coinciden"
         });
       } else {
         setErrors({
           ...errors,
-          passwordConfirm: ""
+         confirmPassword: ""
         });
       }
     }
@@ -68,6 +68,8 @@ const Register = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(dataUser);
+    
     await register(dataUser);
     Swal.fire({
       title: "Registration Successful",
@@ -124,16 +126,16 @@ const Register = () => {
             {/* Password Confirm Input */}
             <div className="relative w-[350px] mb-4">
               <input
-                id="passwordConfirm"
-                name="passwordConfirm"
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
-                value={dataUser.passwordConfirm}
+                value={dataUser.confirmPassword}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Repeat password"
                 className="w-full h-[40px] p-2 border-b-2 border-[#00000080] bg-transparent text-black placeholder-gray-500"
               />
-              {touched.passwordConfirm && errors.passwordConfirm && <span className="text-red-500 text-sm">{errors.passwordConfirm}</span>}
+              {touched.confirmPassword && errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword}</span>}
             </div>
 
             {/* Username Input */}
