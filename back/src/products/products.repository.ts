@@ -14,8 +14,9 @@ export class ProductsRepository{
         return await this.productsRepository.find({relations:['categories']});
     }
 
-    async findProductsSuscription(): Promise<Products[]>{
+    async findProductsSuscription(where: any): Promise<Products[]>{
         return await this.productsRepository.find({
+            where,
             select: ['id','name','image','description', 'stock', 'price','suscription'], 
             relations:['categories']
         })
@@ -41,7 +42,7 @@ export class ProductsRepository{
 
     async deleteProductsData(id:string):Promise<Products>{
         const product = await this.productsRepository.findOne({where:{id}})
-        await this.productsRepository.delete(product)
+        await this.productsRepository.delete(id)
         return product
     }
 

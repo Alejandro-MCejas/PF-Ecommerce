@@ -10,7 +10,7 @@ export class Suscription{
     @Column("simple-array")
     productIds: string[]; 
 
-    @Column()
+    @Column({default: 'Basic'})
     type: string; 
 
     @Column("decimal")

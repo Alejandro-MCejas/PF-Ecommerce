@@ -3,9 +3,11 @@ import { SuscriptionService } from './suscription.service';
 import { SuscriptionController } from './suscription.controller';
 import { UsersModule } from 'src/users/users.module';
 import { ProductsModule } from 'src/products/products.module';
+import { Suscription } from 'src/entities/suscription.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [UsersModule, ProductsModule],
+  imports: [TypeOrmModule.forFeature([Suscription]), UsersModule, ProductsModule],
   controllers: [SuscriptionController],
   providers: [SuscriptionService],
 })

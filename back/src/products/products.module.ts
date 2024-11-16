@@ -16,6 +16,6 @@ import { UsersModule } from 'src/users/users.module';
   imports: [TypeOrmModule.forFeature([Products]), CloudinaryModule, forwardRef(() => CategoriesModule), UsersModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository, ProductsSeed, CloudinaryConfig, CloudinaryController],
-  exports: [ProductsService, ProductsSeed],
+  exports: [ProductsService, ProductsSeed, ProductsRepository],
 })
 export class ProductsModule { }
