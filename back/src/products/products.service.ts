@@ -91,5 +91,5 @@ export class ProductsService {
     await this.productsRepository.updateProductsData(id, {
         stock: product.stock - 1
     })
-  }  
+  }
 }

@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 import { Orders } from './orders.entity'
 import { UserRole } from 'src/users/enum/role.enum'
 import { Reviews } from './reviews.entity'
+import { Suscription } from './suscription.entity'
 
 
 
@@ -26,8 +27,14 @@ export class Users {
     @Column({ type: 'varchar' })
     phone: string
 
+    @Column({default:false})
+    isSuscription:boolean;
+
     @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
     admin: UserRole
+
+    @OneToMany(() => Suscription, (suscriptions) => suscriptions.user)
+    suscriptions: Suscription[];
 
     @OneToMany(() => Orders, order => order.user)
     orders: Orders[]

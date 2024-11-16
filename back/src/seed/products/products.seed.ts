@@ -36,6 +36,7 @@ export class ProductsSeed{
                 product.description = productData.description;
                 product.price = productData.price;
                 product.stock = productData.stock;
+                product.suscription = productData.suscription;
     
                 const category = await this.findCategoryByName(productData.categories);
                 product.categories = [category];

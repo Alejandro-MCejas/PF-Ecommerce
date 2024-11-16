@@ -2,7 +2,8 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColum
 import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
 import { Reviews } from "./reviews.entity";
-// import { Users } from "./users.entity";
+import { Suscription } from "./suscription.entity";
+
 
 
 @Entity({ name: 'products' })
@@ -25,10 +26,12 @@ export class Products {
     @Column('int')
     stock: number;
     
-    // @Column()
-    // suscription:boolean;
+    @Column({default: false})
+    suscription:boolean;
 
-    
+    @OneToMany(() => Suscription, (subscription) => subscription.product)
+    suscriptions: Suscription[];
+
     @ManyToMany(()=> Categories, (categories) => categories.products )
     @JoinTable()
     categories: Categories[];

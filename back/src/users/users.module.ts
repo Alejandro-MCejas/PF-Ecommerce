@@ -11,6 +11,6 @@ import { UsersSeed } from 'src/seed/users/users.seed';
   imports: [TypeOrmModule.forFeature([Users])],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, UsersSeed],
-  exports: [UsersService]
+  exports: [UsersService, UsersRepository]
 })
 export class UsersModule { }
