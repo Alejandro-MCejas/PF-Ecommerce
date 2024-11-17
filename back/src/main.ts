@@ -4,9 +4,13 @@ import { ProductsSeed } from './seed/products/products.seed';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UsersSeed } from './seed/users/users.seed';
 import { CategoriesSeed } from './seed/categories/categories.seed';
+import { auth } from 'express-openid-connect';
+import { auth0Config } from './config/auth0';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(auth(auth0Config))
 
   // Configura CORS antes de ejecutar el seeding
   app.enableCors({
@@ -28,7 +32,7 @@ async function bootstrap() {
   // Ejecuta el seeding después de configurar CORS
   const cateoriesSeed = app.get(CategoriesSeed);
   await cateoriesSeed.seedCategories();
-  
+
   const productsSeed = app.get(ProductsSeed);
   await productsSeed.seedProducts();
 
@@ -36,7 +40,7 @@ async function bootstrap() {
   await userSeed.seedUsers()
   console.log('Usuarios Cargados');
 
-  
+
   await app.listen(3000);
 
 
