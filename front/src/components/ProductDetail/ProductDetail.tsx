@@ -8,19 +8,19 @@ import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
 import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
+import { useAuth } from "@/context/Authcontext";
 
 interface ProductDetail {
     product: IProduct;
-    role: string;
+    // role: string;
 }
 
 const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
-
+    const {userData} = useAuth()
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
 
-    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-    const role: string = userSession.userData?.rol
+    const role: string = userData?.user.admin || ""
 
     const handleDeleteGame = () => {
         Swal.fire({
