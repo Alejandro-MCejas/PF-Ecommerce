@@ -66,7 +66,7 @@ export class AuthController {
 
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
 
-      res.redirect(`http://localhost:3000/?token=${jwtToken}`);
+      return jwtToken
     }
     catch (error) {
       console.error('Error en el callback:', error);
