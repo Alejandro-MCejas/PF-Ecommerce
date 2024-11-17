@@ -7,6 +7,7 @@ export const usersMock = [
         "password": "prueba",
         "address": "Rivadavia 101",
         "phone": "2211334455",
+        "isSuscription":false,
         "admin": UserRole.USER
     },
     {
@@ -15,6 +16,7 @@ export const usersMock = [
         "password": "admin123",
         "address": "San Martin 789",
         "phone": "0987654321",
+        "isSuscription":true,
         "admin": UserRole.ADMIN
     },
     {
@@ -23,6 +25,7 @@ export const usersMock = [
         "password": "prueba",
         "address": "Corrientes 234",
         "phone": "3344556677",
+        "isSuscription":false,
         "admin": UserRole.USER
     },
     {
@@ -31,6 +34,7 @@ export const usersMock = [
         "password": "prueba",
         "address": "Alsina 789",
         "phone": "6677889900",
+        "isSuscription":false,
         "admin": UserRole.USER
     },
     {
@@ -39,6 +43,7 @@ export const usersMock = [
         "password": "prueba",
         "address": "Belgrano 678",
         "phone": "1234567890",
+        "isSuscription":true,
         "admin": UserRole.ADMIN
     },
     {
@@ -47,6 +52,7 @@ export const usersMock = [
         "password": "prueba",
         "address": "Av. Libertador 1234",
         "phone": "1122334455",
+        "isSuscription":true,
         "admin": UserRole.ADMIN
     }
 ];
