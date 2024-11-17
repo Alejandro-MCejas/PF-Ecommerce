@@ -68,9 +68,9 @@ const Register = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(dataUser);
     
     await register(dataUser);
+    console.log(dataUser);
     Swal.fire({
       title: "Registration Successful",
       text: "You have registered successfully!",

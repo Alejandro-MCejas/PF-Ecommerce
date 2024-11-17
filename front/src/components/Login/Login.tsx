@@ -32,6 +32,7 @@ const Login = () => {
 
     try {
       const response = await login(dataUser);
+      console.log(response);
       
   // Verifica la estructura de la respuesta
       const { token, user } = response;  // Desestructuración
@@ -59,6 +60,12 @@ const Login = () => {
       setGeneralError(error.message);
     }
   };
+
+  const handleAuth0Login = () => {
+    const auth0LoginUrl = `${process.env.NEXT_PUBLIC_AUTH0_BASE_URL}/api/auth/login`;
+    window.location.href = auth0LoginUrl;
+    console.log(auth0LoginUrl)
+};
 
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
@@ -117,6 +124,7 @@ const Login = () => {
             <button
               className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
               type="button"
+              onClick={handleAuth0Login}
             >
               Login
               <img

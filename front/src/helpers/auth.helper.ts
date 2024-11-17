@@ -127,8 +127,8 @@ export async function getAllUsers() {
 }
 
 // Login
-console.log(APIURL)
 export async function login(userData:ILoginProps) {
+  console.log(APIURL)
   try {
     const res = await fetch(`${APIURL}/auth/signin`,{
       method:"POST",
