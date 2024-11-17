@@ -3,8 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { mercadoPago } from 'src/entities/mercadoPago.entity';
+import { Products } from 'src/entities/products.entity';
 import { OrderDetailRepository } from 'src/order-detail/order-detail.repository';
 import { OrdersService } from 'src/orders/orders.service';
+import { ProductsService } from 'src/products/products.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -15,28 +17,42 @@ export class MercadoPagoService {
     @InjectRepository(mercadoPago) private readonly mercadoPagoRepository:Repository<mercadoPago>,
     private readonly orderRepository:OrderDetailRepository,
     private readonly ordersService: OrdersService, 
+    private readonly productsService: ProductsService,
   ) {
-
-
-    const accessToken = this.configService.get<string>('MERCADO_PAGO_ACCESS_TOKEN');
+    const accessToken = this.configService.get<string>('MP_ACCESS_TOKEN');
     if (!accessToken) {
       throw new Error('Access token de MercadoPago no configurado.');
     }
 
     this.client = new MercadoPagoConfig({ accessToken });
+  
   }
 
   async createPago(preferenceData: any, orderId: string): Promise<any> {
     try {
 
       const orderResponse = await this.ordersService.findOneOrderService(orderId);
-      // Crear una instancia de Preference
+
+
+      const products = await Promise.all(orderResponse.orderDetail.map(async (product: Products) => {
+        return {
+          id: product.id,
+          title: product.name,            // Título del producto
+          quantity: 1,                     // Asumimos que es 1, pero podrías ajustar esto según la cantidad
+          unit_price: parseFloat(product.price.toString()),  // Precio unitario del producto
+        };
+      }));
+  
       const preference = new Preference(this.client);
       const response = await preference.create({
         body: {
-          items: preferenceData.items, // Items enviados por el cliente
-          back_urls: preferenceData.back_urls || {}, // URLs opcionales
-          auto_return: preferenceData.auto_return || 'approved', // Opcional
+          
+          items: products,
+          back_urls: preferenceData.back_urls || {
+            success: 'http://localhost:8080/api/feedback',
+            failure: 'http://localhost:8080/api/feedback',
+            pending: 'http://localhost:8080/api/feedback'},
+          auto_return: preferenceData.auto_return || 'approved',
         },
       });
       console.log(response);
@@ -50,10 +66,9 @@ export class MercadoPagoService {
 
       console.log(response);
       const mercadoPago = this.mercadoPagoRepository.create({
-        // pagoStatus: response.status,
         pagoId: response.id,
         totalAmount,
-        externalReference: orderId,  // Referencia externa, en este caso el ID de la orden
+        externalReference: orderId,
         order: orderResponse.order,
       });
 
@@ -65,5 +80,7 @@ export class MercadoPagoService {
       throw new Error(`Error en MercadoPago: ${error.message}`);
     }
   }
+
+  
 }
 
