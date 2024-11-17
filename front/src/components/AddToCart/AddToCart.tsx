@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/context/Authcontext";
 import { useCart } from "@/context/CartContext";
 import { IProduct } from "@/interfaces/IProduct";
 import { useRouter } from "next/navigation";
@@ -9,11 +10,11 @@ export const AddToCart = ({ id, name, image, description, stock, price }: { id: 
     const router = useRouter();
     const { addToCart } = useCart();
 
-    const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-    const role: string = userSession.userData?.rol;
+    const {userData} = useAuth()
+    const role = userData?.user.admin;
 
     const hanldeAddToCart = () => {
-        if (userSession?.token) {
+        if (userData?.token) {
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
             const productExist = cart.some((product: IProduct) => {
                 if (product.id === id) return true;
