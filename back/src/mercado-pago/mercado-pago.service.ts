@@ -19,12 +19,17 @@ export class MercadoPagoService {
     private readonly ordersService: OrdersService, 
     private readonly productsService: ProductsService,
   ) {
-    const accessToken = this.configService.get<string>('MP_ACCESS_TOKEN');
-    if (!accessToken) {
-      throw new Error('Access token de MercadoPago no configurado.');
-    }
+
+    const accessToken="APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005";
+    // APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005"
+    // const accessToken = this.configService.get<string>('MP_ACCESS_TOKEN');
+    // if (!accessToken) {
+    //   throw new Error('Access token de MercadoPago no configurado.');
+    // }
 
     this.client = new MercadoPagoConfig({ accessToken });
+
+  
   
   }
 
@@ -39,7 +44,8 @@ export class MercadoPagoService {
           id: product.id,
           title: product.name,            // Título del producto
           quantity: 1,                     // Asumimos que es 1, pero podrías ajustar esto según la cantidad
-          unit_price: parseFloat(product.price.toString()),  // Precio unitario del producto
+          unit_price: parseFloat(product.price.toString().replace(/[^\d.-]/g, '').replace(/^(\d+)\.(\d{2})$/, '$1.$2')),  // Limpiar y redondear a 2 decimales
+
         };
       }));
   
@@ -70,6 +76,7 @@ export class MercadoPagoService {
         totalAmount,
         externalReference: orderId,
         order: orderResponse.order,
+        pagoStatus: 'pendiente',
       });
 
       await this.mercadoPagoRepository.save(mercadoPago); 
@@ -80,7 +87,5 @@ export class MercadoPagoService {
       throw new Error(`Error en MercadoPago: ${error.message}`);
     }
   }
-
-  
 }
 
