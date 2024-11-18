@@ -10,14 +10,14 @@ const MyOrders = () => {
         { id: 3, item: "Racing Mania Game", status: "Delivered", tracking: null }
     ];
 
-    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [selectedOrder, setSelectedOrder] = useState<number|null>(null);
 
-    const handleTrackClick = (orderId) => {
+    const handleTrackClick = (orderId:number) => {
         // Alterna el estado de la orden seleccionada para mostrar u ocultar detalles de tracking
         setSelectedOrder(selectedOrder === orderId ? null : orderId);
     };
 
-    const renderOrderStatusIcon = (status) => {
+    const renderOrderStatusIcon = (status:string) => {
         switch (status) {
             case "In Warehouse":
                 return <FaWarehouse className="text-gray-700 text-2xl" />;

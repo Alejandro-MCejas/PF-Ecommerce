@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetails.entity";
 import { Users } from "./users.entity";
+import { mercadoPago } from "./mercadoPago.entity";
 
 
 
@@ -18,4 +19,6 @@ export class Orders {
     @OneToOne(() => OrderDetails, orderDetail => orderDetail.order)
     orderDetails: OrderDetails
 
+    @OneToMany(() => mercadoPago, payment => payment.order)
+    mercadoPago: mercadoPago[]; 
 }

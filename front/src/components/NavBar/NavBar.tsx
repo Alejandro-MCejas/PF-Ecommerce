@@ -1,27 +1,32 @@
 "use client";
 
-import Image from 'next/image';
+
 import Link from 'next/link';
 import Search from '../Search';
 import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
-import { log } from 'console';
-import ProfileServer from '../useUse/useService';
-import ProfileClient from '../useUse/useClient';
+
+import { useAuth } from '@/context/Authcontext';
+import { useEffect, useState } from 'react';
+// import { useAuth } from '@/context/Authcontext';
+// import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  const [role, setRole] = useState<string | undefined>("undefined");
+  const { userData } = useAuth();
+  const [clientRendered, setClientRendered] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-      setRole(userSession.userData?.rol);
-      }
-    }, []); 
-    
+    // Esto asegura que solo se ejecute en el cliente
+    setClientRendered(true);
+  }, []);
+
+  if (!clientRendered) {
+    return null;
+  }
+  const suscription = true
+
 
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
@@ -47,6 +52,7 @@ const NavBar = () => {
 
         {/* Login/Register */}
         <div className="flex justify-center md:justify-end">
+
           {role === undefined ? (
             
             <div className="bg-[#A065FF] text-white rounded-xl px-4 py-2 text-center">
@@ -63,6 +69,7 @@ const NavBar = () => {
             </div>
           )}
         
+
         </div>
       </div>
 
@@ -70,8 +77,10 @@ const NavBar = () => {
       <div className="mt-4 w-full max-w-[1500px] mx-auto h-[3px] bg-[#A065FF] rounded-3xl" />
 
       {/* Links distribuidos en el ancho del contenedor */}
+
       {role !== "administrator" ? (
         role !== "user" ? (
+
           <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-evenly mt-4 px-4 md:px-8">
             <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Games

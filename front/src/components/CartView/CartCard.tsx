@@ -3,14 +3,68 @@
 import { useCart } from "@/context/CartContext";
 import Swal from "sweetalert2";
 import CardCart from "../CartCard/CardCart";
+import { useEffect, useState } from "react";
+import { OrderData } from "@/interfaces/IOrder";
+import StartTransaction from "../StartTransactionButton/StartTransactionButton";
+import PaymentButton from "../PaymentButton/PaymentButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+// import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 
 export const CartView = () => {
+    const { cart, removeFromCart, clearCart, orderData, setOrderData } = useCart();
+    const [isButtonVisible, setIsButtonVisible] = useState(true);
+    const [preferenceId, setPreferenceId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    //remplazo provisional useAuth()
-    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}")
-    // const role = userSession.user.id
+    useEffect(() => {
+        if (cart.length > 0) {
+            const totalAmount = cart.reduce((sum, product) => sum + product.price, 0);
 
-    const { cart, removeFromCart, clearCart } = useCart();
+            // Usa la función de callback de setOrderData con el tipo adecuado
+            setOrderData((prevOrderData: OrderData) => ({
+                ...prevOrderData,
+                amount: totalAmount,
+                description: "Products in cart"
+            }));
+        }
+    }, [cart, setOrderData]);
+
+    const handleOnClick = async () => {
+        setIsButtonVisible(false); // Oculta el botón de "Purchase"
+        setIsLoading(true)
+        fetch("http://localhost:8080/create_preference", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((preference) => {
+                setPreferenceId(preference.id);
+            })
+            .catch((error) => {
+                console.error(error);
+                setIsButtonVisible(true); // Vuelve a mostrar el botón en caso de error
+                setIsLoading(false)
+            }).finally(() => {
+                setIsLoading(false);
+            })
+    }
+
+    const renderSpinner = () => {
+        if (isLoading) {
+            return (
+                <div className="w-full justify-center flex items-center">
+                    <FontAwesomeIcon icon={faSpinner} spin className="text-white size-[100px]" />
+                </div>
+            )
+        }
+    }
+
 
     const handleDeleteProduct = (productId: string) => {
         Swal.fire({
@@ -25,37 +79,6 @@ export const CartView = () => {
         });
     };
 
-    // const handlePurchase = async () => {
-    //     const idProduct = cart.map((product) => product.id);
-
-    //     if (userData?.user?.id) {
-    //         try {
-    //             const newOrder = await createOrder(idProduct, userData.token, userData.user.id);
-    //             const storedUserToken = localStorage.getItem("userToken");
-    //             if (storedUserToken) {
-    //                 const parsedUserToken = JSON.parse(storedUserToken);
-    //                 parsedUserToken.user.orders = parsedUserToken.user.orders || [];
-    //                 parsedUserToken.user.orders.push(newOrder);
-    //                 localStorage.setItem("userToken", JSON.stringify(parsedUserToken));
-    //             }
-    //             Swal.fire({
-    //                 title: "Buy successfully",
-    //                 width: 400,
-    //                 padding: "3em",
-    //             });
-    //             clearCart();
-    //         } catch (error) {
-    //             console.error("Error creating order:", error);
-    //         }
-    //     } else {
-    //         Swal.fire({
-    //             title: "You have an error, please try again later",
-    //             width: 400,
-    //             padding: "3em",
-    //         });
-    //     }
-    // };
-
     return (
         <div>
             <div>
@@ -64,31 +87,41 @@ export const CartView = () => {
                         <div>
                             {
                                 cart.map((product) => (
-                                        <div
-                                            key={product.id}
-                                            className="flex flex-col justify-evenly items-center w-full max-w-[1500px] min-h-[200px] m-auto h-full"
-                                        >
-                                            <CardCart
-                                                name={product.name}
-                                                image={product.image}
-                                                stock={product.stock}
-                                                price={product.price}
-                                                id={product.id}
-                                                onDelete={() => handleDeleteProduct(product.id)}
-        
-                                            />
-                                        </div>
+                                    <div
+                                        key={product.id}
+                                        className="flex flex-col justify-evenly items-center w-full max-w-[1500px] min-h-[200px] m-auto h-full"
+                                    >
+                                        <CardCart
+                                            name={product.name}
+                                            image={product.image}
+                                            stock={product.stock}
+                                            price={product.price}
+                                            id={product.id}
+                                            onDelete={() => handleDeleteProduct(product.id)}
+
+                                        />
+                                    </div>
                                 ))
 
                             }
-                            <div className="w-full h-auto flex justify-center p-5 mt-auto">
-                                    <button
-                                        className="w-1/2 bg-green-600 rounded-lg text-[30px] font-bold hover:bg-green-400"
-                                    // onClick={handlePurchase}
-                                    >
-                                        Purchase
-                                    </button>
+                            <p>Total amount: ${orderData.amount}</p>
+
+                            {isButtonVisible && (
+                                <button
+                                    className="w-1/2 bg-green-600 rounded-lg text-[30px] font-bold hover:bg-green-400"
+                                    onClick={handleOnClick}
+                                >
+                                    Purchase
+                                </button>
+                            )}
+
+                            {isLoading && renderSpinner()}
+
+                            {preferenceId && (
+                                <div>
+                                    <PaymentButton preferenceId={preferenceId} />
                                 </div>
+                            )}
                         </div>
                     ) : (
                         <div className="flex flex-col justify-evenly min-h-[500px] items-center">
@@ -97,6 +130,9 @@ export const CartView = () => {
                         </div>
                     )
                 }
+                <div>
+
+                </div>
 
             </div>
 
