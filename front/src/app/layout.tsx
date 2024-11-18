@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import NavBar from "@/components/NavBar/NavBar";
@@ -7,8 +7,6 @@ import NavBar from "@/components/NavBar/NavBar";
 //Contexto
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/Authcontext";
-
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,14 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-backgroundLayout">
-      <AuthProvider>
-      <UserProvider>
-        <CartProvider>
-          <NavBar/>
-          {children}
-          <Footer/>
-        </CartProvider>
-        </UserProvider>
+        <AuthProvider>
+          <UserProvider>
+            <CartProvider>
+              <NavBar />
+              {children}
+              <Footer />
+            </CartProvider>
+          </UserProvider>
         </AuthProvider>
       </body>
     </html>

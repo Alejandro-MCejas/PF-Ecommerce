@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { useUser } from "@auth0/nextjs-auth0/client";
 const Login = () => {
   const router = useRouter();
   const initialState = {
@@ -61,11 +62,8 @@ const Login = () => {
     }
   };
 
-  const handleAuth0Login = () => {
-    const auth0LoginUrl = `${process.env.NEXT_PUBLIC_AUTH0_BASE_URL}/api/auth/login`;
-    window.location.href = auth0LoginUrl;
-    console.log(auth0LoginUrl)
-};
+
+ 
 
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
@@ -121,10 +119,9 @@ const Login = () => {
             </button>
 
             {/* Login adicional con ícono */}
-            <button
+            <a href="/api/auth/login"
               className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
-              type="button"
-              onClick={handleAuth0Login}
+                           
             >
               Login
               <img
@@ -132,7 +129,11 @@ const Login = () => {
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
               />
-            </button>
+            </a>
+            <div>
+           
+            <a href="/api/auth/logout">Logout</a>
+        </div>
 
             {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">

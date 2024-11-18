@@ -7,17 +7,21 @@ import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
+import { log } from 'console';
+import ProfileServer from '../useUse/useService';
+import ProfileClient from '../useUse/useClient';
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  const [role, setRole] = useState<string | undefined>(undefined);
+  const [role, setRole] = useState<string | undefined>("undefined");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
       setRole(userSession.userData?.rol);
-    }
-  }, []);
+      }
+    }, []); 
+    
 
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
@@ -44,6 +48,7 @@ const NavBar = () => {
         {/* Login/Register */}
         <div className="flex justify-center md:justify-end">
           {role === undefined ? (
+            
             <div className="bg-[#A065FF] text-white rounded-xl px-4 py-2 text-center">
               <span className="text-[16px] md:text-[25px] font-Tilt-neon">
                 <Link href="/login">Log In</Link> / <Link href="/register">Register</Link>
@@ -53,9 +58,11 @@ const NavBar = () => {
             <div className='bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center'>
               <Link href={"/dashboard"}>
                 <FontAwesomeIcon icon={faUser} className='text-[50px]' />
+                <ProfileClient/>
               </Link>
             </div>
           )}
+        
         </div>
       </div>
 
