@@ -26,8 +26,6 @@ export class AuthController {
   async loginAuth0Controller(@Res() res: Response) {
     console.log('HOLA DESDE LOGIN')
     const loginUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&response_type=code&redirect_uri=${process.env.AUTH0_BASE_URL}/auth/callback&scope=openid profile email`;
-
-
     res.redirect(loginUrl)
   }
 
@@ -41,6 +39,8 @@ export class AuthController {
   async profileAuth0Controller(@Req() request: Request) {
 
     const { idToken, accessToken } = request.oidc
+    console.log(`Este es el idToken: ${idToken}`)
+    console.log(`Este es el accessToken: ${accessToken}`)
 
     if (!idToken && !accessToken) {
       throw new UnauthorizedException('Usuario no autenticado, token no encontrado');
@@ -76,8 +76,10 @@ export class AuthController {
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
       console.log(jwtToken)
 
-
-      return res.redirect(`http://localhost:3000?token=${jwtToken}`);
+      return {
+        user: userProfile,
+        token: jwtToken
+      }
 
     }
     catch (error) {

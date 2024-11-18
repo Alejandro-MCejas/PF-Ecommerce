@@ -16,10 +16,6 @@ async function bootstrap() {
       login: false,
       logout: false,
       callback: false
-    },
-    afterCallback: (req, res, session) => {
-      console.log('Callback recibido:', session);
-      return session;
     }
   }))
 
