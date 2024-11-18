@@ -9,13 +9,16 @@ import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { useAuth } from '@/context/Authcontext';
 import { useEffect, useState } from 'react';
+import ProfileClient from '../useUse/useClient';
 // import { useAuth } from '@/context/Authcontext';
 // import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
   const { userData } = useAuth();
+  const role = userData?.user.admin;
   const [clientRendered, setClientRendered] = useState(false);
+console.log(role);
 
   useEffect(() => {
     // Esto asegura que solo se ejecute en el cliente
