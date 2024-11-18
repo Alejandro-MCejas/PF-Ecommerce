@@ -29,8 +29,8 @@ console.log(role);
     return null;
   }
   const suscription = true
-
-
+  
+  
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
@@ -55,6 +55,7 @@ console.log(role);
 
         {/* Login/Register */}
         <div className="flex justify-center md:justify-end">
+          <ProfileClient/>
 
           {role === undefined ? (
             
@@ -67,7 +68,6 @@ console.log(role);
             <div className='bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center'>
               <Link href={"/dashboard"}>
                 <FontAwesomeIcon icon={faUser} className='text-[50px]' />
-                <ProfileClient/>
               </Link>
             </div>
           )}
