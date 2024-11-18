@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 
 import Link from 'next/link';
@@ -6,15 +6,19 @@ import Search from '../Search';
 import { useCart } from '@/context/CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
+
 import { useAuth } from '@/context/Authcontext';
 import { useEffect, useState } from 'react';
+import ProfileClient from '../useUse/useClient';
 // import { useAuth } from '@/context/Authcontext';
 // import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { cartCount } = useCart();
   const { userData } = useAuth();
+  const role = userData?.user.admin;
   const [clientRendered, setClientRendered] = useState(false);
+console.log(role);
 
   useEffect(() => {
     // Esto asegura que solo se ejecute en el cliente
@@ -25,8 +29,8 @@ const NavBar = () => {
     return null;
   }
   const suscription = true
-
-
+  
+  
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
@@ -50,23 +54,24 @@ const NavBar = () => {
         </div>
 
         {/* Login/Register */}
-
         <div className="flex justify-center md:justify-end">
-          {
-            userData?.user === undefined ? (
-              <div className="bg-[#A065FF] text-white rounded-xl px-4 py-2 text-center">
-                <span className="text-[16px] md:text-[25px] font-Tilt-neon">
-                  <Link href="/login">Log In</Link> / <Link href="/register">Register</Link>
-                </span>
-              </div>
-            ) : (
-              <div className='bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center'>
-                <Link href={"/dashboard"}>
-                  <FontAwesomeIcon icon={faUser} className='text-[50px]' />
-                </Link>
-              </div>
-            )
-          }
+          <ProfileClient/>
+
+          {role === undefined ? (
+            
+            <div className="bg-[#A065FF] text-white rounded-xl px-4 py-2 text-center">
+              <span className="text-[16px] md:text-[25px] font-Tilt-neon">
+                <Link href="/login">Log In</Link> / <Link href="/register">Register</Link>
+              </span>
+            </div>
+          ) : (
+            <div className='bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center'>
+              <Link href={"/dashboard"}>
+                <FontAwesomeIcon icon={faUser} className='text-[50px]' />
+              </Link>
+            </div>
+          )}
+        
 
         </div>
       </div>
@@ -75,9 +80,10 @@ const NavBar = () => {
       <div className="mt-4 w-full max-w-[1500px] mx-auto h-[3px] bg-[#A065FF] rounded-3xl" />
 
       {/* Links distribuidos en el ancho del contenedor */}
-      {userData?.user.admin !== "administrator" ? (
-        userData?.user.admin !== "user" ? (
-          // Mostrar solo botón de comprar si el rol no es admin ni user
+
+      {role !== "administrator" ? (
+        role !== "user" ? (
+
           <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-evenly mt-4 px-4 md:px-8">
             <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Games
@@ -87,7 +93,6 @@ const NavBar = () => {
             </Link>
           </div>
         ) : (
-          // Mostrar botones de navegación si el rol es user
           <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
             <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Home
@@ -95,23 +100,18 @@ const NavBar = () => {
             <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               Games
             </Link>
-            <Link
-              href={suscription ? "/cybergamer" : "/subscription"}
-              className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]"
-            >
-              {suscription ? "Cybergamer" : "Subscription"}
+            <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+              Subscription
             </Link>
             <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              {
-                cartCount === 0 ? (
-                  <FontAwesomeIcon icon={faCartShopping} />
-                ) : (
-                  <>
-                    <FontAwesomeIcon icon={faCartShopping} bounce />
-                    {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
-                  </>
-                )
-              }
+              {cartCount === 0 ? (
+                <FontAwesomeIcon icon={faCartShopping} />
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faCartShopping} bounce />
+                  {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
+                </>
+              )}
             </Link>
           </div>
         )
@@ -128,7 +128,6 @@ const NavBar = () => {
           </Link>
         </div>
       )}
-
     </div>
   );
 };
