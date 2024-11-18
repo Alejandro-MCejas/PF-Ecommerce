@@ -7,7 +7,9 @@ import { AuthGuard } from 'src/auth/authGuard.guard';
 import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from './enum/role.enum';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
