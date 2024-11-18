@@ -7,6 +7,7 @@ const visual = ()=>{
             visual
             <GetAllUsers/>
             <DeleteUser/>
+            
         </div>
     )
 }

@@ -177,4 +177,25 @@ export async function login(userData: ILoginProps) {
   } else {
     throw new Error("Failed to login: Incorrect username or password");
   }
+
 }*/
+export async function getTokken() {
+  try {
+    const res = await fetch(`localhost:3000/auth/profile`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error(`Error ${res.status}: ${errorData.message || "Failed to fetch users"}`);
+      return []; // Devuelve un array vacío en caso de error
+    }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Fetch users error:", error.message);
+    return []; // Devuelve un array vacío en caso de error
+  }
+}
