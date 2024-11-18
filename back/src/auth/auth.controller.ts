@@ -24,7 +24,8 @@ export class AuthController {
 
   @Get('login')
   async loginAuth0Controller(@Res() res: Response) {
-    const loginUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000/auth/callback&scope=openid profile email`
+    console.log('HOLA DESDE LOGIN')
+    const loginUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&response_type=code&redirect_uri=${process.env.AUTH0_BASE_URL}/auth/callback&scope=openid profile email`;
     res.redirect(loginUrl)
   }
 
@@ -38,6 +39,8 @@ export class AuthController {
   async profileAuth0Controller(@Req() request: Request) {
 
     const { idToken, accessToken } = request.oidc
+    console.log(`Este es el idToken: ${idToken}`)
+    console.log(`Este es el accessToken: ${accessToken}`)
 
     if (!idToken && !accessToken) {
       throw new UnauthorizedException('Usuario no autenticado, token no encontrado');
@@ -53,20 +56,31 @@ export class AuthController {
 
   @Get('callback')
   async callbackAuth0Controller(@Req() req: Request, @Res() res: Response) {
+    console.log('HOLA DESDE CALLBACK')
     const code = req.query.code as string;
+    console.log(code)
 
     if (!code) {
       throw new BadRequestException('Código de autorización no recibido');
     }
 
+    console.log('Código de autorización recibido:', code);
+
     try {
       const tokenResponse = await this.authService.exchangeCodeForTokenService(code);
+      console.log(tokenResponse)
 
       const userProfile = await this.authService.getUserProfileService(tokenResponse.access_token);
+      console.log(userProfile)
 
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
+      console.log(jwtToken)
 
-      return jwtToken
+      return {
+        user: userProfile,
+        token: jwtToken
+      }
+
     }
     catch (error) {
       console.error('Error en el callback:', error);
