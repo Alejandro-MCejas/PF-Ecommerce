@@ -8,7 +8,10 @@ export class OrderDetails{
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column({type: 'decimal', precision: 10, scale: 2})
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false, transformer: {
+        to: (value: number) => value, 
+        from: (value: string) => parseFloat(value),}
+    ,})
     price: number
 
     @OneToOne(() => Orders, order => order.orderDetails)

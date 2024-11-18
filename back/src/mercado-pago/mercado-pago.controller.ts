@@ -8,14 +8,12 @@ export class MercadoPagoController {
     private readonly productsService:ProductsService,
   ) {}
 
-  @Post('create-pago/:orderId')
-  async createPayment(@Param('orderId') orderId: string, @Body() preferenceData : any) {
-    const paymentResponse = await this.mercadoPagoService.createPago(preferenceData, orderId);
-      
-      // Retornamos la respuesta de MercadoPago
-      return {
-        message: 'Payment created successfully',
-        data: paymentResponse,
-      };
+  @Post('create-pago/:orderDetailId')
+  async createPagoWithOrderDetail(
+    @Param('orderDetailId') orderDetailId: string,
+    @Body() preferenceData: any,
+  ) {
+    return await this.mercadoPagoService.createPagoWithOrderDetail(preferenceData, orderDetailId);
   }
+
 }  
