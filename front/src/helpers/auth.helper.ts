@@ -9,41 +9,41 @@ console.log(APIURL)
 //CREAR USUARIO
 export async function register(userData: IRegisterProps, parentId?: string) {
   console.log(userData);
-  
-    try {
-      const url = new URL(`${APIURL}/auth/signup`);
-      // Añadir parentId como parámetro de consulta si está disponible
-      if (parentId) {
-        url.searchParams.append("parentId", parentId);
-      }
-  console.log(url);
-  
-      const res = await fetch(url.toString(), {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-  console.log(res);
-  
-      if (!res.ok) {
-        const errorData = await res.json(); // Obtener los detalles del error
-        throw new Error(
-          `Error ${res.status}: ${errorData.message || "Failed to register"}`
-        );
-      }
-      return await res.json();
-    } catch (error: any) {
-      console.error("Registration error:", error.message);
+
+  try {
+    const url = new URL(`${APIURL}/auth/signup`);
+    // Añadir parentId como parámetro de consulta si está disponible
+    if (parentId) {
+      url.searchParams.append("parentId", parentId);
+    }
+    console.log(url);
+
+    const res = await fetch(url.toString(), {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+    console.log(res);
+
+    if (!res.ok) {
+      const errorData = await res.json(); // Obtener los detalles del error
       throw new Error(
-        error.message || `Unknown error occurred during registration.`
+        `Error ${res.status}: ${errorData.message || "Failed to register"}`
       );
     }
+    return await res.json();
+  } catch (error: any) {
+    console.error("Registration error:", error.message);
+    throw new Error(
+      error.message || `Unknown error occurred during registration.`
+    );
   }
+}
 
- //USUARIO POR ID
- export async function getUser(userId: string) {
+//USUARIO POR ID
+export async function getUser(userId: string) {
   try {
     const res = await fetch(`${APIURL}/users/${userId}`, {
       method: "GET",
@@ -127,11 +127,11 @@ export async function getAllUsers() {
 }
 
 // Login
-export async function login(userData:ILoginProps) {
+export async function login(userData: ILoginProps) {
   console.log(APIURL)
   try {
-    const res = await fetch(`${APIURL}/auth/signin`,{
-      method:"POST",
+    const res = await fetch(`${APIURL}/auth/signin`, {
+      method: "POST",
       headers: {
         "Content-type": "application/json"
       },
@@ -139,15 +139,16 @@ export async function login(userData:ILoginProps) {
     });
     console.log(res);
     console.log(userData);
-    
-       if(res.ok){
-          return res.json()
-       } else {
-          throw Error("faild to login")
-       }
- 
-} catch (error: any) {
-  throw new Error(error)  }
+
+    if (res.ok) {
+      return res.json()
+    } else {
+      throw Error("faild to login")
+    }
+
+  } catch (error: any) {
+    throw new Error(error)
+  }
 }
 
 // auth.helper.ts
@@ -199,3 +200,17 @@ export async function getTokken() {
     return []; // Devuelve un array vacío en caso de error
   }
 }
+
+export const getToken2Prueba = async () => {
+  try {
+    const res = await fetch('http://localhost:3000/auth/login');
+    if (!res.ok) {
+      throw new Error(`Error en la solicitud: ${res.status} ${res.statusText}`);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error('Error al obtener el token:', error);
+    // Manejo adicional del error según sea necesario
+  }
+};
+
