@@ -1,3 +1,5 @@
+import { IProduct } from "./IProduct";
+
 export interface OrderDataMP {
     quantity: string;
     price: string;
@@ -26,4 +28,14 @@ export interface OrderResponse {
     };
     price: number;
     orderDetailId: string;
-  }
+}
+
+interface Order {
+  id:string,
+  date:string
+}
+
+export interface OrderDetailInformation {
+  order: Order,
+  orderDetail: IProduct[]
+}
