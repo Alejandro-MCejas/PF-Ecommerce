@@ -1,5 +1,9 @@
-const token ()=>{
+const token  = ()=>{
     return(
-        <div></div>
+        <div>
+            
+        </div>
     )
 }
+
+export default token;

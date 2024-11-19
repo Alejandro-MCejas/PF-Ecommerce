@@ -157,7 +157,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
                                 ) : (
                                     // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
-                                    <div className="w-full flex items-center flex-col bg-red-50 gap-3">
+                                    <div className="w-full flex items-center flex-col gap-3">
                                         <AddToCart
                                             id={product.id}
                                             name={product.name}
