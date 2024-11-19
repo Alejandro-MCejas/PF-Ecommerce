@@ -4,17 +4,20 @@ import { useCart } from "@/context/CartContext";
 import Swal from "sweetalert2";
 import CardCart from "../CartCard/CardCart";
 import { useEffect, useState } from "react";
-import { OrderData } from "@/interfaces/IOrder";
+import { OrderDataMP } from "@/interfaces/IOrder";
 import StartTransaction from "../StartTransactionButton/StartTransactionButton";
 import PaymentButton from "../PaymentButton/PaymentButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { createOrder, createPaymentMercadoPago } from "@/helpers/orderHelper";
+import { useAuth } from "@/context/Authcontext";
 // import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 
 export const CartView = () => {
     const { cart, removeFromCart, clearCart, orderData, setOrderData } = useCart();
+    const { userData } = useAuth();
     const [isButtonVisible, setIsButtonVisible] = useState(true);
-    const [preferenceId, setPreferenceId] = useState(null);
+    const [preferenceId, setPreferenceId] = useState <string | null> (null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -22,7 +25,7 @@ export const CartView = () => {
             const totalAmount = cart.reduce((sum, product) => sum + product.price, 0);
 
             // Usa la función de callback de setOrderData con el tipo adecuado
-            setOrderData((prevOrderData: OrderData) => ({
+            setOrderData((prevOrderData: OrderDataMP) => ({
                 ...prevOrderData,
                 amount: totalAmount,
                 description: "Products in cart"
@@ -30,30 +33,63 @@ export const CartView = () => {
         }
     }, [cart, setOrderData]);
 
+    // const handleOnClick = async () => {
+    //     setIsButtonVisible(false); // Oculta el botón de "Purchase"
+    //     setIsLoading(true)
+    //     fetch("http://localhost:8080/create_preference", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(orderData),
+    //     })
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    //         .then((preference) => {
+    //             setPreferenceId(preference.id);
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             setIsButtonVisible(true); // Vuelve a mostrar el botón en caso de error
+    //             setIsLoading(false)
+    //         }).finally(() => {
+    //             setIsLoading(false);
+    //         })
+    // }
     const handleOnClick = async () => {
-        setIsButtonVisible(false); // Oculta el botón de "Purchase"
-        setIsLoading(true)
-        fetch("http://localhost:8080/create_preference", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderData),
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((preference) => {
-                setPreferenceId(preference.id);
-            })
-            .catch((error) => {
-                console.error(error);
-                setIsButtonVisible(true); // Vuelve a mostrar el botón en caso de error
-                setIsLoading(false)
-            }).finally(() => {
-                setIsLoading(false);
-            })
-    }
+        setIsButtonVisible(false);
+        setIsLoading(true);
+
+        try {
+            const productsId = cart.map((product: { id: string }) => ({ id: product.id }));
+
+            const orderData = {
+                userId: userData?.user.id,
+                products: productsId,
+            };
+
+            const orderResponse = await createOrder(orderData);
+
+            if (orderResponse) {
+                console.log('Orden creada:', orderResponse);
+                const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id);
+
+                if (mercadoPagoOrder && mercadoPagoOrder.id) {
+                    setPreferenceId(mercadoPagoOrder.id);
+                } else {
+                    throw new Error('Error al obtener la preferencia de Mercado Pago');
+                }
+            } else {
+                console.log('Error al crear la orden.');
+            }
+        } catch (error) {
+            console.error('Error en la transacción:', error);
+            setIsButtonVisible(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const renderSpinner = () => {
         if (isLoading) {

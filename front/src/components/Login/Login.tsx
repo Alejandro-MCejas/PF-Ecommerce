@@ -124,9 +124,7 @@ const Login = () => {
             </button>
 
             {/* Login adicional con ícono */}
-            <a href="/api/auth/login"
-              className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
-                           
+            <Link href={"/api/auth/login"} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
             >
               Login
               <img
@@ -134,10 +132,11 @@ const Login = () => {
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
               />
-            </a>
+            
+            </Link>
             <div>
            
-            <a href="/api/auth/logout">Logout</a>
+            <Link href={"/api/auth/logout"}></Link>
         </div>
 
             {/* Mensaje de registro */}
