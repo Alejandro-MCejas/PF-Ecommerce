@@ -3,20 +3,27 @@ import { AddProductProps, EditGameInformationProps, IProduct } from "@/interface
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const fetchingProducts = async():Promise<IProduct[]> =>{
-    try{
+export const fetchingProducts = async (): Promise<IProduct[]> => {
+    try {
         const response = await fetch(`${API_URL}/products`);
-        const products = await response.json()
-        // console.log(products)
-        return products;
-    }catch(error){
-        console.error("Error fetching products:" , error);
-        return[]
+        const products = await response.json();
+
+        // Verificación adicional para garantizar que es un array
+        if (Array.isArray(products)) {
+            return products;
+        } else {
+            console.warn("The data fetched is not an array:", products);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return [];
     }
-}
+};
 
 
-export const fetchingProductByID = async (id:string):Promise<IProduct> =>{
+
+export const fetchingProductByID = async (id: string): Promise<IProduct> => {
     try {
         const response = await fetch(`${API_URL}/products/${id}`);
         const productByID = await response.json()
@@ -26,13 +33,13 @@ export const fetchingProductByID = async (id:string):Promise<IProduct> =>{
     }
 }
 
-export const editProductInformationByID = async (product:EditGameInformationProps, token:string): Promise<EditGameInformationProps> =>{
+export const editProductInformationByID = async (product: EditGameInformationProps, token: string): Promise<EditGameInformationProps> => {
     try {
         const response = await fetch(`${API_URL}/products/${product.id}`, {
-            method:"PUT",
+            method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`,
-                "Content-Type":"application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(product)
         })
@@ -49,14 +56,13 @@ export const editProductInformationByID = async (product:EditGameInformationProp
     } catch (error) {
         console.error("Error updating product:", error);
         throw new Error(
-            `Failed to update product: ${
-                error instanceof Error ? error.message : "Unknown error"
+            `Failed to update product: ${error instanceof Error ? error.message : "Unknown error"
             }`
         );
     }
 }
 
-export const addProduct = async (product:AddProductProps , token:string): Promise<EditGameInformationProps> =>{
+export const addProduct = async (product: AddProductProps, token: string): Promise<EditGameInformationProps> => {
 
     const formData = new FormData();
     product.images.forEach((image: File) => {
@@ -66,7 +72,7 @@ export const addProduct = async (product:AddProductProps , token:string): Promis
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
-    
+
     // // Imprimir el contenido de FormData
     // for (const pair of formData.entries()) {
     //     console.log(pair[0], pair[1]);
@@ -91,17 +97,16 @@ export const addProduct = async (product:AddProductProps , token:string): Promis
     } catch (error) {
         console.error("Error updating product:", error);
         throw new Error(
-            `Failed to update product: ${
-                error instanceof Error ? error.message : "Unknown error"
+            `Failed to update product: ${error instanceof Error ? error.message : "Unknown error"
             }`
         );
     }
 }
 
-export const deleteProductByID = async(id:string , token:string) =>{
+export const deleteProductByID = async (id: string, token: string) => {
     try {
         const response = await fetch(`${API_URL}/products/${id}`, {
-            method:"DELETE",
+            method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
