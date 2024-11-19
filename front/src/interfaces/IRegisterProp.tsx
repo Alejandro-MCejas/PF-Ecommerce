@@ -1,9 +1,11 @@
 export interface IRegisterProps {
 
     password: string;
-    passwordConfirm: string;
+    confirmPassword: string;
     email: string;
-    username: string;
+    name: string;
     address: string;
+    phone: string;
     [key: string]: string; 
 }
+export type ILoginProps = Pick<IRegisterProps, "email" | "password">;
