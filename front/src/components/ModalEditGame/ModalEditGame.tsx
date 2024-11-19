@@ -5,10 +5,13 @@ import { IProduct , EditGameInformationProps } from "@/interfaces/IProduct";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Swal from "sweetalert2";
+import { useAuth } from "@/context/Authcontext";
 
 const ModalEditGame = ({ product }: { product: IProduct }) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);    
+
+    const {userData} = useAuth()
 
     const inicialState ={
         id: product.id,
@@ -31,6 +34,16 @@ const ModalEditGame = ({ product }: { product: IProduct }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+    
+        if (!userData?.token) {
+            Swal.fire({
+                title: "Error",
+                text: "User token is missing. Please log in again.",
+                icon: "error"
+            });
+            return; // Salir de la función si el token no está presente
+        }
+    
         Swal.fire({
             title: "Do you want to save the changes?",
             showDenyButton: true,
@@ -39,7 +52,7 @@ const ModalEditGame = ({ product }: { product: IProduct }) => {
             denyButtonText: `Don't save`,
         }).then((result) => {
             if (result.isConfirmed) {
-                editProductInformationByID(newGameInfo)
+                editProductInformationByID(newGameInfo, userData.token)
                     .then(() => {
                         Swal.fire("Saved!", "The changes have been saved.", "success");
                         closeModal();
@@ -53,7 +66,8 @@ const ModalEditGame = ({ product }: { product: IProduct }) => {
                 Swal.fire("Changes are not saved", "", "info");
             }
         });
-    }
+    };
+    
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = event.target;

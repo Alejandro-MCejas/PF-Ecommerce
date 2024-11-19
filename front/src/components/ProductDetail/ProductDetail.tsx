@@ -9,6 +9,7 @@ import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
 import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 import { useAuth } from "@/context/Authcontext";
+import { useRouter } from "next/navigation";
 
 interface ProductDetail {
     product: IProduct;
@@ -19,10 +20,20 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     const {userData} = useAuth()
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
+    const router = useRouter()
 
-    const role: string = userData?.user.admin || ""
+    // const role: string = userData?.user.admin || ""
 
     const handleDeleteGame = () => {
+        if (!userData?.token) {
+            Swal.fire({
+                title: "Error",
+                text: "User token is missing. Please log in again.",
+                icon: "error"
+            });
+            return;
+        }
+    
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -33,18 +44,29 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await deleteProductByID(product.id);
+                await deleteProductByID(product.id, userData.token);
                 Swal.fire({
                     title: "Deleted!",
                     text: "Your file has been deleted.",
                     icon: "success"
                 });
+                router.push("/products");
             }
         });
     };
+    
 
 
     const handleAddCyberGamer = async () => {
+        if (!userData?.token) {
+            Swal.fire({
+                title: "Error",
+                text: "User token is missing. Please log in again.",
+                icon: "error"
+            });
+            return; // Salir de la función si el token no está presente
+        }
+    
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "You will add this game to CyberGamer",
@@ -54,11 +76,12 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, add it!"
         });
+    
         if (result.isConfirmed) {
             // Crear una copia del producto y cambiar la propiedad `suscription` a true
             const updatedProduct = { ...product, suscription: true };
             try {
-                await editProductInformationByID(updatedProduct);
+                await editProductInformationByID(updatedProduct, userData.token);
                 Swal.fire({
                     title: "Added successfully!",
                     text: "The game is now in CyberGamer",
@@ -73,6 +96,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         }
     };
+    
     
 
     return (
@@ -127,8 +151,8 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                         }
                         <div className="w-full">
                             {/* Lógica de botones según el rol */}
-                            {role !== "administrator" ? (
-                                role !== "user" ? (
+                            {userData?.user.admin !== "admin" ? (
+                                userData?.user.admin !== "user" ? (
                                     // Mostrar solo botón de comprar si el rol no es admin ni user
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
                                 ) : (

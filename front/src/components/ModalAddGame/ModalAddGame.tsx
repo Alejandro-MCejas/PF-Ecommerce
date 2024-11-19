@@ -62,15 +62,21 @@ const AddProductForm = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("New game submitted:", newGame);
+    
+        if (!userData?.token) {
+            console.error('User token is missing. Please log in again.');
+            return; // Salir de la función si el token no está presente
+        }
+    
         try {
-            const newProduct = await addProduct(newGame);
+            const newProduct = await addProduct(newGame, userData.token);
             window.location.reload();
             console.log('Product added:', newProduct);
         } catch (error) {
             console.error('Error adding product:', error);
         }
-        // Lógica de envío al backend o manejo de datos
     };
+    
 
     const openModal = () => {
         setIsOpen(true);
@@ -108,7 +114,7 @@ const AddProductForm = () => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
-    if (userData?.user.admin !== "administrator") return null;
+    if (userData?.user.admin !== "admin") return null;
 
     return (
         <div className="mt-10">

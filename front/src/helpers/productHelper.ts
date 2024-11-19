@@ -26,11 +26,12 @@ export const fetchingProductByID = async (id:string):Promise<IProduct> =>{
     }
 }
 
-export const editProductInformationByID = async (product:EditGameInformationProps): Promise<EditGameInformationProps> =>{
+export const editProductInformationByID = async (product:EditGameInformationProps, token:string): Promise<EditGameInformationProps> =>{
     try {
         const response = await fetch(`${API_URL}/products/${product.id}`, {
             method:"PUT",
             headers: {
+                'Authorization': `Bearer ${token}`,
                 "Content-Type":"application/json",
             },
             body: JSON.stringify(product)
@@ -55,7 +56,7 @@ export const editProductInformationByID = async (product:EditGameInformationProp
     }
 }
 
-export const addProduct = async (product:AddProductProps): Promise<EditGameInformationProps> =>{
+export const addProduct = async (product:AddProductProps , token:string): Promise<EditGameInformationProps> =>{
 
     const formData = new FormData();
     product.images.forEach((image: File) => {
@@ -73,6 +74,9 @@ export const addProduct = async (product:AddProductProps): Promise<EditGameInfor
     try {
         const response = await fetch(`${API_URL}/products`, {
             method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
             body: formData // Pasar FormData directamente
         });
 
@@ -94,10 +98,13 @@ export const addProduct = async (product:AddProductProps): Promise<EditGameInfor
     }
 }
 
-export const deleteProductByID = async(id:string) =>{
+export const deleteProductByID = async(id:string , token:string) =>{
     try {
         const response = await fetch(`${API_URL}/products/${id}`, {
-            method:"DELETE"
+            method:"DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
         })
         const productByID = await response.json()
         return productByID;
