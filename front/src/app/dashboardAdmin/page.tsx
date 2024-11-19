@@ -1,6 +1,6 @@
 const hola =()=>{
     return(
-        <div className="text-white">hola curioso</div>
+        <div className="text-white">Dashboard admin</div>
     )
 }
 export default hola
