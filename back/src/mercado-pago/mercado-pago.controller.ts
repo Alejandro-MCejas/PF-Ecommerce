@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Query, } from '@nestjs/common';
 import { MercadoPagoService } from './mercado-pago.service';
 import { ProductsService } from 'src/products/products.service';
 
@@ -13,7 +13,23 @@ export class MercadoPagoController {
     @Param('orderDetailId') orderDetailId: string,
     @Body() preferenceData: any,
   ) {
-    return await this.mercadoPagoService.createPagoWithOrderDetail(preferenceData, orderDetailId);
+    const response = await this.mercadoPagoService.createPagoWithOrderDetail(preferenceData, orderDetailId);
+    return response;
   }
 
-}  
+  @Get('feedback')
+  async handleFeedback(
+    @Query('payment_id') payment_id: string,
+    @Query('status') status: string,
+    @Query('merchant_order_id') merchant_order_id: string
+  ) {
+    // Solo imprimir para ver los valores
+    console.log('Parámetros:', { payment_id, status, merchant_order_id });
+    
+    return {
+      message: 'Feedback recibido correctamente',
+      data: { payment_id, status, merchant_order_id },
+    };
+  }
+
+}
