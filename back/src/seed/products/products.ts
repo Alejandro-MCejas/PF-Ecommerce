@@ -84,6 +84,6 @@ export const productsMock = [
         description: "Juego de batalla real multijugador gratuito.",
         price: 55.99,
         stock: 40,
-        suscription: true,
+        suscription: false,
     }
 ];
