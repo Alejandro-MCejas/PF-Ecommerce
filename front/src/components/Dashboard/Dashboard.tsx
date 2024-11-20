@@ -1,29 +1,72 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import MyInformation from "./MyInformation";
 import Favorites from "./Favotites";
 import Ordes from "./Orders";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/Authcontext";
 
 const Dashboard = () => {
     const [activeView, setActiveView] = useState("information");
+    const {setUserData} = useAuth()
+    const [isClient, setIsClient] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        setIsClient(true);
+    
+        if (typeof window !== "undefined") {
+          const query = new URLSearchParams(window.location.search);
+          const userSessionString = query.get("userSession");
+    
+          if (userSessionString) {
+            try {
+              // Decodifica y parsea el objeto completo
+              const userSession = JSON.parse(decodeURIComponent(userSessionString));
+              console.log("Objeto userSession recibido:", userSession);
+    
+              // Usa setUserData para actualizar el estado global
+              setUserData({
+                token: userSession.token,
+                user: userSession.userData,
+              });
+    
+              // Redirige al dashboard principal
+              router.replace("/dashboard");
+            } catch (error) {
+              console.error("Error al procesar userSession:", error);
+              router.replace("/login");
+            }
+          } else {
+            router.replace("/login");
+          }
+        }
+      }, [router, setUserData]);
+    
+      if (!isClient) {
+        return null; // O un loader mientras se monta el cliente
+      }
+      
+
+
 
     const renderContent = () => {
         switch (activeView) {
             case "information":
                 return (
-                 <MyInformation/>
-             
+                    <MyInformation />
+
                 );
             case "favorites":
                 return (
-                 <Favorites />     
-             
+                    <Favorites />
+
                 );
             case "orders":
-               return (
-                <Ordes/>
-               )
+                return (
+                    <Ordes />
+                )
             default:
                 return null;
         }

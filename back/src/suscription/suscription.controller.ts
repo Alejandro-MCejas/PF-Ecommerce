@@ -7,7 +7,7 @@ import { CreateSuscriptionDto } from './dto/create-suscription.dto';
 export class SuscriptionController {
   constructor(private readonly suscriptionService: SuscriptionService) {}
 
-  @Get('suscription/:userId')
+  @Get(':userId')
   async suscription(@Param('userId') userId:string): Promise<Products[]>{
     return await this.suscriptionService.getSuscription(userId)
   }

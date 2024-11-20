@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Orders } from './orders.entity'
 import { UserRole } from 'src/users/enum/role.enum'
 import { Reviews } from './reviews.entity'
@@ -39,6 +39,6 @@ export class Users {
     @OneToMany(() => Orders, order => order.user)
     orders: Orders[]
 
-    @ManyToOne(() => Reviews, (reviews)=> reviews.user)
+    @OneToMany(() => Reviews, (reviews)=> reviews.user)
     reviews:Reviews;
 }

@@ -203,14 +203,22 @@ export async function getTokken() {
 
 export const getToken2Prueba = async () => {
   try {
-    const res = await fetch('http://localhost:3000/auth/login');
+    const res = await fetch('http://localhost:3000/auth/login', {
+      method: 'GET',
+      credentials: 'include', // Para enviar cookies o encabezados de autenticación
+      headers: {
+        'Content-Type': 'application/json', // Tipo de contenido esperado
+      },
+    });
+
     if (!res.ok) {
       throw new Error(`Error en la solicitud: ${res.status} ${res.statusText}`);
     }
+
     return await res.json();
   } catch (error) {
     console.error('Error al obtener el token:', error);
-    // Manejo adicional del error según sea necesario
   }
 };
+
 
