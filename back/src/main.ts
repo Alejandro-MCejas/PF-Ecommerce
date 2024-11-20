@@ -6,9 +6,11 @@ import { UsersSeed } from './seed/users/users.seed';
 import { CategoriesSeed } from './seed/categories/categories.seed';
 import { auth } from 'express-openid-connect';
 import { auth0Config } from './config/auth0';
+import { loggerGlobal } from './middlewares/loggerGlobal.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(loggerGlobal)
 
   app.use(auth({
     ...auth0Config,

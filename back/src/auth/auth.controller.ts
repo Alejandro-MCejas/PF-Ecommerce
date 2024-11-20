@@ -76,7 +76,7 @@ export class AuthController {
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
       console.log(jwtToken)
 
-      res.json(jwtToken)
+      res.json({ token: jwtToken })
       console.log('linea 80')
     }
     catch (error) {
