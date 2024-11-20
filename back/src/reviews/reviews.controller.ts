@@ -18,6 +18,7 @@ export class ReviewsController {
       @Param('productId') productId: string,
       @Param('userId') userId: string
   ): Promise<{ rating: number; comment?: string } | null> {
+      console.log('productId:', productId, 'userId:', userId);
       const review = await this.reviewsService.ratingUser(productId, userId);
       return review ? { rating: review.rating, comment: review.comment } : null;
   }
