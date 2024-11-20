@@ -12,6 +12,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(loggerGlobal)
 
+
+  // Configura CORS antes de ejecutar el seeding
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:4000', 'https://pf-ecommerce2024.vercel.app'], // Permite solo este origen
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
+    credentials: true, // Permite cookies u otros headers de autenticación
+    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+    exposedHeaders: ['Authorization'], // Encabezados expuestos al cliente
+  });
+
   app.use(auth({
     ...auth0Config,
     routes: {
@@ -21,13 +31,7 @@ async function bootstrap() {
     }
   }))
 
-
-  // Configura CORS antes de ejecutar el seeding
-  app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:4000'], // Permite solo este origen
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
-    credentials: true // Permite cookies u otros headers de autenticación
-  });
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Nest Api Proyecto Final')
     .setDescription('Ecommerce de proyecto final 2024')
@@ -50,10 +54,7 @@ async function bootstrap() {
   await userSeed.seedUsers()
   console.log('Usuarios Cargados');
 
-
   await app.listen(3000);
-
-
 
 }
 
