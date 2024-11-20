@@ -76,8 +76,22 @@ export class AuthController {
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
       console.log(jwtToken)
 
-      res.json(jwtToken)
-      console.log('linea 80')
+      const userSession = {
+        token: jwtToken,
+        userData: {
+          id: userProfile.sub,
+          name: userProfile.name,
+          email: userProfile.email,
+          picture: userProfile.picture,
+          isSuscription: false, // Ejemplo, podrías calcularlo o extraerlo
+          admin: userProfile.roles || 'user', // Si tienes roles, úsalos
+        },
+      };
+
+      // Codifica el objeto y redirige con la estructura completa
+      const userSessionEncoded = encodeURIComponent(JSON.stringify(userSession));
+
+      res.redirect(`http://localhost:4000/dashboard?userSession=${userSessionEncoded}`);
     }
     catch (error) {
       console.error('Error en el callback:', error);
