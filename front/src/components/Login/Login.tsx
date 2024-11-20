@@ -4,15 +4,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
-import { login } from "@/helpers/auth.helper";
+import { getToken2Prueba, login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "@/context/Authcontext";
+
+
 const Login = () => {
 
-  const {setUserData} = useAuth()
+  const { setUserData } = useAuth()
   const router = useRouter();
   const initialState = {
     email: "",
@@ -21,7 +23,6 @@ const Login = () => {
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
   const [errors, setErrors] = useState<ILoginError>({});
   const [generalError, setGeneralError] = useState<string>("");
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setDataUser({
@@ -38,13 +39,13 @@ const Login = () => {
       const response = await login(dataUser);
 
       console.log(response);
-      
-  // Verifica la estructura de la respuesta
+
+      // Verifica la estructura de la respuesta
 
       const { token, user } = response;  // Desestructuración
       console.log("Token:", token);
       console.log("User:", user);
-      setUserData({token,user})
+      setUserData({ token, user })
 
 
       // localStorage.setItem("userSession", JSON.stringify({ token, user }));
@@ -68,7 +69,13 @@ const Login = () => {
   };
 
 
- 
+  const handleLoginGoogle = async () => {
+    await getToken2Prueba()
+    router.push("/auth/login")
+  }
+
+
+
 
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
@@ -132,12 +139,13 @@ const Login = () => {
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
               />
-            
+
             </Link>
             <div>
-           
-            <Link href={"/api/auth/logout"}></Link>
-        </div>
+
+              <Link href={"/api/auth/logout"}></Link>
+            </div>
+
 
             {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
@@ -149,6 +157,14 @@ const Login = () => {
           </div>
         </div>
       </form>
+      {/* <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
+              Login
+              <img
+                src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
+                alt="Login Icon"
+                className="w-[20px] h-[20px] ml-2"
+              />
+            </button> */}
     </div>
   );
 };
