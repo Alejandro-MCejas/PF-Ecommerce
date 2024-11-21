@@ -1,4 +1,3 @@
-// import { categories } from "./categories/categoriesMock";
 
 export const productsMock = [
     {
@@ -27,6 +26,7 @@ export const productsMock = [
         price: 26.99,
         stock: 100,
         suscription: true,
+        categories: "Aventura",
     },
     {
         name: "Cyberpunk 2077",
@@ -44,7 +44,7 @@ export const productsMock = [
         price: 59.99,
         stock: 70,
         suscription: true,
-        categories: "Acción",
+        categories: "Deportes",
     },
     {
         name: "Elden Ring",
@@ -53,6 +53,7 @@ export const productsMock = [
         price: 59.99,
         stock: 20,
         suscription: false,
+        categories: "Aventura",
     },
     {
         name: "Red Dead Redemption 2",
@@ -61,6 +62,7 @@ export const productsMock = [
         price: 49.99,
         stock: 35,
         suscription: false,
+        categories: "Aventura",
     },
     {
         name: "Among Us",
@@ -69,6 +71,7 @@ export const productsMock = [
         price: 4.99,
         stock: 500,
         suscription: true,
+        categories: "Acción",
     },
     {
         name: "Horizon Forbidden West",
@@ -77,6 +80,7 @@ export const productsMock = [
         price: 59.99,
         stock: 40,
         suscription: false,
+        categories: "Simulación",
     },
     {
         name: "Fortnite",
@@ -85,5 +89,6 @@ export const productsMock = [
         price: 55.99,
         stock: 40,
         suscription: false,
+        categories: "Shooter",
     }
 ];

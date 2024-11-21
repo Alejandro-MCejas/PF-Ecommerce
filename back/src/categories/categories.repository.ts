@@ -16,7 +16,7 @@ export class CategoriesRepository {
     }
 
     async findOneCategoryRepository(id: string) {
-        return await this.categoriesRepository.findOne({ where: { id } })
+        return await this.categoriesRepository.findOne({ where: { id }, relations: ['products'] })
     }
 
     async createCategoryRepository(category: { name: string }) {

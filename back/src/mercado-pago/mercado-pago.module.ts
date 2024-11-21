@@ -11,7 +11,7 @@ import { ProductsModule } from 'src/products/products.module';
   imports: [TypeOrmModule.forFeature([mercadoPago]), OrderDetailModule, OrdersModule, ProductsModule],
   controllers: [MercadoPagoController],
   providers: [MercadoPagoService],
-  exports:[]
+  exports:[MercadoPagoService]
 
 })
 export class MercadoPagoModule {}
