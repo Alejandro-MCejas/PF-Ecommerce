@@ -14,7 +14,7 @@ export class Suscription{
     type: string; 
 
     @Column("decimal")
-    price: number; 
+    price: number = 10; 
 
     @Column("date")
     startDate: Date; 

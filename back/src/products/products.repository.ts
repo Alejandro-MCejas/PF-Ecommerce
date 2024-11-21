@@ -23,7 +23,7 @@ export class ProductsRepository{
     }
 
     async findOneByProductsId(id:string): Promise<Products>{
-        return await this.productsRepository.findOne({where:{id}})
+        return await this.productsRepository.findOne({where:{id}, relations:['reviews']})
     }
     
     async createProductsData(products: CreateProductDto, image: string[]): Promise<Products> {
