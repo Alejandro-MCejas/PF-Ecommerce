@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
 import { Reviews } from "./reviews.entity";
@@ -40,6 +40,6 @@ export class Products {
     @JoinTable()
     orderDetails: OrderDetails;
 
-    @ManyToOne(() => Reviews, (reviews) => reviews.products)
+    @OneToMany(() => Reviews, (reviews) => reviews.products)
     reviews: Reviews[];
 }

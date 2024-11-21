@@ -48,7 +48,7 @@ export class SuscriptionService {
     if (!isUUID(userId)) {
       throw new Error(`El userId ${userId} no es un UUID válido`);
     }
-    const priceSuscription = 5;
+    // const priceSuscription = 5;
 
     const user = await this.userRepository.findOneUserRepository(userId);
     if(!user){
@@ -72,7 +72,7 @@ export class SuscriptionService {
 
     const suscription = this.suscriptionRepository.create({
       user,
-      price: priceSuscription,
+      price:10,
       startDate,
       endDate,
       type:'basic',
@@ -89,7 +89,7 @@ export class SuscriptionService {
           id: 'suscription_basic',
           title: 'Suscripción Básica',
           quantity: 1,
-          unit_price: priceSuscription,
+          unit_price: 10,
         },
       ],
       back_urls: {
