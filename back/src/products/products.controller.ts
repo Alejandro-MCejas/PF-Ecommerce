@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards} from '@nestjs/common';
 import { Response } from 'express';
 import { ProductsService } from './products.service';
 import { Products } from '../entities/products.entity';
@@ -11,8 +11,6 @@ import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from 'src/users/enum/role.enum';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { error } from 'console';
-import { HybridAuthGuard } from 'src/auth/hybridAuthGuard.guard';
 
 @Controller('products')
 // @UseFilters(HttpExceptionFilter)
@@ -71,8 +69,5 @@ export class ProductsController {
     const deleteId = await this.productsService.deleteProducts(id);
     return res.status(200).json({ message: `The product with id ${deleteId.id} was successfully deleted` })
   }
-
- 
-
 
 }

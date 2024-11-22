@@ -41,5 +41,11 @@ export class ReviewsService {
     console.log(reviews)
     return reviews;
   }
+
+  async deleteReviews(id:string): Promise<Reviews>{
+    const reviews = await this.reviewsRpository.findOne({where:{id}})
+    await this.reviewsRpository.delete(id)
+    return reviews;
+  }
   
 }

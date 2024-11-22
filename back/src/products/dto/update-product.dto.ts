@@ -35,6 +35,11 @@ export class UpdateProductDto {
     @IsOptional()
     price?: number;
 
+    @IsDecimal({decimal_digits:'2'})
+    @IsPositive()
+    @IsOptional()
+    discount?: number;
+
     @ApiProperty({
         example: ''
     })

@@ -31,6 +31,11 @@ export class CreateProductDto {
     @IsPositive()
     price: number;
 
+    @IsDecimal({decimal_digits:'2'})
+    @IsPositive()
+    @IsOptional()
+    discount?: number;
+
     @ApiProperty({
         example: '',
     })

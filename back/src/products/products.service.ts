@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
 import { ProductId } from 'src/orders/dto/create-order.dto';
@@ -13,7 +13,19 @@ export class ProductsService {
   ) { }
 
   async findProducts(): Promise<Products[]> {
-    return await this.productsRepository.findProductsData();
+    const product = await this.productsRepository.findProductsData();
+    return product.map(product => {
+      let discountedPrice = product.price;
+  
+      if (product.discount && product.discount > 0) {
+        discountedPrice = product.price - (product.price * product.discount) / 100;
+      }
+  
+      return {
+        ...product,
+        discountedPrice, // Agrega el precio con descuento al producto
+      };
+    }) 
   }
 
   async findOneProducts(id: string) {
@@ -54,6 +66,11 @@ export class ProductsService {
         imageUrls.push(imageUrl.secure_url);
       }
     }
+
+    if (products.discount !== undefined && (products.discount < 0 || products.discount > 100)) {
+      throw new BadRequestException('Discount must be between 0 and 100');
+    }
+
     const updatedData = {
       ...products,
       image: imageUrls,
