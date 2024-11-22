@@ -9,6 +9,7 @@ import { Suscription } from 'src/entities/suscription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 @Injectable()
 export class SuscriptionService {
@@ -40,6 +41,7 @@ export class SuscriptionService {
     }
   }
 
+
   async createSuscription(createSuscription:CreateSuscriptionDto):Promise<Suscription>{
     const {userId} = createSuscription;
     if (!isUUID(userId)) {
@@ -52,6 +54,7 @@ export class SuscriptionService {
       throw new Error('User not found')
     }
 
+    
     
     const product = await this.productsRepository.findProductsSuscription(
       { suscription: true }
@@ -66,14 +69,6 @@ export class SuscriptionService {
 
     const productIds = product.map(product => product.id);
 
-    console.log({
-      user: { id: user.id },
-      price: priceSuscription,
-      startDate,
-      endDate,
-      productIds,
-    });
-
     const suscription = this.suscriptionRepository.create({
       user,
       price: priceSuscription,
@@ -83,16 +78,48 @@ export class SuscriptionService {
       productIds,
     });
 
+    const savedSuscription = await this.suscriptionRepository.save(suscription);
+    
+    await this.suscriptionRepository.save(suscription);
+
+    const client = new MercadoPagoConfig({ accessToken: 'MP_ACCESS_TOKEN' });
+    const preference = new Preference(client);
+
+    const items = [
+      {
+        id: savedSuscription.id,  // ID de la suscripción
+        title: `Suscripción ${savedSuscription.type}`,  // Título de la suscripción
+        quantity: 1,  // Una sola suscripción
+        unit_price: savedSuscription.price,  // Precio de la suscripción
+      },
+    ];
+
+    preference.create({
+      body: {
+        items: items,
+        back_urls: {
+            success: `http://localhost:3000/mercado-pago/feedback?status=approved&userId=${userId}`,
+            failure: `http://localhost:3000/mercado-pago/feedback?status=failure&userId=${userId}`,
+            pending: `http://localhost:3000/mercado-pago/feedback?status=pending&userId=${userId}`,
+          },
+          external_reference: userId
+        }
+    }).then((response) => {
+      // El objeto `response` contiene la información de la preferencia, como la URL para el pago
+      console.log('Preferencia de pago creada con éxito', response);
+    }).catch(error => {
+      // En caso de error, muestra el error
+      console.error('Error al crear la preferencia de pago', error);
+    });
+
     
 
-    await this.suscriptionRepository.save(suscription);
-    
+
     if (!user.isSuscription) {
       user.isSuscription = true;
       await this.userRepository.updateUserRepository(userId, user);
     }
 
-    return suscription
-
+    return savedSuscription
   }
 }

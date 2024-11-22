@@ -33,8 +33,19 @@ export class ReviewsService {
   }
 
   async ratingUser(productsId:string, userId: string): Promise<Reviews | undefined>{
-    return await this.reviewsRpository.findOne({
-      where: {products :{id: productsId}, user: {id: userId}}
-    })
+    console.log('Buscando reseña:', { productsId, userId });
+    const reviews = await this.reviewsRpository.findOne({
+      where: {products :{id: productsId}, user: {id: userId}},
+      relations: ['products', 'user'],
+    });
+    console.log(reviews)
+    return reviews;
   }
+
+  async deleteReviews(id:string): Promise<Reviews>{
+    const reviews = await this.reviewsRpository.findOne({where:{id}})
+    await this.reviewsRpository.delete(id)
+    return reviews;
+  }
+  
 }

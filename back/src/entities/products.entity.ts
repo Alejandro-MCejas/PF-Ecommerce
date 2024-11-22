@@ -11,28 +11,31 @@ export class Products {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type:'varchar', length:200})
+    @Column({ type: 'varchar', length: 200 })
     name: string;
 
-    @Column('text', { array: true,  nullable: false  })
-    image: string[]| string;
+    @Column('text', { array: true, nullable: false })
+    image: string[] | string;
 
-    @Column({type:'varchar', length:200})
+    @Column({ type: 'varchar', length: 200 })
     description: string;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     price: number;
 
+    @Column({ type: 'decimal', nullable: true, default: 0 })
+    discount: number;
+
     @Column('int')
     stock: number;
-    
-    @Column({default: false})
-    suscription:boolean;
+
+    @Column({ default: false })
+    suscription: boolean;
 
     @OneToMany(() => Suscription, (subscription) => subscription.product)
     suscriptions: Suscription[];
 
-    @ManyToMany(()=> Categories, (categories) => categories.products )
+    @ManyToMany(() => Categories, (categories) => categories.products)
     @JoinTable()
     categories: Categories[];
 
@@ -41,5 +44,8 @@ export class Products {
     orderDetails: OrderDetails;
 
     @OneToMany(() => Reviews, (reviews) => reviews.products)
-    reviews: Reviews;
+    reviews: Reviews[];
+
+    @Column({ default: false })
+    isFeatured: boolean;
 }
