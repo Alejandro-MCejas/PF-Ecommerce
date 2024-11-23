@@ -119,21 +119,50 @@ export const deleteProductByID = async (id: string, token: string) => {
 }
 
 
+export const getProductsHome = async () =>{
+    try {
+        const response = await fetch(`${API_URL}/products/productsHome`)
+        console.log(response)
+        const products = response.json()
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
-export const addReview = async (review : AddReviewProps , token:string) => {
-    console.log(review)
+
+export const addReview = async (review: AddReviewProps, token: string) => {
+    console.log(review);
     try {
         const response = await fetch(`${API_URL}/reviews`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json', // Indica que el body es JSON
             },
-            body: JSON.stringify(review) // Pasar FormData directamente
+            body: JSON.stringify(review), // Convierte el objeto a JSON
         });
-        const newComment = await response.json()
-        console.log(newComment)
-        return newComment
+
+        const newComment = await response.json();
+        console.log(newComment);
+        return newComment;
+    } catch (error) {
+        console.error("Error en addReview:", error);
+        throw error;
+    }
+};
+
+export const deleteReview = async (id:string) =>{
+    try {
+        const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                // 'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.json()
     } catch (error) {
         console.log(error)
     }

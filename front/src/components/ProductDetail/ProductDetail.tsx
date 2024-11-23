@@ -11,6 +11,7 @@ import { addReview, deleteProductByID, editProductInformationByID } from "@/help
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
 import ProductReviewCard from "../ProductReviewCard/ProductReviewCard";
+import RelatedProducts from "../RelatedProducts/RelatedProducts";
 
 interface ProductDetail {
     product: IProduct;
@@ -20,17 +21,18 @@ interface ProductDetail {
 const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
     const { userData } = useAuth()
     const [rating, setRating] = useState(0);
-    const [idUser , setIdUser] = useState<string>("")
+    const [idUser, setIdUser] = useState<string>("")
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
-    
+
+    console.log(product)
     const [reviewProduct, setReview] = useState<AddReviewProps>({
         productId: product.id,
         userId: "", // Inicialmente vacío
         rating: 3,
         comment: "",
     });
-    
+
     useEffect(() => {
         if (userData?.user?.id) {
             setIdUser(userData.user.id);
@@ -38,7 +40,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             setIdUser(""); // Asegura que tenga un valor predeterminado
         }
     }, [userData]);
-    
+
     // Sincroniza `reviewProduct.userId` con `idUser`
     useEffect(() => {
         setReview((prev) => ({
@@ -236,29 +238,14 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             </div>
 
             {/* Other games like this */}
-            <h2 className="ml-10 my-5 text-[38px] text-gray-400 font-semibold">Other games like this:</h2>
-            <div className="max-w-[1500px] w-full flex justify-evenly items-center">
-                <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
-                    <Link href={`/products/${product.id}`}>
-                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
-                    </Link>
-                </div>
-                <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
-                    <Link href={`/products/${product.id}`}>
-                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
-                    </Link>
-                </div>
-                <div className="max-w-[200px] max-h-[270] flex justify-evenly  items-center my-3 hover:scale-[1.05]">
-                    <Link href={`/products/${product.id}`}>
-                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
-                    </Link>
-                </div>
-                <div className="max-w-[200px] max-h-[270] flex justify-evenly items-center my-3 hover:scale-[1.05]">
-                    <Link href={`/products/${product.id}`}>
-                        <img src={product.image[0]} alt="" className="w-full h-full rounded-xl" />
-                    </Link>
-                </div>
-            </div >
+            {product?.category && product?.id ? (
+                <RelatedProducts
+                    categoryId={product.category}
+                    excludeProductId={product.id}
+                />
+            ) : (
+                <p>Loading related products...</p>
+            )}
 
             {/* Comments */}
             <div className="my-5">
@@ -295,6 +282,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                         product.reviews.map((review) => (
                             <ProductReviewCard
                                 key={review.id}
+                                id={review.id}
                                 review={review.comment}
                             />
                         ))

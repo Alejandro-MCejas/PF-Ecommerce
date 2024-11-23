@@ -16,7 +16,7 @@ export interface IProduct {
     id:string,
     name: string,
     image: string[],
-    category?: string,
+    category: string,
     price:number,
     stock:number,
     suscription?: boolean,
