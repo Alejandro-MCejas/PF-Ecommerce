@@ -25,12 +25,12 @@ const home = async () => {
         <div className="w-full min-h-screen bg-backgroundLayout">
 
             <h2 className="text-[64px] font-black text-center neon-text mb-4">Latest releases</h2>
-            <div className="relative w-full h-[700px] mb-3 md:w-[500px]">
+            <div className="relative w-full h-[700px] mb-3 ">
                 <Image
                     src={gifImage}
                     alt={"fondo"}
                     layout="fill"
-                    className="w-full h-[700px] blur-md md:w-full" ></Image>
+                    className="w-full h-[700px] blur-md " ></Image>
                 <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
                     <div>
                         <EditGameModal
