@@ -4,52 +4,72 @@ import { IRegisterProps } from "@/interfaces/IRegisterProp";
 const validateRegisterForm = (data: IRegisterProps, excludedFields: string[] = []): IRegisterError => {
   const errors: IRegisterError = {};
 
-  // Helper para verificar si un campo está excluido
+  // Helper to check if a field is excluded
   const isExcluded = (field: string) => excludedFields.includes(field);
 
-  // Validación del email
+  // Email validation
   if (!isExcluded("email")) {
     if (!data.email?.trim()) {
-      errors.email = "El correo electrónico es obligatorio.";
+      errors.email = "Email is required.";
     } else if (!/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(data.email)) {
-      errors.email = "Correo electrónico inválido.";
+      errors.email = "Invalid email address.";
     }
   }
 
-  // Validación del nombre de usuario
-  if (!isExcluded("username")) {
-    if (!data.username?.trim()) {
-      errors.username = "El nombre es obligatorio.";
-    } else if (!/^[a-zA-ZñÑ\s]+$/.test(data.username)) {
-      errors.username = "El nombre no debe tener números ni símbolos.";
-    } else if (/\s{2,}/.test(data.username)) {
-      errors.username = "El nombre no debe tener más de dos espacios consecutivos.";
+  // Username validation
+  if (!isExcluded("name")) {
+    if (!data.name?.trim()) {
+      errors.name = "Username is required.";
+    } else if (/\s/.test(data.name)) {
+      errors.name = "Username must not contain spaces.";
+    } else if (!/^[a-zA-ZñÑ\s]+$/.test(data.name)) {
+      errors.name = "Username should not contain numbers or symbols.";
+    } else if (/\s{2,}/.test(data.name)) {
+      errors.name = "Username should not have more than two consecutive spaces.";
     }
   }
 
-  // Validación de la dirección
+  // Address validation
   if (!isExcluded("address")) {
     if (!data.address?.trim()) {
-      errors.address = "La dirección es obligatoria.";
+      errors.address = "Address is required.";
     }
   }
 
-  // Validación de la contraseña
+  // Phone validation
+  if (!isExcluded("phone")) {
+    if (!data.phone?.trim()) {
+      errors.phone = "Phone is required.";
+    } else if (!/^\d+$/.test(data.phone)) {
+      errors.phone = "Phone must contain only numbers.";
+    } else if (data.phone.length < 10 || data.phone.length > 15) {
+      errors.phone = "Phone must be between 10 and 15 digits.";
+    }
+  }
+
+  // Password validation
   if (!isExcluded("password")) {
     if (!data.password?.trim()) {
-      errors.password = "La contraseña es obligatoria.";
+      errors.password = "Password is required.";
     } else if (data.password.length < 8) {
-      errors.password = "La contraseña debe tener al menos 8 caracteres.";
+      errors.password = "Password must be at least 8 characters long.";
     } else if (data.password.length > 20) {
-      errors.password = "La contraseña debe tener menos de 20 caracteres.";
+      errors.password = "Password must be less than 20 characters.";
     } else if (!/[A-Z]/.test(data.password)) {
-      errors.password = "La contraseña debe tener al menos una letra mayúscula.";
+      errors.password = "Password must include at least one uppercase letter.";
     } else if (!/[a-z]/.test(data.password)) {
-      errors.password = "La contraseña debe tener al menos una letra minúscula.";
+      errors.password = "Password must include at least one lowercase letter.";
     } else if (!/[!@#$%^&*]/.test(data.password)) {
-      errors.password = "La contraseña debe contener al menos un carácter especial.";
+      errors.password = "Password must include at least one special character.";
     } else if (/\s/.test(data.password)) {
-      errors.password = "La contraseña no debe contener espacios.";
+      errors.password = "Password must not contain spaces.";
+    }
+  }
+
+  // Confirm Password validation
+  if (!isExcluded("confirmPassword")) {
+    if (data.confirmPassword !== data.password) {
+      errors.confirmPassword = "Passwords do not match.";
     }
   }
 

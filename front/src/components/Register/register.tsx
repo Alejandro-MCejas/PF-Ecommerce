@@ -70,16 +70,24 @@ const Register = () => {
     event.preventDefault();
     
     await register(dataUser);
-    console.log(dataUser);
-    Swal.fire({
-      title: "Registration Successful",
-      text: "You have registered successfully!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-    router.push("/login");
-  };
-
+    try {
+      const response = await register(dataUser, "optionalParentId");
+      Swal.fire({
+        title: "Registration Successful",
+        text: "You have registered successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      router.push("/login");
+    } catch (error: any) {
+      Swal.fire({
+        title: "Registration Failed",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  }
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
