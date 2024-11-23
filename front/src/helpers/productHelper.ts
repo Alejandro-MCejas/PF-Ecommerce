@@ -1,5 +1,5 @@
 import products from "@/app/products/page";
-import { AddProductProps, EditGameInformationProps, IProduct } from "@/interfaces/IProduct";
+import { AddProductProps, AddReviewProps, EditGameInformationProps, IProduct, IReview } from "@/interfaces/IProduct";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -115,5 +115,26 @@ export const deleteProductByID = async (id: string, token: string) => {
         return productByID;
     } catch (error) {
         throw new Error(`HTTP error! status: ${error}`);
+    }
+}
+
+
+
+
+export const addReview = async (review : AddReviewProps , token:string) => {
+    console.log(review)
+    try {
+        const response = await fetch(`${API_URL}/reviews`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(review) // Pasar FormData directamente
+        });
+        const newComment = await response.json()
+        console.log(newComment)
+        return newComment
+    } catch (error) {
+        console.log(error)
     }
 }

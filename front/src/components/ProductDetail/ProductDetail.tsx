@@ -1,15 +1,16 @@
 "use client"
 
-import { IProduct } from "@/interfaces/IProduct";
-import React, { useState } from "react";
+import { AddReviewProps, IProduct } from "@/interfaces/IProduct";
+import React, { useEffect, useState } from "react";
 import StarRating from "../StarRating/StarRating";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
-import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
+import { addReview, deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
+import ProductReviewCard from "../ProductReviewCard/ProductReviewCard";
 
 interface ProductDetail {
     product: IProduct;
@@ -17,11 +18,49 @@ interface ProductDetail {
 }
 
 const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
-    const {userData} = useAuth()
+    const { userData } = useAuth()
     const [rating, setRating] = useState(0);
+    const [idUser , setIdUser] = useState<string>("")
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
+    
+    const [reviewProduct, setReview] = useState<AddReviewProps>({
+        productId: product.id,
+        userId: "", // Inicialmente vacío
+        rating: 3,
+        comment: "",
+    });
+    
+    useEffect(() => {
+        if (userData?.user?.id) {
+            setIdUser(userData.user.id);
+        } else {
+            setIdUser(""); // Asegura que tenga un valor predeterminado
+        }
+    }, [userData]);
+    
+    // Sincroniza `reviewProduct.userId` con `idUser`
+    useEffect(() => {
+        setReview((prev) => ({
+            ...prev,
+            userId: idUser,
+        }));
+    }, [idUser]);
 
+
+
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = event.target;
+        setReview({
+            ...reviewProduct,
+            [name]: value,
+        });
+    }
+
+    const handleSumbitReview = async () => {
+        const review = await addReview(reviewProduct, userData?.token || "")
+
+    }
     // const role: string = userData?.user.admin || ""
 
     const handleDeleteGame = () => {
@@ -33,7 +72,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             });
             return;
         }
-    
+
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -54,7 +93,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         });
     };
-    
+
 
 
     const handleAddCyberGamer = async () => {
@@ -66,7 +105,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             });
             return; // Salir de la función si el token no está presente
         }
-    
+
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "You will add this game to CyberGamer",
@@ -76,7 +115,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, add it!"
         });
-    
+
         if (result.isConfirmed) {
             // Crear una copia del producto y cambiar la propiedad `suscription` a true
             const updatedProduct = { ...product, suscription: true };
@@ -96,8 +135,8 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         }
     };
-    
-    
+
+
 
     return (
         <div>
@@ -221,42 +260,45 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 </div>
             </div >
 
-            {/* Commets */}
+            {/* Comments */}
             <div className="my-5">
-                <h2 className="ml-10 my-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
+                <h2 className="ml-10 mb-4 text-[38px] text-gray-400 font-semibold">Make your own review</h2>
+                {
+                    userData?.user.admin === "user" ? (
+                        <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
+                            <textarea
+                                name="comment"
+                                value={reviewProduct.comment}
+                                onChange={handleChange}
+                                placeholder="Write something here..."
+                                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+                            />
+                            <div className="w-full flex justify-end items-center">
+                                <button
+                                    onClick={handleSumbitReview}
+                                    className="mt-4 px-4 py-2 bg-violet-500 text-white font-semibold rounded-md hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
+                            <h2 className="text-gray-500 text-[20px] font-semibold">To make your revire please, before</h2>
+                            <a href="/login" className="text-violet-500 text-[20px] font-serif">login</a>
+                        </div>
+                    )
+                }
+                <h2 className="ml-10 mb-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
                 <div className="flex flex-col justify-evenly gap-7">
-                    <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
-                        <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
-                        </div>
-                        <p className="w-10/12 text-[16px]">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione corrupti numquam obcaecati eaque soluta suscipit, eum, rem, possimus hic qui labore aliquid debitis iure aspernatur illo culpa? Saepe, repudiandae eveniet!
-                        </p>
-                    </div>
-                    <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
-                        <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
-                        </div>
-                        <p className="w-10/12 text-[16px]">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate dolorum corrupti quas perspiciatis molestiae voluptas repellendus sequi quisquam eaque deleniti laborum delectus at, nulla veritatis mollitia doloribus maxime itaque inventore?
-                        </p>
-                    </div>
-                    <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
-                        <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
-                        </div>
-                        <p className="w-10/12 text-[16px]">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil enim corrupti sint obcaecati quidem. Placeat facere quis excepturi fuga eius, fugit consequatur culpa. Harum id odio nam unde, voluptas tempora.
-                        </p>
-                    </div>
-                    <div className="w-full max-w-[1400px] mx-auto bg-white border-2 shadow-xl rounded-md h-[110px] flex justify-evenly items-center p-5">
-                        <div className="w-2/12 flex justify-center items-center">
-                            <img src={product.image[0]} className="w-[50px] h-[50px] rounded-full" alt="" />
-                        </div>
-                        <p className="w-10/12 text-[16px]">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi deleniti minima sed voluptatem vitae illo tempore. Consequuntur corrupti ullam aut possimus vel facilis aperiam quam minima tempore veritatis? Quibusdam, quaerat!
-                        </p>
-                    </div>
+                    {
+                        product.reviews.map((review) => (
+                            <ProductReviewCard
+                                key={review.id}
+                                review={review.comment}
+                            />
+                        ))
+                    }
                 </div>
             </div >
         </div>

@@ -1,3 +1,16 @@
+export interface IReview{
+    id:string,
+    rating:number,
+    comment:string
+}
+
+export interface AddReviewProps {
+    productId:string,
+    userId:string,
+    rating:number,
+    comment:string
+}
+
 
 export interface IProduct {
     id:string,
@@ -8,6 +21,7 @@ export interface IProduct {
     stock:number,
     suscription?: boolean,
     description:string
+    reviews:IReview[]
 }
 
 export interface EditGameModalProps {
