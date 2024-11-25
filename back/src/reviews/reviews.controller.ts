@@ -9,7 +9,7 @@ export class ReviewsController {
 
   @Post()
   async addReviews(
-    @Body() reviewData: { productId: string; userId: string; rating: number; comment?: string }
+    @Body() reviewData: { productId: string; userId: string; rating?: number; comment?: string }
   ): Promise<Reviews> {
     return await this.reviewsService.addReviews(reviewData.productId, reviewData.userId, reviewData.rating, reviewData.comment);
   }

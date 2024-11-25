@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
-import { AuthGuard } from 'src/auth/authGuard.guard';
 import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from './enum/role.enum';
@@ -25,7 +24,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async findOneUserController(@Param('id') id: string, @Res() res: Response) {
     const user = await this.usersService.findOneUserService(id);
@@ -39,14 +38,14 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(HybridAuthGuard)
   async updateUserController(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
     const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
     return res.status(200).json({ message: `El usuario con el id: ${updatedUser.id} ha sido actualizado` });
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async deleteUserController(@Param('id') id: string, @Res() res: Response) {
     const deletedUser = await this.usersService.deleteUserService(id);
