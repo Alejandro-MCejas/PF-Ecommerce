@@ -155,6 +155,13 @@ const Login = () => {
                 <span className="font-bold text-blue-500 cursor-pointer">Sign up</span>
               </Link>
             </p>
+            <div className="text-sm text-gray-600">
+        Don&apos;t remember your password?{" "}
+        <Link href="/login" className="text-blue-500">
+          Change your password
+        </Link>
+      </div>
+
           </div>
         </div>
       </form>

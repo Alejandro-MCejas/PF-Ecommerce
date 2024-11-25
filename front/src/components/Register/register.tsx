@@ -69,7 +69,6 @@ const Register = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    await register(dataUser);
     try {
       const response = await register(dataUser, "optionalParentId");
       Swal.fire({
