@@ -13,7 +13,7 @@ export const usersMock = [
     {
         "name": "Carlos Gomez",
         "email": "admin1@gmail.com",
-        "password": "admin123",
+        "password": "prueba",
         "address": "San Martin 789",
         "phone": "0987654321",
         "isSuscription":true,

@@ -53,7 +53,7 @@ export class OrdersService {
     }
 
     const structureOfOrder = {
-      userId: user.id,
+      user,
       products: productsWithStock
     }
 
