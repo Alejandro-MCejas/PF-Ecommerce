@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, Res, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { Response } from 'express';
-import { AuthGuard } from 'src/auth/authGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { UserRole } from 'src/users/enum/role.enum';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { HybridAuthGuard } from 'src/auth/hybridAuthGuard.guard';
 
 @Controller('categories')
 export class CategoriesController {
@@ -25,7 +25,7 @@ export class CategoriesController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async createCategoryController(@Body() category: { name: string }, @Res() res: Response) {
     const newCategory = await this.categoriesService.createCategoryService(category);
@@ -34,7 +34,7 @@ export class CategoriesController {
 
   @Put(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)  
+  @UseGuards(HybridAuthGuard, RoleGuard)  
   @Roles(UserRole.ADMIN)
   async updateCategoryController(@Param('id') id: string, @Body() category: { name: string }, @Res() res: Response) {
     const updatedCategory = await this.categoriesService.updateCategoryService(id, category);
@@ -44,7 +44,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async deleteCategoryController(@Param('id') id: string, @Res() res: Response) {
     const deletedCategory = await this.categoriesService.deleteCategoryService(id);

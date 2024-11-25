@@ -1,5 +1,3 @@
-import { categories } from "../categories/categoriesMock";
-
 export const productsMock = [
     {
         name: "The Legend of Zelda: Breath of the Wild",
