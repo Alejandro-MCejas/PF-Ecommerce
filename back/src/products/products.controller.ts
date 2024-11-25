@@ -6,11 +6,11 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { UUIDValidationPipe } from 'src/validator/uuid-validation.pipes';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { AuthGuard } from 'src/auth/authGuard.guard';
 import { RoleGuard } from 'src/auth/roleGuard.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from 'src/users/enum/role.enum';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { HybridAuthGuard } from 'src/auth/hybridAuthGuard.guard';
 
 @Controller('products')
 // @UseFilters(HttpExceptionFilter)
@@ -37,7 +37,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Post()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @UseInterceptors(FilesInterceptor('images', 3))
   async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
@@ -46,7 +46,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Put(':id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @UseInterceptors(FilesInterceptor('images', 3))
   async updateProducts(@Param('id') id: string, @Body() products: UpdateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
@@ -63,7 +63,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Delete(':id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async deleteProducts(@Param('id', UUIDValidationPipe) id: string, @Res() res: Response) {
     const deleteId = await this.productsService.deleteProducts(id);
