@@ -16,6 +16,8 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
 
     const productInCard = getProductsHome()
 
+    console.log(productInCard)
+
     useEffect(() => {
         const storedGames = localStorage.getItem('selectedGames');
         if (storedGames) {

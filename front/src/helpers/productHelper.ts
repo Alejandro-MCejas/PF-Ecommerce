@@ -118,20 +118,6 @@ export const deleteProductByID = async (id: string, token: string) => {
     }
 }
 
-
-export const getProductsHome = async () =>{
-    try {
-        const response = await fetch(`${API_URL}/products/productsHome`)
-        console.log(response)
-        const products = response.json()
-        return products;
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-
 export const addReview = async (review: AddReviewProps, token: string) => {
     console.log(review);
     try {
@@ -167,3 +153,27 @@ export const deleteReview = async (id:string) =>{
         console.log(error)
     }
 }
+
+export const getProductsHome = async () =>{
+    try {
+        const response = await fetch(`${API_URL}/products/productsHome`)
+        console.log(response)
+        const products = await response.json()
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const changeProductsHome = async () =>{
+    try {
+        const response = await fetch(`${API_URL}/products/productsHome`)
+        console.log(response)
+        const products = response.json()
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+

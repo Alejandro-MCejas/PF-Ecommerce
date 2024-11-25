@@ -11,12 +11,16 @@ export interface AddReviewProps {
     comment:string
 }
 
+export interface Categories {
+    id:string,
+    name:string
+}
 
 export interface IProduct {
     id:string,
     name: string,
     image: string[],
-    category: string,
+    categories: Categories[],
     price:number,
     stock:number,
     suscription?: boolean,

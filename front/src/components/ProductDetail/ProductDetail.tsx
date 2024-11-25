@@ -1,69 +1,24 @@
 "use client"
 
-import { AddReviewProps, IProduct } from "@/interfaces/IProduct";
-import React, { useEffect, useState } from "react";
+import {IProduct } from "@/interfaces/IProduct";
+import React, {useState } from "react";
 import StarRating from "../StarRating/StarRating";
-import Link from "next/link";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
-import { addReview, deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
+import {deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
-import ProductReviewCard from "../ProductReviewCard/ProductReviewCard";
-import RelatedProducts from "../RelatedProducts/RelatedProducts";
 
 interface ProductDetail {
     product: IProduct;
-    // role: string;
 }
 
 const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
     const { userData } = useAuth()
     const [rating, setRating] = useState(0);
-    const [idUser, setIdUser] = useState<string>("")
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
-
-    console.log(product)
-    const [reviewProduct, setReview] = useState<AddReviewProps>({
-        productId: product.id,
-        userId: "", // Inicialmente vacío
-        rating: 3,
-        comment: "",
-    });
-
-    useEffect(() => {
-        if (userData?.user?.id) {
-            setIdUser(userData.user.id);
-        } else {
-            setIdUser(""); // Asegura que tenga un valor predeterminado
-        }
-    }, [userData]);
-
-    // Sincroniza `reviewProduct.userId` con `idUser`
-    useEffect(() => {
-        setReview((prev) => ({
-            ...prev,
-            userId: idUser,
-        }));
-    }, [idUser]);
-
-
-
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setReview({
-            ...reviewProduct,
-            [name]: value,
-        });
-    }
-
-    const handleSumbitReview = async () => {
-        const review = await addReview(reviewProduct, userData?.token || "")
-
-    }
-    // const role: string = userData?.user.admin || ""
 
     const handleDeleteGame = () => {
         if (!userData?.token) {
@@ -163,10 +118,13 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 < div className="w-1/2 min-w-[700px] min-h-[750px] max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
                     <div className="w-full h-[750px] flex flex-col justify-evenly items-start p-10">
                         <div className="flex flex-col justify-evenly items-start h-[200px] mt-0">
-                            <h2 className="text-[48px] font-semibold shadow-md">{product.name}</h2>
+                            <h2 className="text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
-                                <StarRating rating={rating} setRating={setRating} />
+                                <StarRating 
+                                    rating={rating} 
+                                    setRating={setRating} 
+                                />
                             </div>
                             <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
                         </div>
@@ -236,59 +194,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 <h2 className="text-[38px] text-gray-400 font-semibold">Product description</h2>
                 <article className="text-justify text-[28px] text-gray-500 max-w-[1500px]">{product.description}</article >
             </div>
-
-            {/* Other games like this */}
-            {product?.category && product?.id ? (
-                <RelatedProducts
-                    categoryId={product.category}
-                    excludeProductId={product.id}
-                />
-            ) : (
-                <p>Loading related products...</p>
-            )}
-
-            {/* Comments */}
-            <div className="my-5">
-                <h2 className="ml-10 mb-4 text-[38px] text-gray-400 font-semibold">Make your own review</h2>
-                {
-                    userData?.user.admin === "user" ? (
-                        <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
-                            <textarea
-                                name="comment"
-                                value={reviewProduct.comment}
-                                onChange={handleChange}
-                                placeholder="Write something here..."
-                                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
-                            />
-                            <div className="w-full flex justify-end items-center">
-                                <button
-                                    onClick={handleSumbitReview}
-                                    className="mt-4 px-4 py-2 bg-violet-500 text-white font-semibold rounded-md hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-300"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
-                            <h2 className="text-gray-500 text-[20px] font-semibold">To make your revire please, before</h2>
-                            <a href="/login" className="text-violet-500 text-[20px] font-serif">login</a>
-                        </div>
-                    )
-                }
-                <h2 className="ml-10 mb-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
-                <div className="flex flex-col justify-evenly gap-7">
-                    {
-                        product.reviews.map((review) => (
-                            <ProductReviewCard
-                                key={review.id}
-                                id={review.id}
-                                review={review.comment}
-                            />
-                        ))
-                    }
-                </div>
-            </div >
         </div>
 
     )

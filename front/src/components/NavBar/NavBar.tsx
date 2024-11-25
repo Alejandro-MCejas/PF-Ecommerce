@@ -74,18 +74,18 @@ const NavBar = () => {
 
       {/* Links distribuidos en el ancho del contenedor */}
       <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+        <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+          Home
+        </Link>
         <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
         <Link href={suscription ? "/cybergamer" : "/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Subscription
         </Link>
-        
+
         {role === "user" && (
           <>
-            <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              Home
-            </Link>
             <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
               {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
