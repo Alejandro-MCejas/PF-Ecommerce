@@ -15,11 +15,10 @@ const config = {
     migrations:['dist/migrations/*{.js,.ts}'],
     synchronize: true, // TRUE
     logging: false,
-    dropSchema: true,
+    dropSchema: false,
     // ssl: {
     //     rejectUnauthorized: false
     // }
-    ssl:false
 }
 export default registerAs('typeorm', () => config);
 export const connectionSource = new DataSource(config as DataSourceOptions);
