@@ -1,6 +1,6 @@
 export const categories = [
     "Aventura",
-    "Acción",
+    "Accion",
     "Deportes",
     "Simulación",
     "Shooter",
