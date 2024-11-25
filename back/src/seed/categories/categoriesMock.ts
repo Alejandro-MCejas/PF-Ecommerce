@@ -1,10 +1,11 @@
 export const categories = [
     "Aventura",
-    "Accion",
+    "Accion", // Sin tilde
     "Deportes",
-    "Simulación",
-    "Shooter",
+    "Simulacion",
+    "Shooter", // En lugar de "Disparos"
     "RPG",
     "Battle Royale",
-    "Carreras"
+    "Carreras",
+    "Suscription",
 ];

@@ -38,9 +38,14 @@ export class ProductsSeed{
                 product.stock = productData.stock;
                 product.suscription = productData.suscription;
     
-                const category = await this.findCategoryByName(productData.categories);
-                product.categories = [category];
-    
+
+                const categories: Categories[] = [];
+                for (const categoryName of productData.categories) {
+                    const category = await this.findCategoryByName(categoryName);
+                    categories.push(category);
+                }
+                product.categories = categories;
+
                 newProducts.push(product);
             }
         }

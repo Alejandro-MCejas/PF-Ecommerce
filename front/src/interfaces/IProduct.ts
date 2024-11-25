@@ -28,6 +28,16 @@ export interface IProduct {
     reviews:IReview[]
 }
 
+export interface IProductCart { 
+    id:string,
+    name: string,
+    image: string[],
+    price:number,
+    stock:number,
+    suscription?: boolean,
+    description:string
+}
+
 export interface EditGameModalProps {
     games: IProduct[];
 }
