@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { IProduct, EditGameModalProps } from '@/interfaces/IProduct';
 import { HomeCardGame } from '../HomeCardGame/HomeCardGame';
 import { useAuth } from '@/context/Authcontext';
+import { getProductsHome } from '@/helpers/productHelper';
 
 
 
@@ -11,7 +12,11 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedGames, setSelectedGames] = useState<IProduct[]>([]);
     const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]);
-    const {userData} = useAuth()
+    const { userData } = useAuth()
+
+    const productInCard = getProductsHome()
+
+    console.log(productInCard)
 
     useEffect(() => {
         const storedGames = localStorage.getItem('selectedGames');
@@ -27,7 +32,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
         setTempSelectedGames([...selectedGames]);
         setIsOpen(true);
     };
-    
+
 
     const closeModal = () => {
         setIsOpen(false);
@@ -48,15 +53,15 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
         }
     };
 
-    if (userData?.user.admin !== 'administrator') {
+    if (userData?.user.admin !== 'admin') {
         return (
             <div className="w-[1500px] flex justify-evenly items-center">
                 <div className="w-full flex justify-evenly items-center">
                     {selectedGames.map((game, index) => (
-                        <HomeCardGame 
-                        key={index} 
-                        imagenUrl={game.image && Array.isArray(game.image) && game.image.length > 0 ? game.image[0] : undefined
-                        } />
+                        <HomeCardGame
+                            key={index}
+                            imagenUrl={game.image && Array.isArray(game.image) && game.image.length > 0 ? game.image[0] : undefined
+                            } />
                     ))}
                 </div>
             </div>
@@ -83,29 +88,38 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
 
             {isOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1500px] h-[700px]">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1000px] h-[700px]">
                         <h2 className="text-2xl mb-4">Choose 4 games for change</h2>
-                        <div>
-                            {games.map((game) => (
-                                <label key={game.id} className="flex items-center mb-2 p-2 bg-white rounded shadow">
-                                    <input
-                                        type="checkbox"
-                                        checked={tempSelectedGames.some((selectedGame) => selectedGame.id === game.id)}
-                                        onChange={() => handleCheckboxChange(game)}
-                                        className="mr-2"
-                                    />
-                                    {game.name}
-                                </label>
-                            ))}
-                            <div>
+                        <div className='w-full'>
+                            <div className="overflow-y-auto max-h-[400px]">
+                                {games.map((game) => (
+                                    <label
+                                        key={game.id}
+                                        className="flex items-center justify-between p-4 bg-gray-100 mb-2 rounded-lg shadow-sm"
+                                    >
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={tempSelectedGames.some(
+                                                    (selectedGame) => selectedGame.id === game.id
+                                                )}
+                                                onChange={() => handleCheckboxChange(game)}
+                                                className="mr-4"
+                                            />
+                                            <span className="font-semibold">{game.name}</span>
+                                        </div>
+                                    </label>
+                                ))}
+                            </div>
+                            <div className='mt-5 flex flex-col justify-evenly items-center gap-10'>
                                 <button
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                                    className="w-[200px] bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700 transition"
                                     onClick={handleApplyChanges}
                                 >
                                     Apply changes
                                 </button>
                                 <button
-                                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+                                    className="w-[200px] bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
                                     onClick={closeModal}
                                 >
                                     Close

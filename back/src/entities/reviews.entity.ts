@@ -1,12 +1,15 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Users } from "./users.entity";
 import { Products } from "./products.entity";
+import { IsInt, Length } from "class-validator";
 
 @Entity({name: 'reviews'})
 export class Reviews{
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
+    @IsInt()
+    @Length(1, 5)
     @Column()
     rating: number;
 
