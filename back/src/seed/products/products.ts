@@ -28,7 +28,7 @@ export const productsMock = [
         description: "Un juego de construcción y exploración en un mundo infinito.",
         price: 26.99,
         stock: 100,
-        suscription: true,
+        suscription: false,
         categories: ["Aventura"],
     },
     {
@@ -50,7 +50,7 @@ export const productsMock = [
         price: 59.99,
         stock: 70,
         suscription: true,
-        categories: ["Deportes"],
+        categories: ["Deportes","Suscription"],
     },
     {
         name: "Elden Ring",
@@ -81,7 +81,7 @@ export const productsMock = [
         description: "Juego de deducción social para grupos.",
         price: 4.99,
         stock: 500,
-        categories: ["Aventura"],
+        categories: ["Aventura","Suscription"],
         suscription: true,
     },
     {
@@ -103,6 +103,6 @@ export const productsMock = [
         price: 0.00,
         stock: 9999,
         categories: ["Aventura"],
-        suscription: true,
+        suscription: false,
     },
 ];
