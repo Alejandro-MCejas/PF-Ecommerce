@@ -72,7 +72,7 @@ const Login = () => {
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
   };
-  
+
 
 
 
@@ -132,16 +132,14 @@ const Login = () => {
             </button>
 
             {/* Login adicional con ícono */}
-            <Link href={"/api/auth/login"} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
-            >
+            <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
               Login
               <img
                 src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
               />
-
-            </Link>
+            </button>
             <div>
 
               <Link href={"/api/auth/logout"}></Link>
@@ -158,14 +156,7 @@ const Login = () => {
           </div>
         </div>
       </form>
-      <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
-              Login
-              <img
-                src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
-                alt="Login Icon"
-                className="w-[20px] h-[20px] ml-2"
-              />
-            </button>
+
     </div>
   );
 };

@@ -1,11 +1,11 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { IProduct } from '@/interfaces/IProduct';
+import { IProductCart } from '@/interfaces/IProduct';
 
-// Definir los tipos de datos para el contexto combinado
+// Definir los tipos de datos para el contexto
 interface CombinedContextType {
-  cart: IProduct[];
-  addToCart: (product: IProduct) => void;
+  cart: IProductCart[];
+  addToCart: (product: IProductCart) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
   cartCount: number;
@@ -20,7 +20,7 @@ const CartContext = createContext<CombinedContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Estado del carrito
-  const [cart, setCart] = useState<IProduct[]>([]);
+  const [cart, setCart] = useState<IProductCart[]>([]);
   const [preferenceId, setPreferenceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [orderData, setOrderData] = useState({ quantity: '1', price: '10', amount: 10, description: 'Some book' });
@@ -33,9 +33,18 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   // Funciones para manejar el carrito
-  const addToCart = (product: IProduct) => {
+  const addToCart = (product: IProductCart) => {
     setCart((prevCart) => {
-      const updatedCart = [...prevCart, product];
+      const existingProductIndex = prevCart.findIndex((p) => p.id === product.id);
+      let updatedCart;
+      if (existingProductIndex !== -1) {
+        // Si el producto ya está en el carrito, actualiza la cantidad
+        updatedCart = [...prevCart];
+        // updatedCart[existingProductIndex].quantity += product.quantity;
+      } else {
+        // Si el producto no está en el carrito, agrégalo
+        updatedCart = [...prevCart, product];
+      }
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       return updatedCart;
     });
@@ -43,7 +52,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const removeFromCart = (productId: string) => {
     setCart((prevCart) => {
-      const updatedCart = prevCart.filter((product) => product.id.toString() !== productId);
+      const updatedCart = prevCart.filter((product) => product.id !== productId);
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       return updatedCart;
     });
@@ -73,14 +82,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Custom hook para usar el contexto combinado
+// Custom hook para usar el contexto del carrito
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCombinedContext must be used within a CombinedProvider');
+    throw new Error('useCart must be used within a CartProvider');
   }
   return context;
 };
+
 
 
 
