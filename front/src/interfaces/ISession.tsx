@@ -1,5 +1,7 @@
 
 export interface userSession {
+    name: string;
+    picture: string;
     token: string,
     user:{
         id: string;

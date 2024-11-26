@@ -70,7 +70,7 @@ export async function updateUser(
   token: string
 ) {
   try {
-    const res = await fetch(``, {
+    const res = await fetch(`${APIURL}/users/${userId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

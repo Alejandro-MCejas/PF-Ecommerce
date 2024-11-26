@@ -8,8 +8,9 @@ import { getToken2Prueba, login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "@/context/Authcontext";
+import { userSession } from "@/interfaces/ISession";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 
 const Login = () => {
@@ -30,44 +31,47 @@ const Login = () => {
       [name]: value,
     });
   };
-
-  const handleSubmit = async (event: React.FocusEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setGeneralError(""); // Limpiar error general antes de intentar el login
-
+    setGeneralError("");
+  
     try {
       const response = await login(dataUser);
-
-      console.log(response);
-
-      // Verifica la estructura de la respuesta
-
-      const { token, user } = response;  // Desestructuración
-      console.log("Token:", token);
-      console.log("User:", user);
-      setUserData({ token, user })
-
-
-      // localStorage.setItem("userSession", JSON.stringify({ token, user }));
+      const { token, user } = response;
+  
+      const userSessionData: userSession = {
+        token,
+        user: {
+          ...user,
+          name: user.name || "Default Name",
+          picture: user.picture || "default-picture-url.jpg",
+        },
+        name: "",
+        picture: ""
+      };
+  
+      setUserData(userSessionData);
+  
       Swal.fire({
         title: "Login Successful",
-        text: "You have Login successfully!",
+        text: "You have logged in successfully!",
         icon: "success",
         confirmButtonText: "OK",
       });
-      // Redirigir según el admin
-      if (user.admin === "admin") {
-        router.push("/dashboardAdmin");
-      } else if (user.admin === "user") {
-        router.push("/dashboard");
-      } else {
-        router.push("/"); // En caso de que no tenga un admin específico
+  
+      const roleRoutes: Record<string, string> = {
+        admin: "/dashboardAdmin",
+        user: "/dashboard",
+      };
+  
+      router.push(roleRoutes[user.admin] || "/");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setGeneralError(error.message);
       }
-    } catch (error: any) {
-      setGeneralError(error.message);
     }
   };
-
+  
 
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
@@ -132,16 +136,14 @@ const Login = () => {
             </button>
 
             {/* Login adicional con ícono */}
-            <Link href={"/api/auth/login"} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
-            >
+            <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
               Login
               <img
                 src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
                 alt="Login Icon"
                 className="w-[20px] h-[20px] ml-2"
               />
-
-            </Link>
+            </button>
             <div>
 
               <Link href={"/api/auth/logout"}></Link>
@@ -157,22 +159,14 @@ const Login = () => {
             </p>
             <div className="text-sm text-gray-600">
         Don&apos;t remember your password?{" "}
-        <Link href="/login" className="text-blue-500">
-          Change your password
-        </Link>
+       
+        <ChangePassword />
       </div>
 
           </div>
         </div>
       </form>
-      <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
-              Login
-              <img
-                src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
-                alt="Login Icon"
-                className="w-[20px] h-[20px] ml-2"
-              />
-            </button>
+   
     </div>
   );
 };
