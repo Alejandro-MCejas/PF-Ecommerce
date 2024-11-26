@@ -10,6 +10,8 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "@/context/Authcontext";
+import ChangePassword from "../ChangePassword/ChangePassword";
+import { userSession } from "@/interfaces/ISession";
 
 
 const Login = () => {
@@ -30,28 +32,30 @@ const Login = () => {
       [name]: value,
     });
   };
-
-  const handleSubmit = async (event: React.FocusEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setGeneralError(""); // Limpiar error general antes de intentar el login
-
+  
     try {
       const response = await login(dataUser);
-
-      console.log(response);
-
-      // Verifica la estructura de la respuesta
-
-      const { token, user } = response;  // Desestructuración
-      console.log("Token:", token);
-      console.log("User:", user);
-      setUserData({ token, user })
-
-
-      // localStorage.setItem("userSession", JSON.stringify({ token, user }));
+      const { token, user } = response;
+  
+      const userSessionData: userSession = {
+        token,
+        user: {
+          ...user,
+          name: user.name || "Default Name",
+          picture: user.picture || "default-picture-url.jpg",
+        },
+        name: "",
+        picture: ""
+      };
+  
+      setUserData(userSessionData);
+  
       Swal.fire({
         title: "Login Successful",
-        text: "You have Login successfully!",
+        text: "You have logged in successfully!",
         icon: "success",
         confirmButtonText: "OK",
       });
@@ -64,10 +68,11 @@ const Login = () => {
         router.push("/"); // En caso de que no tenga un admin específico
       }
     } catch (error: any) {
-      setGeneralError(error.message);
-    }
+        setGeneralError(error.message);
+      }
+    
   };
-
+  
 
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
@@ -153,6 +158,11 @@ const Login = () => {
                 <span className="font-bold text-blue-500 cursor-pointer">Sign up</span>
               </Link>
             </p>
+            <div className="text-sm text-gray-600">
+        Don&apos;t remember your password?{" "}
+       
+        <ChangePassword />
+      </div>
           </div>
         </div>
       </form>

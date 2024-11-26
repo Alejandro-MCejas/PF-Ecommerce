@@ -16,9 +16,9 @@ const config = {
     synchronize: true, // TRUE
     logging: false,
     dropSchema: false,
-    // ssl: {
-    //     rejectUnauthorized: false
-    // }
+  /*  ssl: {
+        rejectUnauthorized: false
+    }*/
 }
 export default registerAs('typeorm', () => config);
 export const connectionSource = new DataSource(config as DataSourceOptions);
