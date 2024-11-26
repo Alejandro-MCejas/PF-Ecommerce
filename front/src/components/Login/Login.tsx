@@ -76,7 +76,7 @@ const Login = () => {
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
   };
-  
+
 
 
 
@@ -162,11 +162,10 @@ const Login = () => {
        
         <ChangePassword />
       </div>
-
           </div>
         </div>
       </form>
-   
+
     </div>
   );
 };

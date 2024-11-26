@@ -57,6 +57,7 @@ const NavBar = () => {
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
+
         <Link href="/">
           <div className="flex items-center justify-center md:justify-start">
             <img
@@ -111,6 +112,9 @@ const NavBar = () => {
       <div className="mt-4 w-full max-w-[1500px] mx-auto h-[3px] bg-[#A065FF] rounded-3xl" />
 
       <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
+        <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+          Home
+        </Link>
         <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
@@ -120,9 +124,6 @@ const NavBar = () => {
 
         {role === "user" && (
           <>
-            <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              Home
-            </Link>
             <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
               <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
               {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
@@ -130,7 +131,7 @@ const NavBar = () => {
           </>
         )}
 
-        {role === "administrator" && (
+        {role === "admin" && (
           <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
             Admin configuration
           </Link>

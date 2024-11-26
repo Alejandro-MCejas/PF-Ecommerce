@@ -3,7 +3,7 @@ import gifImage from "../../../public/gif.gif"
 import RandomProductsComponent from "@/components/RandomProductCard/RandomProductCard";
 import { fetchingProducts } from "@/helpers/productHelper";
 
-import { productHelper } from "../backHelper";
+// import { productHelper } from "../backHelper";
 
 const cybergamer = async() => {
 
