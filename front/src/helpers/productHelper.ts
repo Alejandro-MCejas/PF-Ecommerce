@@ -1,9 +1,9 @@
 import products from "@/app/products/page";
-import { AddProductProps, EditGameInformationProps, IProduct } from "@/interfaces/IProduct";
+import { AddProductProps, AddReviewProps, EditGameInformationProps, IProduct, IReview } from "@/interfaces/IProduct";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const fetchingProducts = async (): Promise<IProduct[]> => {
+export const fetchingProducts = async (value: string): Promise<IProduct[]> => {
     try {
         const response = await fetch(`${API_URL}/products`);
         const products = await response.json();
@@ -117,3 +117,63 @@ export const deleteProductByID = async (id: string, token: string) => {
         throw new Error(`HTTP error! status: ${error}`);
     }
 }
+
+export const addReview = async (review: AddReviewProps, token: string) => {
+    console.log(review);
+    try {
+        const response = await fetch(`${API_URL}/reviews`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json', // Indica que el body es JSON
+            },
+            body: JSON.stringify(review), // Convierte el objeto a JSON
+        });
+
+        const newComment = await response.json();
+        console.log(newComment);
+        return newComment;
+    } catch (error) {
+        console.error("Error en addReview:", error);
+        throw error;
+    }
+};
+
+export const deleteReview = async (id:string) =>{
+    try {
+        const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                // 'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getProductsHome = async () =>{
+    try {
+        const response = await fetch(`${API_URL}/products/productsHome`)
+        console.log(response)
+        const products = await response.json()
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const changeProductsHome = async () =>{
+    try {
+        const response = await fetch(`${API_URL}/products/productsHome`)
+        console.log(response)
+        const products = response.json()
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+

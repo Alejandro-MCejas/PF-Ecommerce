@@ -23,17 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-backgroundLayout">
-        <AuthProvider>
-          <UserProvider>
+        <UserProvider>
+          <AuthProvider>
             <CartProvider>
               {/* <BrowserRouter> */}
-                <NavBar />
-                {children}
-                <Footer />
+              <NavBar />
+              {children}
+              <Footer />
               {/* </BrowserRouter> */}
             </CartProvider>
-          </UserProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </UserProvider>
       </body>
     </html>
   );

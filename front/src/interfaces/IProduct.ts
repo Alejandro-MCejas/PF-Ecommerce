@@ -1,9 +1,37 @@
+export interface IReview{
+    id:string,
+    rating:number,
+    comment:string
+}
+
+export interface AddReviewProps {
+    productId:string,
+    userId:string,
+    rating:number,
+    comment:string
+}
+
+export interface Categories {
+    id:string,
+    name:string
+}
 
 export interface IProduct {
     id:string,
     name: string,
     image: string[],
-    category?: string,
+    categories: Categories[],
+    price:number,
+    stock:number,
+    suscription?: boolean,
+    description:string
+    reviews:IReview[]
+}
+
+export interface IProductCart { 
+    id:string,
+    name: string,
+    image: string[],
     price:number,
     stock:number,
     suscription?: boolean,

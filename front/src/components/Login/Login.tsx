@@ -8,9 +8,10 @@ import { getToken2Prueba, login } from "@/helpers/auth.helper";
 //import { validateLoginform } from "@/helpers/validateLogin";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "@/context/Authcontext";
-import { userSession } from "@/interfaces/ISession";
 import ChangePassword from "../ChangePassword/ChangePassword";
+import { userSession } from "@/interfaces/ISession";
 
 
 const Login = () => {
@@ -33,7 +34,7 @@ const Login = () => {
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setGeneralError("");
+    setGeneralError(""); // Limpiar error general antes de intentar el login
   
     try {
       const response = await login(dataUser);
@@ -58,25 +59,25 @@ const Login = () => {
         icon: "success",
         confirmButtonText: "OK",
       });
-  
-      const roleRoutes: Record<string, string> = {
-        admin: "/dashboardAdmin",
-        user: "/dashboard",
-      };
-  
-      router.push(roleRoutes[user.admin] || "/");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
+      // Redirigir según el admin
+      if (user.admin === "admin") {
+        router.push("/dashboardAdmin");
+      } else if (user.admin === "user") {
+        router.push("/dashboard");
+      } else {
+        router.push("/"); // En caso de que no tenga un admin específico
+      }
+    } catch (error: any) {
         setGeneralError(error.message);
       }
-    }
+    
   };
   
 
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
   };
-  
+
 
 
 
@@ -162,11 +163,10 @@ const Login = () => {
        
         <ChangePassword />
       </div>
-
           </div>
         </div>
       </form>
-   
+
     </div>
   );
 };
