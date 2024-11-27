@@ -1,7 +1,7 @@
 
 export interface userSession {
-    name: string;
-    picture: string;
+    name?: string;
+    picture?: string;
     token: string,
     user:{
         id: string;
@@ -12,6 +12,16 @@ export interface userSession {
         phone?: string
         admin?:string
         isSuscription:boolean
-
     }
+}
+
+
+export interface IUserInformation { 
+    id: string,
+    name:string,
+    email:string,
+    address:string,
+    phone:number,
+    isSuscription:boolean,
+    admin:string
 }

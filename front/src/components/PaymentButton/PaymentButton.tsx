@@ -14,7 +14,6 @@ const PaymentButton = ({preferenceId} : {preferenceId:string})=>{
                 preferenceId ? (
                     <Wallet 
                         initialization={{ preferenceId}} 
-                    
                     />
                 ) : (
                     <p>Preparing payment...</p>

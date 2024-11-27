@@ -6,6 +6,7 @@ import Favorites from "./Favorites";
 import Orders from "./Orders";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
+import MyOrders from "./Orders";
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("information");
@@ -62,7 +63,11 @@ const Dashboard = () => {
       case "favorites":
         return <Favorites />;
       case "orders":
-        return <Orders />;
+        if (!userData?.user.id) {
+          console.error("User ID is undefined");
+          return null; // O un mensaje de error
+        }
+        return <MyOrders userId={userData.user.id} token={userData.token} />;
       default:
         return null;
     }

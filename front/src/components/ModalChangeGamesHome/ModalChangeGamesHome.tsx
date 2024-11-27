@@ -55,13 +55,16 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
 
     if (userData?.user.admin !== 'admin') {
         return (
-            <div className="w-[1500px] flex justify-evenly items-center">
-                <div className="w-full flex justify-evenly items-center">
+            <div className="w-[800px] md:w-[1500px] flex justify-evenly items-center">
+                <div className="w-1/2 md:w-full flex flex-wrap md:flex-nowrap justify-evenly items-center">
                     {selectedGames.map((game, index) => (
-                        <HomeCardGame
-                            key={index}
-                            imagenUrl={game.image && Array.isArray(game.image) && game.image.length > 0 ? game.image[0] : undefined
-                            } />
+                        <div className='w-1/2 flex justify-center'>
+                            <HomeCardGame
+                                key={index}
+                                imagenUrl={game.image && Array.isArray(game.image) && game.image.length > 0 ? game.image[0] : undefined
+                                } />
+
+                        </div>
                     ))}
                 </div>
             </div>

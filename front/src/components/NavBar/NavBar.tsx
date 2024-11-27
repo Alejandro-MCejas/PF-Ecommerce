@@ -52,8 +52,6 @@ const NavBar = () => {
     return null;
   }
 
-  const suscription = true;
-
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
@@ -90,7 +88,6 @@ const NavBar = () => {
               onClick={() => setMenuOpen(!menuOpen)}
             >
               <FontAwesomeIcon icon={faUser} className="text-[50px]" />
-
               {menuOpen && (
                 <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
                   <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
@@ -118,17 +115,15 @@ const NavBar = () => {
         <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
-        <Link href={suscription ? "/cybergamer" : "/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href={"/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Subscription
         </Link>
 
         {role === "user" && (
-          <>
-            <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-              <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
-              {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
-            </Link>
-          </>
+          <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+            <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
+            {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
+          </Link>
         )}
 
         {role === "admin" && (

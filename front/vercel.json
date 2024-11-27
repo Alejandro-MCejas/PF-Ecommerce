@@ -1,0 +1,5 @@
+{
+    "github": {
+        "ignoredBuildStep": "if [[ $VERCEL_GIT_COMMIT_REF == 'ale' || $VERCEL_GIT_COMMIT_REF == 'martin' || $VERCEL_GIT_COMMIT_REF == 'agus' || $VERCEL_GIT_COMMIT_REF == 'anselmo' || $VERCEL_GIT_COMMIT_REF == 'valen' || $VERCEL_GIT_COMMIT_REF == 'development' ]]; then exit 0; fi"
+    }
+}

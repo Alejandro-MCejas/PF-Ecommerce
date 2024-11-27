@@ -2,21 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { use, useState } from "react";
+import { useState } from "react";
 import { ILoginError, ILoginProps } from "./TypesLogin";
-import { getToken2Prueba, login } from "@/helpers/auth.helper";
-//import { validateLoginform } from "@/helpers/validateLogin";
-import Image from "next/image";
+import { login } from "@/helpers/auth.helper";
 import Swal from "sweetalert2";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "@/context/Authcontext";
 import ChangePassword from "../ChangePassword/ChangePassword";
 import { userSession } from "@/interfaces/ISession";
 
 
 const Login = () => {
-
-  const { setUserData } = useAuth()
+  const { setUserData } = useAuth();
   const router = useRouter();
   const initialState = {
     email: "",
@@ -25,6 +21,7 @@ const Login = () => {
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
   const [errors, setErrors] = useState<ILoginError>({});
   const [generalError, setGeneralError] = useState<string>("");
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setDataUser({
@@ -59,13 +56,14 @@ const Login = () => {
         icon: "success",
         confirmButtonText: "OK",
       });
-      // Redirigir según el admin
+
+      // Redirige según el rol del usuario
       if (user.admin === "admin") {
         router.push("/dashboardAdmin");
       } else if (user.admin === "user") {
         router.push("/dashboard");
       } else {
-        router.push("/"); // En caso de que no tenga un admin específico
+        router.push("/"); // Redirige a la página principal si no tiene un rol específico
       }
     } catch (error: any) {
         setGeneralError(error.message);
@@ -78,11 +76,6 @@ const Login = () => {
     window.location.href = "http://localhost:3000/auth/login";
   };
 
-
-
-
-
-
   return (
     <div className="flex flex-col items-center bg-[#232323] min-h-screen">
       <form onSubmit={handleSubmit}>
@@ -94,7 +87,9 @@ const Login = () => {
           }}
         >
           <div className="bg-white rounded-3xl h-[80%] w-[70%] p-8 flex flex-col items-center space-y-4">
-            <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">Login</h1>
+            <h1 className="font-inter font-bold text-[48px] leading-[58px] tracking-[0.1em]">
+              Login
+            </h1>
             <p className="text-gray-700">Log in and dive into CyberGames</p>
 
             {/* Mostrar error general si existe */}
@@ -137,7 +132,10 @@ const Login = () => {
             </button>
 
             {/* Login adicional con ícono */}
-            <button onClick={handleLoginGoogle} className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
+            <button
+              onClick={handleLoginGoogle}
+              className="w-[250px] h-[50px] bg-[#FF973D] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
+            >
               Login
               <img
                 src="https://s3-alpha-sig.figma.com/img/c1f7/af45/b7120995e091ef867eb852154830c210?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NremoJpuX~9zwsTnDpCpiYhwWdcWq4CROO74NzZPEySh1R1UEdwUWvHa-6I-hfCvogaB2r16-W~spxmNqZK82WCIQBbl3norXHc~W~xKF3wPmn1OtnzLtt4JjJThTqYozZNALJHmSYZZv38KdMkMarXw5ligCrW295JCw6w59l0zu~fmTUtfRnEJhGrtebdJgfo-uY-nJ-LAxHQj-TGrxzh6IGJvhiBdIkVjdH2CXe4xQAg3uJAwrfaFvccFxpR9~Vmxz4GquN2vxChTc8Bi-EZKSbZYZSd7jNDk3LTWGVfii-tUn~nfxlltmKvIyOmItpzE0lNh3oYOCwsjcFFeGA__"
@@ -145,11 +143,6 @@ const Login = () => {
                 className="w-[20px] h-[20px] ml-2"
               />
             </button>
-            <div>
-
-              <Link href={"/api/auth/logout"}></Link>
-            </div>
-
 
             {/* Mensaje de registro */}
             <p className="font-inter italic text-[24px] leading-[29.05px] text-center text-black mt-4">
@@ -166,7 +159,6 @@ const Login = () => {
           </div>
         </div>
       </form>
-
     </div>
   );
 };
