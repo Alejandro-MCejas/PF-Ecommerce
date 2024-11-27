@@ -9,7 +9,7 @@ export interface userSession {
         user?: string;
         phone?: string
         admin?:string
-        isSuscription?:boolean
+        isSuscription:boolean
     }
 }
 
