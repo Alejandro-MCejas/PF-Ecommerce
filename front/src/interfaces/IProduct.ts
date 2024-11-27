@@ -26,6 +26,8 @@ export interface IProduct {
     suscription?: boolean,
     description:string
     reviews:IReview[]
+    discount:number,
+    discountedPrice: number
 }
 
 export interface IProductCart { 
@@ -36,6 +38,8 @@ export interface IProductCart {
     stock:number,
     suscription?: boolean,
     description:string
+    discount:number,
+    discountedPrice: number
 }
 
 export interface EditGameModalProps {
@@ -49,6 +53,7 @@ export interface AddProductProps{
     stock:number,
     suscription:boolean,
     price:number
+    discount:string
 }
 
 export interface ProductDetail {
@@ -57,11 +62,12 @@ export interface ProductDetail {
 
 export interface EditGameInformationProps{
     id:string,
-    name:string,
-    price:number,
-    stock:number,
+    name?:string,
+    price?:number,
+    stock?:number,
     suscription?:boolean,
-    description:string
+    description?:string
+    discount?:number
 }
 
 
