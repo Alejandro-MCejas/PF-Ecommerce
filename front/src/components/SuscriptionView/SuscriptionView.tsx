@@ -8,9 +8,7 @@ import SuscriptionInformationCard from "../SuscriptionInformationCard/Suscriptio
 const SuscriptionView = () => {
     const { userData } = useAuth()
 
-    const isSuscription = true
-
-    console.log(isSuscription)
+    console.log(userData?.user.isSuscription)
 
     if (userData?.user.admin === "admin") {
         return (

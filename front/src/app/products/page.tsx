@@ -6,6 +6,7 @@ import { fetchingProducts } from "@/helpers/productHelper"
 
 const products = async () => {
     const products = await fetchingProducts();
+    console.log(products)
     return (
         <div>
             <div className="w-full h-[70px] bg-white flex justify-center items-center shadow-inner">
