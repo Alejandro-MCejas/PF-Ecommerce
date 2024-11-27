@@ -21,6 +21,8 @@ export class ProductsService {
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
   
+      discountedPrice = Math.floor(discountedPrice * 100) / 100;
+      
       return {
         ...product,
         discountedPrice, // Agrega el precio con descuento al producto
@@ -35,7 +37,18 @@ export class ProductsService {
       throw new NotFoundException(`Product with ID ${id} not found`)
     }
 
-    return this.productsRepository.findOneByProductsId(id);
+    let discountedPrice = ProductId.price;
+
+    if (ProductId.discount && ProductId.discount > 0) {
+      discountedPrice = ProductId.price - (ProductId.price * ProductId.discount) / 100;
+    }
+
+    discountedPrice = Math.floor(discountedPrice * 100) / 100;
+    // Agregar la propiedad `discountedPrice` al producto y retornarlo
+    return {
+      ...ProductId,
+      discountedPrice, // Agrega el precio con descuento al producto
+  };
 
   }
 
