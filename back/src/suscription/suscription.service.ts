@@ -82,7 +82,7 @@ export class SuscriptionService {
     
     await this.suscriptionRepository.save(suscription);
 
-    const client = new MercadoPagoConfig({ accessToken: 'MP_ACCESS_TOKEN' });
+    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
     const preference = new Preference(client);
 
     const items = [

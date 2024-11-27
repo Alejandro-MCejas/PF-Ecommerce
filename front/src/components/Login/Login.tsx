@@ -7,8 +7,9 @@ import { ILoginError, ILoginProps } from "./TypesLogin";
 import { login } from "@/helpers/auth.helper";
 import Swal from "sweetalert2";
 import { useAuth } from "@/context/Authcontext";
-// import ChangePassword from "../ChangePassword/ChangePassword";
+import ChangePassword from "../ChangePassword/ChangePassword";
 import { userSession } from "@/interfaces/ISession";
+
 
 const Login = () => {
   const { setUserData } = useAuth();
@@ -28,17 +29,14 @@ const Login = () => {
       [name]: value,
     });
   };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setGeneralError(""); // Limpiar error general antes de intentar el login
-
+  
     try {
       const response = await login(dataUser);
-
-      // Procesa la respuesta para establecer el estado global
       const { token, user } = response;
-
+  
       const userSessionData: userSession = {
         token,
         user: {
@@ -46,10 +44,12 @@ const Login = () => {
           name: user.name || "Default Name",
           picture: user.picture || "default-picture-url.jpg",
         },
+        name: "",
+        picture: ""
       };
-
+  
       setUserData(userSessionData);
-
+  
       Swal.fire({
         title: "Login Successful",
         text: "You have logged in successfully!",
@@ -66,9 +66,11 @@ const Login = () => {
         router.push("/"); // Redirige a la página principal si no tiene un rol específico
       }
     } catch (error: any) {
-      setGeneralError(error.message || "An error occurred while logging in.");
-    }
+        setGeneralError(error.message);
+      }
+    
   };
+  
 
   const handleLoginGoogle = async () => {
     window.location.href = "http://localhost:3000/auth/login";
@@ -150,9 +152,10 @@ const Login = () => {
               </Link>
             </p>
             <div className="text-sm text-gray-600">
-              Don&apos;t remember your password? 
-              {/* <ChangePassword /> */}
-            </div>
+        Don&apos;t remember your password?{" "}
+       
+        <ChangePassword />
+      </div>
           </div>
         </div>
       </form>

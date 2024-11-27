@@ -1,9 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import MyInformation from "./MyInformation";
-import Favorites from "./Favotites";
+import Favorites from "./Favorites";
 import Orders from "./Orders";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
@@ -11,39 +10,47 @@ import MyOrders from "./Orders";
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("information");
-  const { setUserData, userData } = useAuth(); // Aseguramos que usemos el contexto de autenticación
+  const { setUserData, userData } = useAuth();  // Aseguramos que usemos el contexto de autenticación
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
 
+    // Verificar si el token está disponible en localStorage
     if (typeof window !== "undefined") {
-      const query = new URLSearchParams(window.location.search);
-      const userSessionString = query.get("userSession");
+      const storedToken = localStorage.getItem("token");  // Verifica si hay un token almacenado
 
-      if (userSessionString) {
-        try {
-          const userSession = JSON.parse(decodeURIComponent(userSessionString));
-          console.log("Objeto userSession recibido:", userSession);
+      if (storedToken) {
+        // Si el token está en localStorage, intenta usarlo para autenticar al usuario
+        const userSessionString = localStorage.getItem("userSession");  // Puede ser que almacenes el usuario junto con el token
+        if (userSessionString) {
+          try {
+            const userSession = JSON.parse(userSessionString);  // Decodifica los datos de la sesión
+            console.log("Usuario autenticado desde localStorage:", userSession);
 
-          setUserData({
-            token: userSession.token,
-            user: userSession.userData,
-          });
+            // Actualiza el contexto con los datos del usuario y el token
+            setUserData({
+              token: storedToken,
+              user: userSession.userData,
+            });
 
-          router.replace("/dashboard");
-        } catch (error) {
-          console.error("Error al procesar userSession:", error);
-          router.replace("/login");
+            // Redirige al dashboard si ya está autenticado
+            router.replace("/dashboard");
+          } catch (error) {
+            console.error("Error al procesar userSession desde localStorage:", error);
+            router.replace("/login");  // Si ocurre un error, redirige al login
+          }
         }
+      } else if (!userData?.token) {
+        // Si no hay token en localStorage ni en el contexto de usuario, redirige al login
+        router.replace("/login");
       } else {
-        console.log(
-          "No se encontró un userSession, acceso como invitado permitido."
-        );
+        // Si ya está en el contexto de usuario, redirige al dashboard
+        router.replace("/dashboard");
       }
     }
-  }, [router, setUserData]);
+  }, [router, setUserData, userData]);
 
   if (!isClient) {
     return <div>Cargando...</div>; // Muestra un mensaje de carga mientras se monta el cliente
