@@ -37,9 +37,6 @@ const Login = () => {
 
     try {
       const response = await login(dataUser);
-
-      console.log(response);
-
       // Verifica la estructura de la respuesta
 
       const { token, user } = response;  // Desestructuración

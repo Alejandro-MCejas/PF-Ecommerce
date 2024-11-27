@@ -32,7 +32,7 @@ const NavBar = () => {
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
         {/* Logo y Nombre */}
         <Link href="/home">
-          <div className="flex items-center justify-center md:justify-start">
+          <div className="flex items-center justify-evenly md:justify-start">
             <img
               src="https://s3-alpha-sig.figma.com/img/9b24/ab51/4afde8507a88429e72fe3362ccbebe43?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dRsBfIogFmR3yUGOV6dEjMC0MH7NFtW4-NXo6eeUhCZ3JbHKzWNMKHYg08~IiruoGURhyL1PcSY~phZaTgFvbBsq7DxAE0LJF3UNRglelYEi4dt7GPmHhDSk-LbBkQ6to1ddesbQGtU4m-jfMaaT3ShKm82V0aFOFJoT9ng8chimHLKaxz5qYkZC1JCP158GzA3worP-RIqK9QObZ3gjouw2-9MYaRKhnpuS9CSIbOCoAZaGZskMAlo~KjXAs3-q03rEtEeTW~J3eAeUhU-Xmwt5ruo7KEkOG1Arycn-wCaLsDBkyWbWegXNEqgKj8LcDCD2GFSQyHjKeHg9X6DX3Q__"
               alt="Logo"
@@ -41,6 +41,11 @@ const NavBar = () => {
             <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
               Cybergames
             </span>
+            <div className="bg-white rounded-full w-[40px] h-[40px] flex justify-center items-center md:invisible">
+              <Link href="/dashboard">
+                <FontAwesomeIcon icon={faUser} className="text-[30px] md:text-[50px]" />
+              </Link>
+            </div>
           </div>
         </Link>
 
@@ -60,9 +65,9 @@ const NavBar = () => {
               </span>
             </div>
           ) : (
-            <div className="bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center">
+            <div className="invisible bg-white rounded-full w-[20px] h-[20px]  flex justify-center items-center md:w-[100px] md:h-[100px] md:visible">
               <Link href="/dashboard">
-                <FontAwesomeIcon icon={faUser} className="text-[50px]" />
+                <FontAwesomeIcon icon={faUser} className="text-[20px] md:text-[50px]" />
               </Link>
             </div>
           )}
@@ -80,13 +85,13 @@ const NavBar = () => {
         <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
-        <Link href={suscription ? "/cybergamer" : "/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href={"/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Subscription
         </Link>
 
         {role === "user" && (
           <>
-            <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+            <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]md:bg-red-200">
               <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
               {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
             </Link>

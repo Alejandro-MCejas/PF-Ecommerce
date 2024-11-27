@@ -6,47 +6,54 @@ import Favorites from "./Favotites";
 import Ordes from "./Orders";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
+import { userSession } from "@/interfaces/ISession";
+import { IOrderUserBasicInfo } from "@/interfaces/IOrder";
+import MyOrders from "./Orders";
 
 const Dashboard = () => {
     const [activeView, setActiveView] = useState("information");
-    const {setUserData} = useAuth()
+    const {setUserData , userData} = useAuth()
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
         setIsClient(true);
-    
+      
         if (typeof window !== "undefined") {
           const query = new URLSearchParams(window.location.search);
           const userSessionString = query.get("userSession");
-    
+      
           if (userSessionString) {
             try {
               // Decodifica y parsea el objeto completo
               const userSession = JSON.parse(decodeURIComponent(userSessionString));
               console.log("Objeto userSession recibido:", userSession);
-    
+      
               // Usa setUserData para actualizar el estado global
               setUserData({
                 token: userSession.token,
                 user: userSession.userData,
               });
-    
+      
               // Redirige al dashboard principal
               router.replace("/dashboard");
             } catch (error) {
               console.error("Error al procesar userSession:", error);
-              router.replace("/login");
+              // Si hay un error, permanece en la página actual o redirige opcionalmente
+              // router.replace("/login");
             }
           } else {
-            router.replace("/login");
+            console.log("No se encontró un userSession, acceso como invitado permitido.");
+            // Permitir el acceso como invitado, sin redirigir
+            // Puedes agregar lógica para usuarios no autenticados aquí si lo necesitas
           }
         }
       }, [router, setUserData]);
-    
+      
       if (!isClient) {
         return null; // O un loader mientras se monta el cliente
       }
+      
       
 
 
@@ -64,8 +71,15 @@ const Dashboard = () => {
 
                 );
             case "orders":
+                if (!userData?.user.id) {
+                    console.error("User ID is undefined");
+                    return null; // O un mensaje de error
+                }
                 return (
-                    <Ordes />
+                    <MyOrders 
+                        userId={userData.user.id} // Usa un string vacío si es undefined
+                        token={userData.token}
+                    />
                 )
             default:
                 return null;

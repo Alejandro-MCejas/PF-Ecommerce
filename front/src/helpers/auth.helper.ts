@@ -137,8 +137,8 @@ export async function login(userData: ILoginProps) {
       },
       body: JSON.stringify(userData)
     });
-    console.log(res);
-    console.log(userData);
+    // console.log(res);
+    // console.log(userData);
 
     if (res.ok) {
       return res.json()

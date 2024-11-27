@@ -1,6 +1,6 @@
 import Dashboard from "@/components/Dashboard/Dashboard"
 
-const dashboardForm =()=>{
+const dashboardForm = async ()=>{
     return(
     <div>
         <Dashboard/>

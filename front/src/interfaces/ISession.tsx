@@ -9,5 +9,17 @@ export interface userSession {
         user?: string;
         phone?: string
         admin?:string
+        isSuscription?:boolean
     }
+}
+
+
+export interface IUserInformation { 
+    id: string,
+    name:string,
+    email:string,
+    address:string,
+    phone:number,
+    isSuscription:boolean,
+    admin:string
 }
