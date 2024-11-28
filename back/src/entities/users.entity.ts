@@ -21,14 +21,14 @@ export class Users {
     @Column({ type: 'varchar' })
     password: string
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     address: string
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', nullable: true })
     phone: string
 
-    @Column({default:false})
-    isSuscription:boolean;
+    @Column({ default: false, nullable: true })
+    isSuscription: boolean;
 
     @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
     admin: UserRole
@@ -39,6 +39,9 @@ export class Users {
     @OneToMany(() => Orders, order => order.user)
     orders: Orders[]
 
-    @OneToMany(() => Reviews, (reviews)=> reviews.user)
-    reviews:Reviews;
+    @OneToMany(() => Reviews, (reviews) => reviews.user)
+    reviews: Reviews;
+
+    @Column({ unique: true, nullable: true })
+    sub: string;
 }
