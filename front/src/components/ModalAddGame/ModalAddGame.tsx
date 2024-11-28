@@ -14,10 +14,8 @@ const AddProductForm = () => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
 
-    const {userData} = useAuth()
+    const { userData } = useAuth()
     const router = useRouter()
-
-    // const initialState = 
 
     const [newGame, setNewGame] = useState<AddProductProps>({
         name: "",
@@ -26,10 +24,8 @@ const AddProductForm = () => {
         stock: 0,
         description: "",
         suscription: false,
+        discount: ""
     })
-
-    // const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-    // const role: string = userSession.userData?.rol;
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -62,21 +58,31 @@ const AddProductForm = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("New game submitted:", newGame);
-    
+
         if (!userData?.token) {
             console.error('User token is missing. Please log in again.');
             return; // Salir de la función si el token no está presente
         }
-    
+
         try {
             const newProduct = await addProduct(newGame, userData.token);
+            console.log(newProduct)
+            debugger
             window.location.reload();
             console.log('Product added:', newProduct);
         } catch (error) {
             console.error('Error adding product:', error);
         }
     };
-    
+
+    const handleDiscountChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value.replace("%", ""); // Elimina el símbolo '%' si existe
+        setNewGame((prevGame) => ({
+            ...prevGame,
+            discount: value, // Almacena el valor del descuento en la propiedad discount
+        }));
+    };
+
 
     const openModal = () => {
         setIsOpen(true);
@@ -216,9 +222,9 @@ const AddProductForm = () => {
                         <div className='flex flex-col w-full justify-evenly items-start my-3 p-3'>
                             {/* Checkbox and Select options */}
                             <label className="flex items-center w-2/4 gap-4">
-                                <input 
-                                    type="checkbox" 
-                                    className="hidden peer" 
+                                <input
+                                    type="checkbox"
+                                    className="hidden peer"
                                     name="suscription"
                                     checked={newGame.suscription}
                                     onChange={handleCheckboxChange}
@@ -230,26 +236,19 @@ const AddProductForm = () => {
                                 <input type="checkbox" className="hidden peer" />
                                 <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span>
                                 Have any discount?
-                                <select className="p-1 w-1/4 border border-gray-500 rounded">
-                                    <option>5%</option>
-                                    <option>10%</option>
-                                    <option>15%</option>
-                                    <option>20%</option>
-                                    <option>25%</option>
-                                    <option>30%</option>
-                                    <option>35%</option>
-                                    <option>40%</option>
-                                    <option>45%</option>
-                                    <option>50%</option>
-                                    <option>55%</option>
-                                    <option>60%</option>
-                                    <option>65%</option>
-                                    <option>70%</option>
-                                    <option>75%</option>
-                                    <option>80%</option>
-                                    <option>85%</option>
-                                    <option>90%</option>
-                                    <option>95%</option>
+                                <select
+                                    className="p-1 w-full border border-gray-500 rounded"
+                                    value={newGame.discount}
+                                    onChange={handleDiscountChange}
+                                >
+                                    <option value="">No Discount</option>
+                                    {[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95].map(
+                                        (discount) => (
+                                            <option key={discount} value={`${discount}`}>
+                                                {discount}%
+                                            </option>
+                                        )
+                                    )}
                                 </select>
                             </label>
                             {/* Product description */}

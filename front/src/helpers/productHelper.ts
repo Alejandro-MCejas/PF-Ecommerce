@@ -35,6 +35,7 @@ export const fetchingProductByID = async (id: string): Promise<IProduct> => {
 
 export const editProductInformationByID = async (product: EditGameInformationProps, token: string): Promise<EditGameInformationProps> => {
     try {
+        console.log(product)
         const response = await fetch(`${API_URL}/products/${product.id}`, {
             method: "PUT",
             headers: {
@@ -51,7 +52,8 @@ export const editProductInformationByID = async (product: EditGameInformationPro
             throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
         const newGameInfo = await response.json()
-        console.log(newGameInfo)
+        console.log("Esta es la informacion nueva ", newGameInfo)
+        debugger
         return newGameInfo;
     } catch (error) {
         console.error("Error updating product:", error);

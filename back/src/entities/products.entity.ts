@@ -23,7 +23,7 @@ export class Products {
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     price: number;
 
-    @Column({ type: 'decimal', nullable: true, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, default: 0 })
     discount: number;
 
     @Column('int')

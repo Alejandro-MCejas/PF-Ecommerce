@@ -82,7 +82,7 @@ export class SuscriptionService {
     
     await this.suscriptionRepository.save(suscription);
 
-    const client = new MercadoPagoConfig({ accessToken: 'MP_ACCESS_TOKEN' });
+    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
     const preference = new Preference(client);
 
     const items = [
@@ -106,6 +106,8 @@ export class SuscriptionService {
         }
     }).then((response) => {
       // El objeto `response` contiene la información de la preferencia, como la URL para el pago
+      const preferenceId = response.id; // Obtiene el preferenceId
+      console.log(preferenceId);
       console.log('Preferencia de pago creada con éxito', response);
     }).catch(error => {
       // En caso de error, muestra el error
@@ -122,4 +124,16 @@ export class SuscriptionService {
 
     return savedSuscription
   }
+
+  // async refundPayment(paymentId: string) {
+  //   try {
+  //     // Realizar el reembolso completo
+  //     const refund = await MercadoPago.payment.refund(paymentId);
+  //     console.log('Reembolso procesado exitosamente', refund);
+  //     return refund;
+  //   } catch (error) {
+  //     console.error('Error procesando el reembolso', error);
+  //     throw new Error('No se pudo procesar el reembolso');
+  //   }
+  // }  
 }

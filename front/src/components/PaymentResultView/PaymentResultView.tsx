@@ -1,10 +1,11 @@
 "use client"; // Indica que este componente se renderiza en el cliente
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getOrderDetailById } from '@/helpers/orderHelper';
 import { useAuth } from '@/context/Authcontext';
 import OrderDetailInformation from '../OrderDetailInformation/OrderDetailInformation';
+import { useCart } from '@/context/CartContext';
 
 interface FeedbackData {
   collectionId: string | null;
@@ -23,7 +24,9 @@ interface FeedbackData {
 
 const PaymentResultView: React.FC = () => {
   const { userData } = useAuth()
+  const {clearCart} = useCart()
   const searchParams = useSearchParams();
+  const router = useRouter()
   const [feedbackData, setFeedbackData] = useState<FeedbackData>({
     collectionId: null,
     collectionStatus: null,
@@ -40,6 +43,7 @@ const PaymentResultView: React.FC = () => {
   });
 
   useEffect(() => {
+    clearCart()
     if (typeof window !== 'undefined') {
       // Captura la URL completa
       const url = window.location.href;
@@ -73,6 +77,10 @@ const PaymentResultView: React.FC = () => {
     }
   }, []);
 
+  const handleSeeOrdenDetail= ()=>{
+    router.push("/dashboard")
+  }
+
   return (
     <div>
       <div className='w-full flex justify-evenly items-center gap-2'>
@@ -94,7 +102,11 @@ const PaymentResultView: React.FC = () => {
         </div>
       </div>
         <div className='w-full flex justify-center items-center my-3'>
-          <button className='bg-violet-500 w-[200px] h-[50px] rounded-lg text-white'>See my order detail</button>
+          <button 
+            className='bg-violet-500 w-[200px] h-[50px] rounded-lg text-white'
+            onClick={handleSeeOrdenDetail}
+          >See my order detail
+          </button>
         </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { OrderData, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
+import { OrderData, OrderDetail, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
 import { IProduct } from "@/interfaces/IProduct";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -61,9 +61,9 @@ export const createPaymentMercadoPago = async (orderId: string) => {
   }
 };
 
-export const getOrderDetailById = async (orderId: string, token: string): Promise<OrderDetailInformation | null> => {
+export const getOrderDetailById = async (orderId: string, token: string): Promise<OrderDetail | null> => {
   try {
-    const response = await fetch(`${API_URL}/products/${orderId}`, {
+    const response = await fetch(`${API_URL}/orders/${orderId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }
@@ -73,8 +73,10 @@ export const getOrderDetailById = async (orderId: string, token: string): Promis
       throw new Error(`Error fetching order detail: ${response.statusText}`);
     }
 
-    const orderDetail: OrderDetailInformation = await response.json();
+    const orderDetail: OrderDetail = await response.json();
+    // console.log(orderDetail)
     return orderDetail;
+
   } catch (error) {
     console.error('Error fetching order detail:', error);
     return null; // Asegura que la función siempre devuelva un valor
