@@ -5,19 +5,32 @@ import { ProductId } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Categories } from 'src/entities/categories.entity';
+// import { CategoriesService } from 'src/categories/categories.service';
+import { CategoriesRepository } from 'src/categories/categories.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly categoriesRepository: CategoriesRepository,
+    private readonly categories:Categories[],
   ) { }
 
   async findProducts(): Promise<Products[]> {
     const product = await this.productsRepository.findProductsData();
+    const now = new Date(); 
+
+    console.log("Hora actual local:", now);
     return product.map(product => {
       let discountedPrice = product.price;
-  
-      if (product.discount && product.discount > 0) {
+    
+      if (product.discount > 0 &&
+        product.discountStartDate &&
+        product.discountEndDate &&
+        now >= new Date(product.discountStartDate) &&
+        now <= new Date(product.discountEndDate)
+      ) {
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
   
@@ -25,7 +38,7 @@ export class ProductsService {
       
       return {
         ...product,
-        discountedPrice, // Agrega el precio con descuento al producto
+        discountedPrice
       };
     }) 
   }
@@ -44,15 +57,20 @@ export class ProductsService {
     }
 
     discountedPrice = Math.floor(discountedPrice * 100) / 100;
-    // Agregar la propiedad `discountedPrice` al producto y retornarlo
     return {
       ...ProductId,
-      discountedPrice, // Agrega el precio con descuento al producto
+      discountedPrice, 
   };
 
   }
 
   async createProducts(products: CreateProductDto, files: Express.Multer.File[]): Promise<Products> {
+    const newProducts = {
+      ...products,
+      discountStartDate: products.discountStartDate || null,
+      discountEndDate: products.discountEndDate || null,
+    }
+    
     const imageUrls: string[] = [];
 
     if (files && files.length > 0) {
@@ -62,7 +80,21 @@ export class ProductsService {
       }
     }
 
-    return await this.productsRepository.createProductsData(products, imageUrls);
+    // let categoryEntities: Categories[] = [];
+    // if (newProducts.categories && newProducts.categories.length > 0) {
+    //   categoryEntities = await Promise.all(
+    //     newProducts.categories.map(async (categoryName) => {
+    //       let category = await this.categoriesRepository.findOneCategoryRepository(categoryName);
+    //       if (!category) {
+    //         category = await this.categoriesRepository.createCategoryRepository({ name: categoryName });
+    //       }
+    //       return category;
+    //     }),
+    //   );
+    // }
+    
+
+    return await this.productsRepository.createProductsData(newProducts, imageUrls)
   }
 
   async updateProducts(id: string, products: UpdateProductDto, files: Express.Multer.File[]): Promise<Products> {

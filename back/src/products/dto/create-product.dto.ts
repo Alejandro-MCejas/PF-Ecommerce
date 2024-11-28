@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsDecimal, IsInt, IsOptional, IsPositive, IsString, Length } from "class-validator";
+import { IsArray, IsDate, IsDecimal, IsInt, IsOptional, IsPositive, IsString, Length } from "class-validator";
 
 export class CreateProductDto {
 
@@ -36,6 +36,14 @@ export class CreateProductDto {
     @IsOptional()
     discount?: number;
 
+    @IsOptional()
+    @IsDate()
+    discountStartDate?: Date;
+
+    @IsOptional()
+    @IsDate()
+    discountEndDate?: Date;   
+
     @ApiProperty({
         example: '',
     })
@@ -46,8 +54,8 @@ export class CreateProductDto {
     @ApiProperty({
         example: '',
     })
-    @IsString()
+    @IsArray()
+    @IsString({ each: true })
     @IsOptional()
-    @Length(1, 50)
-    categoryName?: string;
+    categories?: string[];
 }
