@@ -30,33 +30,33 @@ const SuscriptionInformationCard = () => {
     const handleSuscription = async () => {
         setIsButtonVisible(false);
         setIsLoading(true);
-
+    
         try {
             if (userData?.user.id) {
                 const response = await suscribeCybergamer(userData.user.id);
-                console.log(response)
-                console.log(response?.id)
-                if (response?.id) {
-                    setPreferenceId(response.id);
+                console.log('Preference ID recibido:', response.preferenceId);
+                if (response.preferenceId) {
+                    setPreferenceId(response.preferenceId);
                 } else {
-                    throw new Error("Failed to retrieve preference ID");
+                    throw new Error('Failed to retrieve preference ID');
                 }
             } else {
-                throw new Error("User ID is undefined");
+                throw new Error('User ID is undefined');
             }
         } catch (error: any) {
-            console.error("Error en la transacción:", error.message);
+            console.error('Error en la transacción:', error.message);
             Swal.fire({
-                title: "Error",
-                text: error.message || "An error occurred while processing your subscription.",
-                icon: "error",
-                confirmButtonText: "Retry"
+                title: 'Error',
+                text: error.message || 'An error occurred while processing your subscription.',
+                icon: 'error',
+                confirmButtonText: 'Retry',
             });
             setIsButtonVisible(true);
         } finally {
             setIsLoading(false);
         }
     };
+    
 
 
     const renderSpinner = () => {

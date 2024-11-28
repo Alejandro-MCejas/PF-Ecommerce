@@ -1,3 +1,5 @@
+import { ICategories } from "./ICategories"
+
 export interface IReview{
     id:string,
     rating:number,
@@ -52,8 +54,9 @@ export interface AddProductProps{
     description:string,
     stock:number,
     suscription:boolean,
-    price:number
-    discount:string
+    price:number,
+    categories: ICategories[]
+    discount:number
 }
 
 export interface ProductDetail {
