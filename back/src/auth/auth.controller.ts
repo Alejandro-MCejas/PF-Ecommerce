@@ -22,36 +22,29 @@ export class AuthController {
     return await this.authService.signInService(user.email, user.password)
   }
 
+
   @Get('login')
   async loginAuth0Controller(@Res() res: Response) {
-    console.log('HOLA DESDE LOGIN')
-    const loginUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&response_type=code&redirect_uri=${process.env.AUTH0_BASE_URL}/auth/callback&scope=openid profile email`;
+    const loginUrl = this.authService.getLoginAuth0UrlService()
     res.redirect(loginUrl)
   }
 
   @Get('logout')
   logoutAuth0Controller(@Res() res: Response) {
-    const auth0LogoutUrl = `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${process.env.AUTH0_BASE_URL}`;
+    const auth0LogoutUrl = this.authService.getLogouAuth0UrlService()
     res.redirect(auth0LogoutUrl);
   }
 
   @Get('profile')
-  async profileAuth0Controller(@Req() request: Request) {
-
-    const { idToken, accessToken } = request.oidc
-    console.log(`Este es el idToken: ${idToken}`)
-    console.log(`Este es el accessToken: ${accessToken}`)
+  async profileAuth0Controller(@Req() req: Request) {
+    const { idToken, accessToken } = req.oidc;
 
     if (!idToken && !accessToken) {
       throw new UnauthorizedException('Usuario no autenticado, token no encontrado');
     }
 
-    if (idToken) {
-      const user = request.oidc.user;
-      return { user, token: idToken };
-    }
-
-    throw new UnauthorizedException('Token inválido o no disponible');
+    const user = req.oidc.user;
+    return { user, token: idToken };
   }
 
   @Get('callback')
@@ -73,24 +66,35 @@ export class AuthController {
       const userProfile = await this.authService.getUserProfileService(tokenResponse.access_token);
       console.log(userProfile)
 
+      let user = await this.authService.findUserByEmailOrSubService(userProfile.email, userProfile.sub);
+
+      let isDataComplete = true;
+
+      if (!user) {
+        const newUser = this.authService.createDefaultUser(userProfile);
+        user = await this.authService.signUpService(newUser);
+        isDataComplete = false;
+      } else if (!this.authService.isUserDataCompleteService(user)) {
+        isDataComplete = false;
+      }
+
+      if (user && !user.sub) {
+        await this.authService.updateUserSubService(user.id, userProfile.sub);
+      }
+
+
       const jwtToken = await this.authService.generateJwtTokenAuth0Service(userProfile);
       console.log(jwtToken)
 
       const userSession = {
         token: jwtToken,
         userData: {
-          id: userProfile.sub,
-          name: userProfile.name,
-          email: userProfile.email,
-          picture: userProfile.picture,
-          isSuscription: false, // Ejemplo, podrías calcularlo o extraerlo
-          admin: userProfile.roles || 'user', // Si tienes roles, úsalos
-        },
+          ...user,
+          isDataComplete
+        }
       };
 
-      // Codifica el objeto y redirige con la estructura completa
       const userSessionEncoded = encodeURIComponent(JSON.stringify(userSession));
-
       res.redirect(`http://localhost:4000/dashboard?userSession=${userSessionEncoded}`);
     }
     catch (error) {
