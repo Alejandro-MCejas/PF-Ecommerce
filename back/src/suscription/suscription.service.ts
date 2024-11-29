@@ -16,11 +16,11 @@ export class SuscriptionService {
   constructor(
     @InjectRepository(Suscription)
     private suscriptionRepository: Repository<Suscription>,
-    private readonly userService:UsersService,
-    private readonly productsService:ProductsService,
-    private readonly productsRepository:ProductsRepository,
-    private readonly userRepository:UsersRepository,
-  ){}
+    private readonly userService: UsersService,
+    private readonly productsService: ProductsService,
+    private readonly productsRepository: ProductsRepository,
+    private readonly userRepository: UsersRepository,
+  ) { }
 
   async getSuscription(userId: string): Promise<Products[]> {
     const user = await this.userService.findOneUserService(userId);
@@ -32,10 +32,10 @@ export class SuscriptionService {
     const products = await this.productsService.findProducts();
 
     if (products.length === 0) {
-      return []; 
+      return [];
     }
     if (user.isSuscription) {
-      return products.filter(product => product.suscription === true); 
+      return products.filter(product => product.suscription === true);
     } else {
       return products.filter(product => product.suscription === false);
     }
@@ -46,22 +46,22 @@ export class SuscriptionService {
     const { userId } = createSuscription;
 
     if (!isUUID(userId)) {
-        throw new Error(`El userId ${userId} no es un UUID válido`);
+      throw new Error(`El userId ${userId} no es un UUID válido`);
     }
 
     const priceSuscription = 5;
 
     const user = await this.userRepository.findOneUserRepository(userId);
     if (!user) {
-        throw new Error('User not found');
+      throw new Error('User not found');
     }
 
     const product = await this.productsRepository.findProductsSuscription(
-        { suscription: true }
+      { suscription: true }
     );
 
     if (product.length === 0) {
-        throw new Error('No subscription products available');
+      throw new Error('No subscription products available');
     }
 
     const startDate = new Date();
@@ -71,12 +71,12 @@ export class SuscriptionService {
     const productIds = product.map((product) => product.id);
 
     const suscription = this.suscriptionRepository.create({
-        user,
-        price: priceSuscription,
-        startDate,
-        endDate,
-        type: 'basic',
-        productIds,
+      user,
+      price: priceSuscription,
+      startDate,
+      endDate,
+      type: 'basic',
+      productIds,
     });
 
     const savedSuscription = await this.suscriptionRepository.save(suscription);
@@ -85,43 +85,43 @@ export class SuscriptionService {
     const preference = new Preference(client);
 
     const items = [
-        {
-            id: savedSuscription.id,
-            title: `Suscripción ${savedSuscription.type}`,
-            quantity: 1,
-            unit_price: savedSuscription.price,
-        },
+      {
+        id: savedSuscription.id,
+        title: `Suscripción ${savedSuscription.type}`,
+        quantity: 1,
+        unit_price: savedSuscription.price,
+      },
     ];
 
     let preferenceId: string;
     try {
-        const response = await preference.create({
-            body: {
-                items,
-                back_urls: {
-                    success: `http://localhost:3000/mercado-pago/feedback?status=approved&userId=${userId}`,
-                    failure: `http://localhost:3000/mercado-pago/feedback?status=failure&userId=${userId}`,
-                    pending: `http://localhost:3000/mercado-pago/feedback?status=pending&userId=${userId}`,
-                },
-                external_reference: userId,
-            },
-        });
-        preferenceId = response.id; // Extraer el ID de la preferencia.
-        console.log('Preference creada con ID:', preferenceId);
+      const response = await preference.create({
+        body: {
+          items,
+          back_urls: {
+            success: `http://localhost:3000/mercado-pago/feedback?status=approved&userId=${userId}`,
+            failure: `http://localhost:3000/mercado-pago/feedback?status=failure&userId=${userId}`,
+            pending: `http://localhost:3000/mercado-pago/feedback?status=pending&userId=${userId}`,
+          },
+          external_reference: userId,
+        },
+      });
+      preferenceId = response.id; // Extraer el ID de la preferencia.
+      console.log('Preference creada con ID:', preferenceId);
     } catch (error) {
-        console.error('Error al crear la preferencia de pago:', error);
-        throw new Error('Failed to create payment preference');
+      console.error('Error al crear la preferencia de pago:', error);
+      throw new Error('Failed to create payment preference');
     }
 
     // Actualizar al usuario como suscriptor si es necesario.
     if (!user.isSuscription) {
-        user.isSuscription = true;
-        await this.userRepository.updateUserRepository(userId, user);
+      user.isSuscription = true;
+      await this.userRepository.updateUserRepository(userId, user);
     }
 
     // Devolver el `preferenceId` generado al frontend.
     return { preferenceId };
-}
+  }
 
 
   // async refundPayment(paymentId: string) {

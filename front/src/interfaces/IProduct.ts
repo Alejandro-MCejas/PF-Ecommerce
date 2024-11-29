@@ -29,7 +29,9 @@ export interface IProduct {
     description:string
     reviews:IReview[]
     discount:number,
-    discountedPrice: number
+    discountedPrice: number,
+    discountStartDate?: Date,
+    discountEndDate?:Date
 }
 
 export interface IProductCart { 
@@ -71,6 +73,8 @@ export interface EditGameInformationProps{
     suscription?:boolean,
     description?:string
     discount?:number
+    discountStartDate: Date,
+    discountEndDate:Date
 }
 
 

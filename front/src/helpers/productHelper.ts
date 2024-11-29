@@ -34,8 +34,11 @@ export const fetchingProductByID = async (id: string): Promise<IProduct> => {
 }
 
 export const editProductInformationByID = async (product: EditGameInformationProps, token: string): Promise<EditGameInformationProps> => {
+    
+    console.log(product)
+    debugger
     try {
-        console.log(product)
+
         const response = await fetch(`${API_URL}/products/${product.id}`, {
             method: "PUT",
             headers: {
