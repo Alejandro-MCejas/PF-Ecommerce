@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateOrderDto, OrderStatus } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
@@ -103,5 +103,29 @@ export class OrdersService {
     }
 
     return total
+  }
+
+  async changeOrderStatus(orderId: string): Promise<any> {
+    const order = await this.ordersRepository.findOneOrderRepository(orderId);
+
+    if (!order) {
+        throw new NotFoundException(`Order with ID ${orderId} not found.`);
+    }
+
+    const currentStatus = order.status; // Aquí ya deberías poder acceder al status
+    const statuses = Object.values(OrderStatus);
+    const currentIndex = statuses.indexOf(currentStatus);
+
+    if (currentIndex === -1 || currentIndex === statuses.length - 1) {
+        throw new BadRequestException(
+            `Cannot change status for order ${orderId}. Current status: ${currentStatus}`
+        );
+    }
+
+    const nextStatus = statuses[currentIndex + 1];
+    order.status = nextStatus; // Cambiar al siguiente estado
+
+    // Llamada al save desde el repositorio
+    return { message: `Order status updated to ${nextStatus}`, order};  // Guarda la orden con el nuevo estado
   }
 }

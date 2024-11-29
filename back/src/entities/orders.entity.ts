@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn 
 import { OrderDetails } from "./orderDetails.entity";
 import { Users } from "./users.entity";
 import { mercadoPago } from "./mercadoPago.entity";
+import { OrderStatus } from "src/orders/dto/create-order.dto";
 
 
 
@@ -20,5 +21,12 @@ export class Orders {
     orderDetails: OrderDetails
 
     @OneToMany(() => mercadoPago, payment => payment.order)
-    mercadoPago: mercadoPago[]; 
+    mercadoPago: mercadoPago[];
+    
+    @Column({
+        type: 'enum',
+        enum: OrderStatus,
+        default: OrderStatus.PAYMENT_PENDING, // Establece un valor predeterminado si lo deseas
+    })
+    status: OrderStatus;
 }
