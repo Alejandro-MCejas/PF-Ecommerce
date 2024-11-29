@@ -16,16 +16,16 @@ export class ProductsService {
     const product = await this.productsRepository.findProductsData();
     return product.map(product => {
       let discountedPrice = product.price;
-  
+
       if (product.discount && product.discount > 0) {
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
-  
+
       return {
         ...product,
         discountedPrice, // Agrega el precio con descuento al producto
       };
-    }) 
+    })
   }
 
   async findOneProducts(id: string) {
@@ -118,16 +118,17 @@ export class ProductsService {
     const product = await this.productsRepository.findOneByProductsId(id)
 
     if (!product) {
-      throw new NotFoundException(`Product with id ${id} not found`)
+      throw new NotFoundException(`Products with ID ${id} not found`);
     }
 
     const listOfProducts = await this.productsRepository.arrayOfProductsHomeRepository()
 
+
     if (!product.isFeatured && listOfProducts.length === 4) {
-      
+
       throw new Error('Cannot mark more than 4 products as featured');
     }
-  
+
     const newStatus = !product.isFeatured
 
     return await this.productsRepository.updateArrayOfProductsHomeRepository(id, newStatus)
