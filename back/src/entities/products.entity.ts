@@ -26,6 +26,12 @@ export class Products {
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, default: 0 })
     discount: number;
 
+    @Column({ nullable: true })
+    discountStartDate: Date; // Fecha de inicio del descuento
+
+    @Column({ nullable: true })
+    discountEndDate: Date;
+
     @Column('int')
     stock: number;
 
