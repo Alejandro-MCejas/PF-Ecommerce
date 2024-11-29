@@ -2,18 +2,20 @@
 import { CardProductsView } from "@/components/CardProductsView/CardProductsView"
 import { FilterForm } from "@/components/FilterForm/FilterForm"
 import AddGame from "@/components/ModalAddGame/ModalAddGame"
+import { fetchingCategories } from "@/helpers/categoiresHelper"
 import { fetchingProducts } from "@/helpers/productHelper"
 
 const products = async () => {
     const products = await fetchingProducts();
-    console.log(products)
+    const allCategories = await fetchingCategories()
     return (
         <div>
             <div className="w-full h-[70px] bg-white flex justify-center items-center shadow-inner">
                 <h1 className="font-bold text-[30px] md:text-[48px]">All games</h1>
             </div>
-            <div className="max-w-[1500px] w-full mx-auto flex justify-center items-center">
+            <div className="max-w-[1500px] w-full mx-auto flex justify-center items-center z-50">
                 <AddGame
+                    categories={allCategories}
                 />
             </div>
             <div className="max-w-[1500px] w-full mx-auto mt-5">

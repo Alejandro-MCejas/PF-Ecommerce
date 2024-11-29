@@ -16,11 +16,11 @@ export class SuscriptionService {
   constructor(
     @InjectRepository(Suscription)
     private suscriptionRepository: Repository<Suscription>,
-    private readonly userService:UsersService,
-    private readonly productsService:ProductsService,
-    private readonly productsRepository:ProductsRepository,
-    private readonly userRepository:UsersRepository,
-  ){}
+    private readonly userService: UsersService,
+    private readonly productsService: ProductsService,
+    private readonly productsRepository: ProductsRepository,
+    private readonly userRepository: UsersRepository,
+  ) { }
 
   async getSuscription(userId: string): Promise<Products[]> {
     const user = await this.userService.findOneUserService(userId);
@@ -32,10 +32,10 @@ export class SuscriptionService {
     const products = await this.productsService.findProducts();
 
     if (products.length === 0) {
-      return []; 
+      return [];
     }
     if (user.isSuscription) {
-      return products.filter(product => product.suscription === true); 
+      return products.filter(product => product.suscription === true);
     } else {
       return products.filter(product => product.suscription === false);
     }
@@ -124,6 +124,7 @@ export class SuscriptionService {
 
   //   return savedSuscription
   // }
+
 
   // async refundPayment(paymentId: string) {
   //   try {

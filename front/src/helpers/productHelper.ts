@@ -34,8 +34,11 @@ export const fetchingProductByID = async (id: string): Promise<IProduct> => {
 }
 
 export const editProductInformationByID = async (product: EditGameInformationProps, token: string): Promise<EditGameInformationProps> => {
+    
+    console.log(product)
+    debugger
     try {
-        console.log(product)
+
         const response = await fetch(`${API_URL}/products/${product.id}`, {
             method: "PUT",
             headers: {
@@ -74,6 +77,16 @@ export const addProduct = async (product: AddProductProps, token: string): Promi
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
+    product.categories.forEach((category: { id: string; name: string }) => {
+        formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
+    });
+    
+    console.log("Las categorias inyectadas son", product.categories)
+    debugger
+    // Añadir descuento al FormData
+    formData.append('discount', product.discount.toString())
+
+
 
     // // Imprimir el contenido de FormData
     // for (const pair of formData.entries()) {
