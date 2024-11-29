@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Orders } from "src/entities/orders.entity";
 import { Repository } from "typeorm";
 import { Users } from "src/entities/users.entity";
-import { ProductId } from "./dto/create-order.dto";
+import { ProductIdAndQuantity } from "./dto/create-order.dto";
 
 
 @Injectable()
@@ -32,7 +32,7 @@ export class OrdersRepository {
         })
     }
 
-    async createOrderRepository(order: { user: Users, products: Array<ProductId> }) {
+    async createOrderRepository(order: { user: Users, products: Array<ProductIdAndQuantity> }) {
         const newOrderToCreate = {
             ...order,
             date: new Date().toLocaleString()

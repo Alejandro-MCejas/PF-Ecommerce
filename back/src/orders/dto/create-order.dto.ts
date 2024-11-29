@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID } from "class-validator"
 
 
-export interface ProductId {
+export interface ProductIdAndQuantity {
     id: string
 }
 
@@ -19,13 +19,11 @@ export class CreateOrderDto {
 
     @ApiProperty({
         example: [
-            { 'id': '' },
+            { 'id': '', 'quantity': '' },
         ]
     })
     @IsArray()
     @ArrayNotEmpty()
-    products: Array<ProductId>
-
-
+    products: Array<ProductIdAndQuantity>
 
 }

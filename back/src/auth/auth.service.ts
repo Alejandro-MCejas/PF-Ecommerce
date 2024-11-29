@@ -56,7 +56,15 @@ export class AuthService {
         return token
     }
 
-    async exchangeCodeForTokenService(code: string){
+    getLoginAuth0UrlService() {
+        return `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&response_type=code&redirect_uri=${process.env.AUTH0_BASE_URL}/auth/callback&scope=openid profile email`;
+    }
+
+    getLogouAuth0UrlService() {
+        return `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${process.env.AUTH0_BASE_URL}`;
+    }
+
+    async exchangeCodeForTokenService(code: string) {
         const response = await firstValueFrom(this.httpService.post(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
             grant_type: 'authorization_code',
             client_id: process.env.AUTH0_CLIENT_ID,
@@ -68,7 +76,7 @@ export class AuthService {
         return response.data
     }
 
-    async getUserProfileService(accesToken: string){
+    async getUserProfileService(accesToken: string) {
         const response = await firstValueFrom(this.httpService.get(`https://${process.env.AUTH0_DOMAIN}/userinfo`, {
             headers: {
                 Authorization: `Bearer ${accesToken}`
@@ -78,7 +86,33 @@ export class AuthService {
         return response.data
     }
 
-    async generateJwtTokenAuth0Service(userProfile){
+    async findUserByEmailOrSubService(email: string, sub: string) {
+        return await this.usersService.findUserByEmailOrSubService(email, sub);
+    }
+
+    createDefaultUser(userProfile: any): CreateUserDto {
+        console.log(`Este es el sub: ${userProfile.sub}`);
+        return {
+            name: userProfile.name,
+            email: userProfile.email,
+            password: 'defaultPassword123',
+            confirmPassword: 'defaultPassword123',
+            address: '',
+            phone: '',
+            sub: userProfile.sub
+        };
+    }
+
+    isUserDataCompleteService(user: Users): boolean {
+        return !!user.phone && !!user.address;
+    }
+
+    async updateUserSubService(userId: string, sub: string): Promise<void> {
+        await this.usersService.updateUserService(userId, { sub });
+    }
+
+
+    async generateJwtTokenAuth0Service(userProfile) {
         const payload = {
             email: userProfile.email,
             sub: userProfile.sub,

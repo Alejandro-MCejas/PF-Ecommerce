@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
-import { ProductId } from 'src/orders/dto/create-order.dto';
+import { ProductIdAndQuantity } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -101,7 +101,7 @@ export class ProductsService {
     return this.productsRepository.deleteProductsData(id);
   }
 
-  async getProductsWithStock(productsIds: Array<ProductId>) {
+  async getProductsWithStock(productsIds: Array<ProductIdAndQuantity>) {
     const ids = productsIds.map(product => product.id)
     return await this.productsRepository.findByIds(ids)
   }
