@@ -42,88 +42,88 @@ export class SuscriptionService {
   }
 
 
-  async createSuscription(createSuscription:CreateSuscriptionDto):Promise<Suscription>{
-    const {userId} = createSuscription;
-    if (!isUUID(userId)) {
-      throw new Error(`El userId ${userId} no es un UUID válido`);
-    }
-    const priceSuscription = 5;
+  // async createSuscription(createSuscription:CreateSuscriptionDto):Promise<Suscription>{
+  //   const {userId} = createSuscription;
+  //   if (!isUUID(userId)) {
+  //     throw new Error(`El userId ${userId} no es un UUID válido`);
+  //   }
+  //   const priceSuscription = 5;
 
-    const user = await this.userRepository.findOneUserRepository(userId);
-    if(!user){
-      throw new Error('User not found')
-    }
-
-    
-    
-    const product = await this.productsRepository.findProductsSuscription(
-      { suscription: true }
-    );
-    if (product.length === 0) {
-      throw new Error('No subscription products available');
-    }
-
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setDate(startDate.getDate() + 30);
-
-    const productIds = product.map(product => product.id);
-
-    const suscription = this.suscriptionRepository.create({
-      user,
-      price: priceSuscription,
-      startDate,
-      endDate,
-      type:'basic',
-      productIds,
-    });
-
-    const savedSuscription = await this.suscriptionRepository.save(suscription);
-    
-    await this.suscriptionRepository.save(suscription);
-
-    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
-    const preference = new Preference(client);
-
-    const items = [
-      {
-        id: savedSuscription.id,  // ID de la suscripción
-        title: `Suscripción ${savedSuscription.type}`,  // Título de la suscripción
-        quantity: 1,  // Una sola suscripción
-        unit_price: savedSuscription.price,  // Precio de la suscripción
-      },
-    ];
-
-    preference.create({
-      body: {
-        items: items,
-        back_urls: {
-            success: `http://localhost:3000/mercado-pago/feedback?status=approved&userId=${userId}`,
-            failure: `http://localhost:3000/mercado-pago/feedback?status=failure&userId=${userId}`,
-            pending: `http://localhost:3000/mercado-pago/feedback?status=pending&userId=${userId}`,
-          },
-          external_reference: userId
-        }
-    }).then((response) => {
-      // El objeto `response` contiene la información de la preferencia, como la URL para el pago
-      const preferenceId = response.id; // Obtiene el preferenceId
-      console.log(preferenceId);
-      console.log('Preferencia de pago creada con éxito', response);
-    }).catch(error => {
-      // En caso de error, muestra el error
-      console.error('Error al crear la preferencia de pago', error);
-    });
+  //   const user = await this.userRepository.findOneUserRepository(userId);
+  //   if(!user){
+  //     throw new Error('User not found')
+  //   }
 
     
+    
+  //   const product = await this.productsRepository.findProductsSuscription(
+  //     { suscription: true }
+  //   );
+  //   if (product.length === 0) {
+  //     throw new Error('No subscription products available');
+  //   }
+
+  //   const startDate = new Date();
+  //   const endDate = new Date();
+  //   endDate.setDate(startDate.getDate() + 30);
+
+  //   const productIds = product.map(product => product.id);
+
+  //   const suscription = this.suscriptionRepository.create({
+  //     user,
+  //     price: priceSuscription,
+  //     startDate,
+  //     endDate,
+  //     type:'basic',
+  //     productIds,
+  //   });
+
+  //   const savedSuscription = await this.suscriptionRepository.save(suscription);
+    
+  //   await this.suscriptionRepository.save(suscription);
+
+  //   const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
+  //   const preference = new Preference(client);
+
+  //   const items = [
+  //     {
+  //       id: savedSuscription.id,  // ID de la suscripción
+  //       title: `Suscripción ${savedSuscription.type}`,  // Título de la suscripción
+  //       quantity: 1,  // Una sola suscripción
+  //       unit_price: savedSuscription.price,  // Precio de la suscripción
+  //     },
+  //   ];
+
+  //   preference.create({
+  //     body: {
+  //       items: items,
+  //       back_urls: {
+  //           success: `http://localhost:3000/mercado-pago/feedback?status=approved&userId=${userId}`,
+  //           failure: `http://localhost:3000/mercado-pago/feedback?status=failure&userId=${userId}`,
+  //           pending: `http://localhost:3000/mercado-pago/feedback?status=pending&userId=${userId}`,
+  //         },
+  //         external_reference: userId
+  //       }
+  //   }).then((response) => {
+  //     // El objeto `response` contiene la información de la preferencia, como la URL para el pago
+  //     console.log('Preferencia de pago creada con éxito', response);
+  //     const preferenceId = response.id; // Obtiene el preferenceId
+  //     console.log(preferenceId);
+  //   }).catch(error => {
+  //     // En caso de error, muestra el error
+  //     console.error('Error al crear la preferencia de pago', error);
+  //   });
+
+    
 
 
-    if (!user.isSuscription) {
-      user.isSuscription = true;
-      await this.userRepository.updateUserRepository(userId, user);
-    }
+  //   if (!user.isSuscription) {
+  //     user.isSuscription = true;
+  //     await this.userRepository.updateUserRepository(userId, user);
+  //   }
 
-    return savedSuscription
-  }
+  //   return savedSuscription
+  // }
 
   // async refundPayment(paymentId: string) {
   //   try {
@@ -135,5 +135,86 @@ export class SuscriptionService {
   //     console.error('Error procesando el reembolso', error);
   //     throw new Error('No se pudo procesar el reembolso');
   //   }
-  // }  
+  // }
+  
+  async createSuscription(createSuscription: CreateSuscriptionDto): Promise<{ preferenceId: string }> {
+    const { userId } = createSuscription;
+
+    if (!isUUID(userId)) {
+        throw new Error(`El userId ${userId} no es un UUID válido`);
+    }
+
+    const priceSuscription = 5;
+
+    const user = await this.userRepository.findOneUserRepository(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const product = await this.productsRepository.findProductsSuscription(
+        { suscription: true }
+    );
+
+    if (product.length === 0) {
+        throw new Error('No subscription products available');
+    }
+
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setDate(startDate.getDate() + 30);
+
+    const productIds = product.map((product) => product.id);
+
+    const suscription = this.suscriptionRepository.create({
+        user,
+        price: priceSuscription,
+        startDate,
+        endDate,
+        type: 'basic',
+        productIds,
+    });
+
+    const savedSuscription = await this.suscriptionRepository.save(suscription);
+
+    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
+    const preference = new Preference(client);
+
+    const items = [
+        {
+            id: savedSuscription.id,
+            title: `Suscripción ${savedSuscription.type}`,
+            quantity: 1,
+            unit_price: savedSuscription.price,
+        },
+    ];
+
+    let preferenceId: string;
+    try {
+        const response = await preference.create({
+            body: {
+                items,
+                back_urls: {
+                  success: `http://localhost:4000/subscription/paymentResult/feedback?status=approved&userId=${userId}`,
+                  failure: `http://localhost:4000/subscription/paymentResult/feedback?status=failure&userId=${userId}`,
+                  pending: `http://localhost:4000/subscription/paymentResult/feedback?status=pending&userId=${userId}`,
+                },
+                external_reference: userId,
+            },
+        });
+        preferenceId = response.id; // Extraer el ID de la preferencia.
+        console.log('Preference creada con ID:', preferenceId);
+    } catch (error) {
+        console.error('Error al crear la preferencia de pago:', error);
+        throw new Error('Failed to create payment preference');
+    }
+
+    // Actualizar al usuario como suscriptor si es necesario.
+    if (!user.isSuscription) {
+        user.isSuscription = true;
+        await this.userRepository.updateUserRepository(userId, user);
+    }
+
+    // Devolver el preferenceId generado al frontend.
+    return { preferenceId };
+  }
 }
