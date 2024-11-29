@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Products } from '../entities/products.entity';
-import { ProductId } from 'src/orders/dto/create-order.dto';
+import { ProductIdAndQuantity } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -20,7 +20,9 @@ export class ProductsService {
       if (product.discount && product.discount > 0) {
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
-
+  
+      discountedPrice = Math.floor(discountedPrice * 100) / 100;
+      
       return {
         ...product,
         discountedPrice, // Agrega el precio con descuento al producto
@@ -35,7 +37,18 @@ export class ProductsService {
       throw new NotFoundException(`Product with ID ${id} not found`)
     }
 
-    return this.productsRepository.findOneByProductsId(id);
+    let discountedPrice = ProductId.price;
+
+    if (ProductId.discount && ProductId.discount > 0) {
+      discountedPrice = ProductId.price - (ProductId.price * ProductId.discount) / 100;
+    }
+
+    discountedPrice = Math.floor(discountedPrice * 100) / 100;
+    // Agregar la propiedad `discountedPrice` al producto y retornarlo
+    return {
+      ...ProductId,
+      discountedPrice, // Agrega el precio con descuento al producto
+  };
 
   }
 
@@ -88,7 +101,7 @@ export class ProductsService {
     return this.productsRepository.deleteProductsData(id);
   }
 
-  async getProductsWithStock(productsIds: Array<ProductId>) {
+  async getProductsWithStock(productsIds: Array<ProductIdAndQuantity>) {
     const ids = productsIds.map(product => product.id)
     return await this.productsRepository.findByIds(ids)
   }

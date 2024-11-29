@@ -7,4 +7,5 @@ export const categories = [
     "RPG",
     "Battle Royale",
     "Carreras",
+    "Suscription",
 ];

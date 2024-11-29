@@ -1,14 +1,15 @@
 "use client"
 
-import {IProduct } from "@/interfaces/IProduct";
-import React, {useState } from "react";
+import { IProduct } from "@/interfaces/IProduct";
+import React, { useState } from "react";
 import StarRating from "../StarRating/StarRating";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
-import {deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
+import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
+import ModalApplyDiscount from "../ModalAddDiscount/ModalAddDiscount";
 
 interface ProductDetail {
     product: IProduct;
@@ -19,6 +20,11 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
+
+    const price = typeof product.price === "string" ? parseFloat(product.price) : product.price;
+    const discount = typeof product.discount === "string" ? parseFloat(product.discount) : product.discount;
+    const discountedPrice = discount > 0 ? Math.floor((price - (price * discount) / 100) * 100) / 100 : price;
+    // console.log(discountedPrice)
 
     const handleDeleteGame = () => {
         if (!userData?.token) {
@@ -93,8 +99,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
         }
     };
 
-
-
     return (
         <div>
             {/* Imagen e informacion */}
@@ -121,16 +125,31 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <h2 className="text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
-                                <StarRating 
-                                    rating={rating} 
-                                    setRating={setRating} 
+                                <StarRating
+                                    rating={rating}
+                                    setRating={setRating}
                                 />
                             </div>
                             <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
                         </div>
                         <div>
+                            {/* Mostrar el precio dinámicamente */}
+                            {
+                                discount === 0 ? (
+                                    <div>
+                                        <p className="text-[98px] font-black">${product.price}</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p className="text-[98px] font-black">${discountedPrice}</p>
+                                        <p className="text-[24px] text-gray-500 line-through">
+                                            Original: ${product.price}
+                                        </p>
+                                    </div>
+                                )
+                            }
 
-                            <p className="text-[98px] font-black">${product.price}</p>
+
                         </div>
                         {
                             product.stock === 0 ? (
@@ -162,7 +181,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                             name={product.name}
                                             description={product.description}
                                             stock={product.stock}
-                                            price={product.price}
+                                            price={discountedPrice !== price ? discountedPrice : price}
                                             image={product.image}
                                         />
                                         <button className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded">Buy Now</button>
@@ -175,7 +194,9 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                         <ModalEditGame
                                             product={product}
                                         />
-                                        <button className="w-[300px] h-[50px] bg-purple-400 text-violet-700 px-4 py-2 rounded">Add discount</button>
+                                        <ModalApplyDiscount
+                                            product={product}
+                                        />
                                     </div>
                                     <div className="flex flex-col gap-4">
                                         <button className="w-[300px] h-[50px] bg-violet-600 text-white px-4 py-2 rounded" onClick={handleAddCyberGamer}>Subscription</button>

@@ -10,6 +10,7 @@ import { loggerGlobal } from './middlewares/loggerGlobal.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.use(loggerGlobal)
 
 
@@ -28,10 +29,10 @@ async function bootstrap() {
       login: false,
       logout: false,
       callback: false
-    }
+    },
   }))
 
-  
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Nest Api Proyecto Final')
     .setDescription('Ecommerce de proyecto final 2024')

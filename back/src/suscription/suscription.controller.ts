@@ -16,4 +16,6 @@ export class SuscriptionController {
   async createSuscription(@Body() createSuscriptionDto: CreateSuscriptionDto) {
     return await this.suscriptionService.createSuscription(createSuscriptionDto);
   }
+
+  
 }

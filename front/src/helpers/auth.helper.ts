@@ -64,26 +64,38 @@ export async function getUser(userId: string) {
 }
 
 //ACTUALIZAR USUARIO
-export async function updateUser(userId: string, updateData: Partial<IRegisterProps>) {
+export async function updateUser(
+  userId: string,
+  updateData: Partial<IRegisterProps>,
+  token: string
+) {
   try {
     const res = await fetch(`${APIURL}/users/${userId}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
       },
       body: JSON.stringify(updateData),
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(`Error ${res.status}: ${errorData.message || "Failed to update user"}`);
+      throw new Error(
+        `Error ${res.status}: ${errorData.message || "Failed to update user"}`
+      );
     }
+
     return await res.json();
   } catch (error: any) {
     console.error("Update user error:", error.message);
-    throw new Error(error.message || `Unknown error occurred during updating user.`);
+    throw new Error(
+      error.message || `Unknown error occurred during updating user.`
+    );
   }
 }
+
+
 //ELIMINAR USUARIO
 export async function deleteUser(userId: string) {
   try {
@@ -137,8 +149,8 @@ export async function login(userData: ILoginProps) {
       },
       body: JSON.stringify(userData)
     });
-    console.log(res);
-    console.log(userData);
+    // console.log(res);
+    // console.log(userData);
 
     if (res.ok) {
       return res.json()

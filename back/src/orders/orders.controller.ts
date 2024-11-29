@@ -14,7 +14,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
   @Get()
-  @UseGuards(HybridAuthGuard, RoleGuard)
+  // @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async findAllOrdersController(@Res() res: Response) {
     const orders = await this.ordersService.findAllOrdersService();
@@ -22,21 +22,21 @@ export class OrdersController {
   }
 
   @Get(':id')
-  @UseGuards(HybridAuthGuard)
+  // @UseGuards(HybridAuthGuard)
   async findOneOrderController(@Param('id') id: string, @Res() res: Response) {
     const order = await this.ordersService.findOneOrderService(id);
     return res.status(200).json(order);
   }
 
   @Post()
-  @UseGuards(HybridAuthGuard)
+  // @UseGuards(HybridAuthGuard)
   async createOrderController(@Body() createOrderDto: CreateOrderDto, @Res() res: Response) {
     const newOrder = await this.ordersService.createOrderService(createOrderDto);
     return res.status(201).json(newOrder);
   }
 
   @Delete(':id')
-  @UseGuards(HybridAuthGuard, RoleGuard)
+  // @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async deleteOrderController(@Param('id') id: string, @Res() res: Response) {
     const deletedOrder = await this.ordersService.deleteOrderService(id);
