@@ -57,5 +57,5 @@ export class CreateProductDto {
     @IsArray()
     @IsString({ each: true })
     @IsOptional()
-    categories?: string[];
+    categoriess?: string[];
 }

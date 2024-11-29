@@ -5,16 +5,11 @@ import { ProductId } from 'src/orders/dto/create-order.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Categories } from 'src/entities/categories.entity';
-// import { CategoriesService } from 'src/categories/categories.service';
-import { CategoriesRepository } from 'src/categories/categories.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository,
     private readonly cloudinaryService: CloudinaryService,
-    private readonly categoriesRepository: CategoriesRepository,
-    private readonly categories:Categories[],
   ) { }
 
   async findProducts(): Promise<Products[]> {
@@ -64,11 +59,13 @@ export class ProductsService {
 
   }
 
-  async createProducts(products: CreateProductDto, files: Express.Multer.File[]): Promise<Products> {
+  async createProducts(products: CreateProductDto, files: Express.Multer.File[], categoriesId:string): Promise<Products> {
+    
     const newProducts = {
       ...products,
       discountStartDate: products.discountStartDate || null,
       discountEndDate: products.discountEndDate || null,
+
     }
     
     const imageUrls: string[] = [];
@@ -79,22 +76,9 @@ export class ProductsService {
         imageUrls.push(imageUrl.secure_url);
       }
     }
-
-    // let categoryEntities: Categories[] = [];
-    // if (newProducts.categories && newProducts.categories.length > 0) {
-    //   categoryEntities = await Promise.all(
-    //     newProducts.categories.map(async (categoryName) => {
-    //       let category = await this.categoriesRepository.findOneCategoryRepository(categoryName);
-    //       if (!category) {
-    //         category = await this.categoriesRepository.createCategoryRepository({ name: categoryName });
-    //       }
-    //       return category;
-    //     }),
-    //   );
-    // }
     
 
-    return await this.productsRepository.createProductsData(newProducts, imageUrls)
+    return await this.productsRepository.createProductsData(newProducts, imageUrls, categoriesId)
   }
 
   async updateProducts(id: string, products: UpdateProductDto, files: Express.Multer.File[]): Promise<Products> {
