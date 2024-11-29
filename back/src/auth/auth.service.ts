@@ -82,8 +82,6 @@ export class AuthService {
                 Authorization: `Bearer ${accesToken}`
             }
         }))
-        console.log('Perfil del usuario:', response.data);
-
 
         return response.data
     }

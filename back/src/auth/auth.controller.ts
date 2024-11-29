@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
@@ -37,15 +37,12 @@ export class AuthController {
 
   @Get('profile')
   async profileAuth0Controller(@Req() req: Request) {
-    const { idToken, accessToken } = req.oidc;
+    const { idToken } = req.oidc
 
-    if (!idToken && !accessToken) {
-      throw new UnauthorizedException('Usuario no autenticado, token no encontrado');
-    }
-
-    const user = req.oidc.user;
-    return { user, token: idToken };
+    const user = req.oidc?.user;
+    return { user, idToken };
   }
+
 
   @Get('callback')
   async callbackAuth0Controller(@Req() req: Request, @Res() res: Response) {
@@ -93,6 +90,7 @@ export class AuthController {
           isDataComplete
         }
       };
+
 
       const userSessionEncoded = encodeURIComponent(JSON.stringify(userSession));
       res.redirect(`http://localhost:4000/dashboard?userSession=${userSessionEncoded}`);
