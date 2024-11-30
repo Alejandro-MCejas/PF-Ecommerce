@@ -54,7 +54,7 @@ export class ProductsController {
   }
 
 
-  @Put('editProductsHome/:id')
+  @Put('editProductsHome')
   // @UseGuards(HybridAuthGuard, RoleGuard)
   // @Roles(UserRole.ADMIN)
   async updateArrayOfProductsHomeController(@Body() arrayOfProducts: Products[]) {
