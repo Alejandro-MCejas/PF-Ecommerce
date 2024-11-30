@@ -1,52 +1,48 @@
-import { ApiProperty } from "@nestjs/swagger";
-import {
-  ArrayNotEmpty,
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from "class-validator";
-
-export enum OrderStatus {
-  PAYMENT_PENDING = "Pago pendiente",
-  PAYMENT_CONFIRMED = "Pago confirmado, preparacion del envio",
-  SHIPPED = "Enviado",
-  RECEIVED = "Recibido",
-}
+import { ApiProperty } from "@nestjs/swagger"
+import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator"
+import { Orders } from "src/entities/orders.entity";
 
 export interface ProductIdAndQuantity {
   id: string;
 }
 
+export enum OrderStatus {
+    PAYMENT_PENDING = "Pago pendiente",
+    PAYMENT_CONFIRMED = "Pago confirmado, preparacion del envio",
+    SHIPPED = "Enviado",
+    RECEIVED = "Recibido",
+}
+
+export interface OrderStatusResponse{
+    message: string;
+    order: Orders;
+}
+
 export class CreateOrderDto {
+
   @ApiProperty({
-    example: "123e4567-e89b-12d3-a456-426614174000",
-    description: "The user ID placing the order",
+      example: ''
   })
   @IsNotEmpty()
   @IsString()
   @IsUUID()
-  userId: string;
+  userId: string
 
   @ApiProperty({
-    example: [
-      { id: "product-id-1", quantity: 2 },
-      { id: "product-id-2", quantity: 1 },
-    ],
-    description: "List of products with their quantities",
+      example: [
+          { 'id': '', 'quantity': '' },
+      ]
   })
   @IsArray()
   @ArrayNotEmpty()
-  products: Array<ProductIdAndQuantity>;
+  products: Array<ProductIdAndQuantity>
 
   @ApiProperty({
-    enum: OrderStatus,
-    example: OrderStatus.PAYMENT_PENDING,
-    description: "The current status of the order",
+      enum: OrderStatus,
+      example: OrderStatus.PAYMENT_PENDING,
+      description: "The current status of the order",
   })
   @IsOptional()
   @IsEnum(OrderStatus)
-  status?: OrderStatus = OrderStatus.PAYMENT_PENDING; // Default to "Pago pendiente"
+  status?: OrderStatus = OrderStatus.PAYMENT_PENDING; // Default to "Pago pendiente
 }
