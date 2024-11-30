@@ -40,8 +40,8 @@ export class ProductsController {
   @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @UseInterceptors(FilesInterceptor('images', 3))
-  async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
-    return await this.productsService.createProducts(products, files);
+  async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[],@Body('categories') categoriesId: string,) {
+    return await this.productsService.createProducts(products, files, categoriesId);
   }
 
   @ApiBearerAuth()
