@@ -5,13 +5,12 @@ import { Repository } from "typeorm";
 import { Users } from "src/entities/users.entity";
 import { ProductIdAndQuantity } from "./dto/create-order.dto";
 
-
 @Injectable()
 export class OrdersRepository {
-    constructor(@InjectRepository(Orders) private readonly ordersRepository: Repository<Orders>) { }
+    constructor(@InjectRepository(Orders) private readonly ordersRepository: Repository<Orders>) {}
 
     async findAllOrdersRepository() {
-        return await this.ordersRepository.find()
+        return await this.ordersRepository.find();
     }
 
     async findOneOrderRepository(id: string) {
@@ -28,22 +27,30 @@ export class OrdersRepository {
                     isSuscription: true,
                     admin: true,
                 },
-            }
-        })
+            },
+        });
     }
 
-    async createOrderRepository(order: { user: Users, products: Array<ProductIdAndQuantity> }) {
+    async createOrderRepository(order: { user: Users; products: Array<ProductIdAndQuantity> }) {
         const newOrderToCreate = {
             ...order,
-            date: new Date().toLocaleString()
-        }
+            date: new Date().toLocaleString(),
+        };
 
         return await this.ordersRepository.save(
             this.ordersRepository.create(newOrderToCreate)
-        )
+        );
     }
 
     async deleteOrderRepository(id: string) {
-        return await this.ordersRepository.delete(id)
+        return await this.ordersRepository.delete(id);
+    }
+
+    /**
+     * Método para guardar cambios en una orden existente.
+     * Este método utiliza el `save` de TypeORM.
+     */
+    async saveOrder(order: Orders) {
+        return await this.ordersRepository.save(order);
     }
 }

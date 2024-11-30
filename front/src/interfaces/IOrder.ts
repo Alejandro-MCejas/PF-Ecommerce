@@ -50,6 +50,7 @@ export interface IOrder {
   id:string,
   date:String,
   user: IUserInformation
+  status:string
 }
 
 export interface OrderDetail { 
