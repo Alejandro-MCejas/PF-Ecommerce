@@ -4,35 +4,27 @@ import React, { useEffect, useState } from "react";
 import { IProduct, EditGameModalProps } from "@/interfaces/IProduct";
 import { HomeCardGame } from "../HomeCardGame/HomeCardGame";
 import { useAuth } from "@/context/Authcontext";
-import { getProductsHome } from "@/helpers/productHelper";
+import { changeProductsHome, getProductsHome } from "@/helpers/productHelper";
 
 export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedGames, setSelectedGames] = useState<IProduct[]>([]);
-  const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]);
-  const [productInCard, setProductInCard] = useState<IProduct[] | null>(null);
+  const [selectedGames, setSelectedGames] = useState<IProduct[]>([]); // Para los 4 juegos seleccionados
+  const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]); // Temporal en el modal
+  const [productInCard, setProductInCard] = useState<IProduct[]>([]); // Los juegos traídos por el backend
   const { userData } = useAuth();
 
+  // Obtener los juegos del backend al cargar el componente
   useEffect(() => {
     const fetchProducts = async () => {
       const products = await getProductsHome();
-      setProductInCard(products);
+      setProductInCard(products); // Mantener los productos que vienen del backend
     };
 
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const storedGames = localStorage.getItem("selectedGames");
-    if (storedGames) {
-      setSelectedGames(JSON.parse(storedGames));
-    } else if (games.length > 0) {
-      setSelectedGames(games.slice(0, 4));
-    }
-  }, [games]);
-
   const openModal = () => {
-    setTempSelectedGames([...selectedGames]);
+    setTempSelectedGames([]); // Inicializar el estado temporal vacío
     setIsOpen(true);
   };
 
@@ -40,19 +32,43 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     setIsOpen(false);
   };
 
-  const handleApplyChanges = () => {
-    localStorage.setItem("selectedGames", JSON.stringify(tempSelectedGames));
-    setSelectedGames(tempSelectedGames);
-    setIsOpen(false);
+  const handleApplyChanges = async () => {
+    try {
+      if (tempSelectedGames.length !== 4) {
+        alert("You must select exactly 4 games.");
+        return;
+      }
+
+      if (userData?.token) {
+        // Combinar los IDs de los productos traídos por el backend y los seleccionados
+        const idsArray = [
+          ...productInCard.map((game) => ({ id: game.id })), // IDs del backend
+          ...tempSelectedGames.map((game) => ({ id: game.id })), // IDs seleccionados
+        ];
+
+        const changeProducts = await changeProductsHome(idsArray, userData.token);
+        console.log("Productos cambiados con éxito:", changeProducts);
+
+        setSelectedGames(tempSelectedGames); // Actualizar los juegos seleccionados
+        setIsOpen(false);
+        return changeProducts;
+      }
+    } catch (error) {
+      console.error("El error fue:", error);
+    }
   };
 
   const handleCheckboxChange = (game: IProduct) => {
     if (tempSelectedGames.some((selectedGame) => selectedGame.id === game.id)) {
+      // Quitar si ya está seleccionado
       setTempSelectedGames(
         tempSelectedGames.filter((selectedGame) => selectedGame.id !== game.id)
       );
     } else if (tempSelectedGames.length < 4) {
+      // Agregar si no supera el límite de 4
       setTempSelectedGames([...tempSelectedGames, game]);
+    } else {
+      alert("You can only select 4 games.");
     }
   };
 
@@ -60,7 +76,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     return (
       <div className="w-[800px] md:w-[1500px] flex justify-evenly items-center">
         <div className="w-1/2 md:w-full flex flex-wrap md:flex-nowrap justify-evenly items-center">
-          {selectedGames.map((game, index) => (
+          {productInCard.map((game, index) => (
             <div className="w-1/2 flex justify-center" key={index}>
               <HomeCardGame
                 imagenUrl={
@@ -82,7 +98,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
     <div className="top-0">
       <div className="flex flex-col w-[1500px] justify-center items-center">
         <div className="w-full flex justify-evenly items-center">
-          {selectedGames.map((game, index) => (
+          {productInCard.map((game, index) => (
             <HomeCardGame key={index} imagenUrl={game.image[0]} />
           ))}
         </div>

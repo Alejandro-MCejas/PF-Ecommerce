@@ -14,8 +14,6 @@ import { faPlaystation } from "@fortawesome/free-brands-svg-icons/faPlaystation"
 import { faXbox } from "@fortawesome/free-brands-svg-icons";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { fetchingProducts } from "@/helpers/productHelper";
-import { IProduct } from "@/interfaces/IProduct";
-
 
 const home = async () => {
 
