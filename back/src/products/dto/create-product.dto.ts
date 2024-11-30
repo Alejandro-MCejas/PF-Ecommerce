@@ -15,7 +15,7 @@ export class CreateProductDto {
     })
     @IsArray()
     @IsString({each: true })
-    image: string[];
+    image?: string[];
 
     @ApiProperty({
         example: '',
