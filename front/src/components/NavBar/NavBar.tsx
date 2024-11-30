@@ -10,12 +10,15 @@ import { useEffect, useState } from 'react';
 import ProfileClient from '../useUse/useClient';
 
 import Swal from 'sweetalert2';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
+import logoApp from "../../../public/logoApp.png"
+import Image from 'next/image';
 
 const NavBar = () => {
   const { cartCount } = useCart();
   const { userData , setUserData} = useAuth(); // Supongo que tienes un método `logout` en tu AuthContext.
+  const router = useRouter()
   const role = userData?.user?.admin;
   const [clientRendered, setClientRendered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // Maneja la visibilidad del menú desplegable.
@@ -58,11 +61,12 @@ const NavBar = () => {
 
         <Link href="/">
           <div className="flex items-center justify-center md:justify-start">
-            <img
-              src="https://s3-alpha-sig.figma.com/img/9b24/ab51/4afde8507a88429e72fe3362ccbebe43?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dRsBfIogFmR3yUGOV6dEjMC0MH7NFtW4-NXo6eeUhCZ3JbHKzWNMKHYg08~IiruoGURhyL1PcSY~phZaTgFvbBsq7DxAE0LJF3UNRglelYEi4dt7GPmHhDSk-LbBkQ6to1ddesbQGtU4m-jfMaaT3ShKm82V0aFOFJoT9ng8chimHLKaxz5qYkZC1JCP158GzA3worP-RIqK9QObZ3gjouw2-9MYaRKhnpuS9CSIbOCoAZaGZskMAlo~KjXAs3-q03rEtEeTW~J3eAeUhU-Xmwt5ruo7KEkOG1Arycn-wCaLsDBkyWbWegXNEqgKj8LcDCD2GFSQyHjKeHg9X6DX3Q__"
+            <Image
+              src={logoApp}
               alt="Logo"
               className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
-            />
+            >
+            </Image>
             <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
               Cybergames
             </span>

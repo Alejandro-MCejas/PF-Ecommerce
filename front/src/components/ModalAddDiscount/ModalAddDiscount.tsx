@@ -12,18 +12,25 @@ const ModalApplyDiscount = ({ product }: { product: IProduct }) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [newDiscount, setNewDiscount] = useState<number>(0);
+    const [endDate, setEndDate] = useState<string>(""); // Fecha final como string
     const [newGameInfo, setNewGameInfo] = useState<EditGameInformationProps>({
         id: product.id,
         discount: 0,
+        discountStartDate: new Date(), // Renombrado: Fecha inicial por defecto
+        discountEndDate: new Date(), // Renombrado: Fecha final inicializada con la actual
     });
 
-    // Sincronizar el estado de `newGameInfo` con `newDiscount`
+    const currentDate = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+
+    // Sincronizar el estado de `newGameInfo` con los cambios en `newDiscount` y `endDate`
     useEffect(() => {
         setNewGameInfo((prev) => ({
             ...prev,
-            discount: newDiscount, // Actualiza el descuento con el nuevo valor
+            discount: newDiscount,
+            discountStartDate: new Date(), // Siempre la fecha actual
+            discountEndDate: endDate ? new Date(endDate) : prev.discountEndDate, // Convertir endDate string a Date
         }));
-    }, [newDiscount]);
+    }, [newDiscount, endDate]);
 
     const openModal = () => {
         setIsOpen(true);
@@ -35,8 +42,8 @@ const ModalApplyDiscount = ({ product }: { product: IProduct }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const parsedPrice = Number(product.price); // Convertimos price a número
+    
+        const parsedPrice = Number(product.price);
         if (isNaN(parsedPrice)) {
             Swal.fire({
                 title: "Error",
@@ -45,7 +52,7 @@ const ModalApplyDiscount = ({ product }: { product: IProduct }) => {
             });
             return;
         }
-
+    
         if (newDiscount < 0 || newDiscount > 95) {
             Swal.fire({
                 title: "Invalid Discount",
@@ -54,41 +61,56 @@ const ModalApplyDiscount = ({ product }: { product: IProduct }) => {
             });
             return;
         }
-
-        const discountAmount = (parsedPrice * newDiscount) / 100; // Calcular el monto del descuento
-        const finalPrice = parsedPrice - discountAmount; // Calcular el precio final
-
-        // Mostrar SweetAlert con la información del descuento
+    
+        if (!endDate || new Date(endDate) < new Date()) {
+            Swal.fire({
+                title: "Invalid End Date",
+                text: "The end date must be after or equal to today's date.",
+                icon: "error",
+            });
+            return;
+        }
+    
+        const discountAmount = (parsedPrice * newDiscount) / 100;
+        const finalPrice = parsedPrice - discountAmount;
+    
+        // Construir el objeto con las propiedades correctas
+        const payload = {
+            ...newGameInfo,
+            discountStartDate: newGameInfo.discountStartDate, // Fecha de inicio del descuento
+            discountEndDate: newGameInfo.discountEndDate,     // Fecha de fin del descuento
+        };
+    
         Swal.fire({
             title: "Discount Details",
             html: `
                 <p>Product Price: <strong>$${parsedPrice.toFixed(2)}</strong></p>
                 <p>Discount to Apply: <strong>${newDiscount}%</strong></p>
                 <p>Price After Discount: <strong>$${finalPrice.toFixed(2)}</strong></p>
+                <p>Start Date: <strong>${new Date().toLocaleDateString()}</strong></p>
+                <p>End Date: <strong>${new Date(endDate).toLocaleDateString()}</strong></p>
             `,
             showCancelButton: true,
             confirmButtonText: "Accept",
             cancelButtonText: "Cancel",
         }).then(async (result) => {
             if (result.isConfirmed && userData) {
-                console.log("Data being sent to backend:", newGameInfo);
-
-                editProductInformationByID(newGameInfo, userData?.token)
+                console.log("Data being sent to backend:", payload);
+    
+                editProductInformationByID(payload, userData?.token)
                     .then(() => {
                         Swal.fire("Saved!", "The changes have been saved.", "success");
                         closeModal();
-                        router.push(`/products/${product.id}`); // Redirecciona después de guardar los cambios
+                        router.push(`/products/${product.id}`);
                     })
                     .catch((error) => {
                         Swal.fire("Error", "There was an issue saving the changes.", "error");
                         console.error("Error updating product:", error);
                     });
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
             }
         });
     };
-
+    
     return (
         <div>
             <button
@@ -122,6 +144,20 @@ const ModalApplyDiscount = ({ product }: { product: IProduct }) => {
                                     max="95"
                                     step="1"
                                     placeholder="Enter a discount between 5% and 95%"
+                                />
+                            </label>
+                            <label>
+                                <span className="font-semibold">Start date of the discount:</span>
+                                <p className="font-normal">{currentDate}</p> {/* Mostrar como texto */}
+                            </label>
+                            <label>
+                                <span className="font-semibold">End date of the discount:</span>
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    min={currentDate} // Evitar fechas antes de hoy
                                 />
                             </label>
                             <button

@@ -1,11 +1,10 @@
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface PreferenceResponse {
-    id: string;
+    preferenceId: string;
 }
 
-export const suscribeCybergamer = async (userId: string) => {
+export const suscribeCybergamer = async (userId: string): Promise<PreferenceResponse> => {
     try {
         const response = await fetch(`${API_URL}/suscription/create`, {
             method: 'POST',
@@ -13,7 +12,7 @@ export const suscribeCybergamer = async (userId: string) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: userId
+                userId,
             }),
         });
 
@@ -21,10 +20,11 @@ export const suscribeCybergamer = async (userId: string) => {
             throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
-        const preference: PreferenceResponse = await response.json();
-        return preference;
+        const data: PreferenceResponse = await response.json();
+        console.log('Respuesta del backend:', data);
+        return data;
     } catch (error) {
         console.error('Error al crear la preferencia:', error);
-
+        throw error;
     }
-}
+};

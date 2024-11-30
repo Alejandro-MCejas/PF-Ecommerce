@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Res, UseGuards, BadRequestException, HttpCode, HttpStatus } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Response } from 'express';
@@ -42,4 +42,15 @@ export class OrdersController {
     const deletedOrder = await this.ordersService.deleteOrderService(id);
     return res.status(200).json(deletedOrder);
   }
+
+  @Post("changeStatus")
+  @HttpCode(HttpStatus.OK)
+  async changeStatus(@Body("orderId") orderId: string) {
+    if (!orderId) {
+      throw new BadRequestException("orderId is required.");
+    }
+
+    return this.ordersService.changeOrderStatus(orderId);
+  }
+
 }

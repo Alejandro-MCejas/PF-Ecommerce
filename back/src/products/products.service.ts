@@ -14,10 +14,23 @@ export class ProductsService {
 
   async findProducts(): Promise<Products[]> {
     const product = await this.productsRepository.findProductsData();
+    const now = new Date(); 
+
+    console.log("Hora actual local:", now);
     return product.map(product => {
       let discountedPrice = product.price;
+<<<<<<< HEAD
 
       if (product.discount && product.discount > 0) {
+=======
+    
+      if (product.discount > 0 &&
+        product.discountStartDate &&
+        product.discountEndDate &&
+        now >= new Date(product.discountStartDate) &&
+        now <= new Date(product.discountEndDate)
+      ) {
+>>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
 
@@ -25,7 +38,7 @@ export class ProductsService {
 
       return {
         ...product,
-        discountedPrice, // Agrega el precio con descuento al producto
+        discountedPrice
       };
     })
   }
@@ -44,15 +57,27 @@ export class ProductsService {
     }
 
     discountedPrice = Math.floor(discountedPrice * 100) / 100;
-    // Agregar la propiedad `discountedPrice` al producto y retornarlo
     return {
       ...ProductId,
+<<<<<<< HEAD
       discountedPrice, // Agrega el precio con descuento al producto
     };
+=======
+      discountedPrice, 
+  };
+>>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
 
   }
 
-  async createProducts(products: CreateProductDto, files: Express.Multer.File[]): Promise<Products> {
+  async createProducts(products: CreateProductDto, files: Express.Multer.File[], categoriesId:string): Promise<Products> {
+    
+    const newProducts = {
+      ...products,
+      discountStartDate: products.discountStartDate || null,
+      discountEndDate: products.discountEndDate || null,
+
+    }
+    
     const imageUrls: string[] = [];
 
     if (files && files.length > 0) {
@@ -61,8 +86,9 @@ export class ProductsService {
         imageUrls.push(imageUrl.secure_url);
       }
     }
+    
 
-    return await this.productsRepository.createProductsData(products, imageUrls);
+    return await this.productsRepository.createProductsData(newProducts, imageUrls, categoriesId)
   }
 
   async updateProducts(id: string, products: UpdateProductDto, files: Express.Multer.File[]): Promise<Products> {
