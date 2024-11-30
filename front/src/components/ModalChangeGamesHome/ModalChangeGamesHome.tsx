@@ -79,7 +79,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   }
 
   return (
-    <div>
+    <div className="top-0">
       <div className="flex flex-col w-[1500px] justify-center items-center">
         <div className="w-full flex justify-evenly items-center">
           {selectedGames.map((game, index) => (

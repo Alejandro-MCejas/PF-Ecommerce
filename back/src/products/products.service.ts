@@ -19,10 +19,6 @@ export class ProductsService {
     console.log("Hora actual local:", now);
     return product.map(product => {
       let discountedPrice = product.price;
-<<<<<<< HEAD
-
-      if (product.discount && product.discount > 0) {
-=======
     
       if (product.discount > 0 &&
         product.discountStartDate &&
@@ -30,7 +26,6 @@ export class ProductsService {
         now >= new Date(product.discountStartDate) &&
         now <= new Date(product.discountEndDate)
       ) {
->>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
 
@@ -59,13 +54,8 @@ export class ProductsService {
     discountedPrice = Math.floor(discountedPrice * 100) / 100;
     return {
       ...ProductId,
-<<<<<<< HEAD
-      discountedPrice, // Agrega el precio con descuento al producto
-    };
-=======
       discountedPrice, 
   };
->>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
 
   }
 
@@ -159,19 +149,6 @@ export class ProductsService {
     if (!products || products.length === 0) {
       throw new Error('The product list cannot be empty');
     }
-<<<<<<< HEAD
-
-    const listOfProducts = await this.productsRepository.arrayOfProductsHomeRepository()
-
-    if (!product.isFeatured && listOfProducts.length === 4) {
-
-      throw new Error('Cannot mark more than 4 products as featured');
-    }
-
-    const newStatus = !product.isFeatured
-
-    return await this.productsRepository.updateArrayOfProductsHomeRepository(id, newStatus)
-=======
   
     // Obtén los productos actualmente destacados
     const currentFeaturedProducts = await this.productsRepository.arrayOfProductsHomeRepository();
@@ -211,7 +188,6 @@ export class ProductsService {
       message: 'Products updated successfully',
       updatedProducts,
     };
->>>>>>> 9ca407b17948037e591c60171b9586116fd4164e
   }
   
 

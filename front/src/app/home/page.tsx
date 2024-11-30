@@ -32,7 +32,7 @@ const home = async () => {
                     alt={"fondo"}
                     layout="fill"
                     className="w-full h-[450px] md:h-[700px] blur-md " ></Image>
-                <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
+                <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50">
                     <div>
                         <EditGameModal
                             games={products}
