@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Products } from "../entities/products.entity";
 import { In, MoreThan, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -72,6 +72,12 @@ export class ProductsRepository {
         await this.productsRepository.update(id, { isFeatured })
 
         return this.productsRepository.findOneBy({ id })
-    }   
+    }
+
+    async updateProductStock(id: string, stock: number) {
+        if (stock < 0) throw new BadRequestException('El stock no puede ser negativo');
+        await this.productsRepository.update(id, { stock });
+    }
+
 
 }

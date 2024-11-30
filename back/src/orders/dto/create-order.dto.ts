@@ -3,7 +3,8 @@ import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID } from "class-vali
 
 
 export interface ProductIdAndQuantity {
-    id: string
+    id: string,
+    quantity: number
 }
 
 

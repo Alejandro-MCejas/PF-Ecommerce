@@ -16,18 +16,18 @@ export class ProductsService {
     const product = await this.productsRepository.findProductsData();
     return product.map(product => {
       let discountedPrice = product.price;
-  
+
       if (product.discount && product.discount > 0) {
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
-  
+
       discountedPrice = Math.floor(discountedPrice * 100) / 100;
-      
+
       return {
         ...product,
         discountedPrice, // Agrega el precio con descuento al producto
       };
-    }) 
+    })
   }
 
   async findOneProducts(id: string) {
@@ -48,7 +48,7 @@ export class ProductsService {
     return {
       ...ProductId,
       discountedPrice, // Agrega el precio con descuento al producto
-  };
+    };
 
   }
 
@@ -102,25 +102,28 @@ export class ProductsService {
   }
 
   async getProductsWithStock(productsIds: Array<ProductIdAndQuantity>) {
-    const ids = productsIds.map(product => product.id)
-    return await this.productsRepository.findByIds(ids)
-  }
+    const productsWithStock = [];
 
-  async reduceProductStockService(id: string) {
-    const product = await this.findOneProducts(id)
-
-    if (!product) {
-      throw new Error('Product not found')
+    for (const { id, quantity } of productsIds) {
+      const product = await this.findOneProducts(id); // Método que busca un producto
+      if (product && product.stock >= quantity) {
+        productsWithStock.push({ ...product, quantity });
+      }
     }
 
-    if (product.stock === 0) {
-      throw new Error('The product is out of stock ')
-    }
-
-    await this.productsRepository.updateProductsData(id, {
-      stock: product.stock - 1
-    })
+    return productsWithStock
   }
+
+  async reduceProductStockService(id: string, quantity: number) {
+    const product = await this.findOneProducts(id);
+    if (!product) throw new Error('Producto no encontrado');
+
+    if (product.stock < quantity) throw new Error('Stock insuficiente');
+
+    product.stock -= quantity;
+    await this.productsRepository.updateProductStock(product.id, product.stock);
+  }
+
 
   async arrayOfProductsHomeService() {
     return await this.productsRepository.arrayOfProductsHomeRepository()
@@ -137,10 +140,10 @@ export class ProductsService {
     const listOfProducts = await this.productsRepository.arrayOfProductsHomeRepository()
 
     if (!product.isFeatured && listOfProducts.length === 4) {
-      
+
       throw new Error('Cannot mark more than 4 products as featured');
     }
-  
+
     const newStatus = !product.isFeatured
 
     return await this.productsRepository.updateArrayOfProductsHomeRepository(id, newStatus)

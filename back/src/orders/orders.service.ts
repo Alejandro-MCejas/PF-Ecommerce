@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { UsersService } from 'src/users/users.service';
@@ -22,7 +22,7 @@ export class OrdersService {
   async findOneOrderService(id: string) {
     const order = await this.ordersRepository.findOneOrderRepository(id)
 
-    if(!order){
+    if (!order) {
       throw new Error('La orden no existe')
     }
 
@@ -42,6 +42,10 @@ export class OrdersService {
     const { userId, products } = createOrderDto
     const user = await this.usersService.findOneUserService(userId)
 
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
     const productsWithStock = await this.productsService.getProductsWithStock(products)
 
     if (productsWithStock.length === 0) {
@@ -59,13 +63,13 @@ export class OrdersService {
 
     const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder)
 
-    if(!newOrder){
+    if (!newOrder) {
       throw new Error('La orden no pudo ser creada')
     }
 
 
-    for (const product of productsWithStock) {
-      await this.productsService.reduceProductStockService(product.id)
+    for (const { id, quantity } of productsWithStock) {
+      await this.productsService.reduceProductStockService(id, quantity)
     }
 
     const total = await this.calculateTotal(productsWithStock)
@@ -95,13 +99,13 @@ export class OrdersService {
     return await this.ordersRepository.deleteOrderRepository(id);
   }
 
-  private async calculateTotal(products: Array<{ id: string, price: number, stock: number }>) {
+  private async calculateTotal(products: Array<{ id: string, price: number, quantity: number }>) {
     let total: number = 0;
     for (const product of products) {
-      total += Number(product.price)
-
+      total += product.price * product.quantity;  // Multiplicamos el precio por la cantidad
     }
-
-    return total
+  
+    return total;
   }
+  
 }
