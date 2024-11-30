@@ -1,4 +1,4 @@
-import { OrderData, OrderDetail, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
+import { IOrder, OrderData, OrderDetail, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
 import { IProduct } from "@/interfaces/IProduct";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -82,4 +82,33 @@ export const getOrderDetailById = async (orderId: string, token: string): Promis
     return null; // Asegura que la función siempre devuelva un valor
   }
 };
+
+interface changeStatus{
+  message:string,
+  order:IOrder
+}
+
+export const changeStatus = async (orderId: string, token: string): Promise<changeStatus | null> => {
+  try {
+    const response = await fetch(`${API_URL}/orders/changeStatus`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Asegúrate de que el backend reconozca el formato JSON
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ orderId }), // Convertir el objeto a JSON
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error changing status: ${response.statusText}`);
+    }
+
+    const newState: changeStatus = await response.json();
+    return newState;
+  } catch (error) {
+    console.log("Error en:", error);
+    return null;
+  }
+};
+
 

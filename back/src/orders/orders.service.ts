@@ -22,7 +22,7 @@ export class OrdersService {
   async findOneOrderService(id: string) {
     const order = await this.ordersRepository.findOneOrderRepository(id)
 
-    if(!order){
+    if (!order) {
       throw new Error('La orden no existe')
     }
 
@@ -59,7 +59,7 @@ export class OrdersService {
 
     const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder)
 
-    if(!newOrder){
+    if (!newOrder) {
       throw new Error('La orden no pudo ser creada')
     }
 
@@ -109,23 +109,27 @@ export class OrdersService {
     const order = await this.ordersRepository.findOneOrderRepository(orderId);
 
     if (!order) {
-        throw new NotFoundException(`Order with ID ${orderId} not found.`);
+      throw new NotFoundException(`Order with ID ${orderId} not found.`);
     }
 
-    const currentStatus = order.status; // Aquí ya deberías poder acceder al status
+    const currentStatus = order.status;
     const statuses = Object.values(OrderStatus);
     const currentIndex = statuses.indexOf(currentStatus);
 
     if (currentIndex === -1 || currentIndex === statuses.length - 1) {
-        throw new BadRequestException(
-            `Cannot change status for order ${orderId}. Current status: ${currentStatus}`
-        );
+      throw new BadRequestException(
+        `Cannot change status for order ${orderId}. Current status: ${currentStatus}`
+      );
     }
 
     const nextStatus = statuses[currentIndex + 1];
-    order.status = nextStatus; // Cambiar al siguiente estado
+    order.status = nextStatus;
 
-    // Llamada al save desde el repositorio
-    return { message: `Order status updated to ${nextStatus}`, order};  // Guarda la orden con el nuevo estado
+    // Usar el nuevo método saveOrder para guardar los cambios
+    await this.ordersRepository.saveOrder(order);
+
+    return { message: `Order status updated to ${nextStatus}`, order };
   }
+
+
 }
