@@ -58,9 +58,8 @@ const NavBar = () => {
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
-
         <Link href="/">
-          <div className="flex items-center justify-center md:justify-start">
+          <div className="flex items-center justify-evenly md:justify-start">
             <Image
               src={logoApp}
               alt="Logo"
@@ -70,6 +69,27 @@ const NavBar = () => {
             <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
               Cybergames
             </span>
+            <div className='md:hidden'>
+              <div
+                className="bg-white rounded-full w-[50px] h-[50px] flex justify-center items-center cursor-pointer relative"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <FontAwesomeIcon icon={faUser} className="text-[20px]" />
+                {menuOpen && (
+                  <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
+                    <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleClose}
+                      className="block text-sm mt-2 text-left hover:text-[#A065FF] w-full"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </Link>
 
@@ -87,24 +107,26 @@ const NavBar = () => {
               </span>
             </div>
           ) : (
-            <div
-              className="bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center cursor-pointer relative"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <FontAwesomeIcon icon={faUser} className="text-[50px]" />
-              {menuOpen && (
-                <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
-                  <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={handleClose}
-                    className="block text-sm mt-2 text-left hover:text-[#A065FF] w-full"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
+            <div className='hidden md:block'>
+              <div
+                className="bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center cursor-pointer relative"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <FontAwesomeIcon icon={faUser} className="text-[50px]" />
+                {menuOpen && (
+                  <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
+                    <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleClose}
+                      className="block text-sm mt-2 text-left hover:text-[#A065FF] w-full"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

@@ -14,8 +14,6 @@ import { faPlaystation } from "@fortawesome/free-brands-svg-icons/faPlaystation"
 import { faXbox } from "@fortawesome/free-brands-svg-icons";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { fetchingProducts } from "@/helpers/productHelper";
-import { IProduct } from "@/interfaces/IProduct";
-
 
 const home = async () => {
 
@@ -32,7 +30,7 @@ const home = async () => {
                     alt={"fondo"}
                     layout="fill"
                     className="w-full h-[450px] md:h-[700px] blur-md " ></Image>
-                <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
+                <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50">
                     <div>
                         <EditGameModal
                             games={products}
