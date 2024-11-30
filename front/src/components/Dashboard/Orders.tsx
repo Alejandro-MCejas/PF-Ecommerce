@@ -1,27 +1,24 @@
-import { getOrderDetailById } from "@/helpers/orderHelper";
+import { changeStatus, getOrderDetailById } from "@/helpers/orderHelper";
 import { getUserById } from "@/helpers/userHelper";
 import { IOrder, OrderDetail, OrderDetailInformation } from "@/interfaces/IOrder";
 import { useEffect, useState } from "react";
-import { FaWarehouse, FaShippingFast, FaHome } from "react-icons/fa";
-import { MdLocalShipping } from "react-icons/md";
 
 const MyOrders = ({ userId, token }: { userId: string, token: string }) => {
     const [ordersWithDetails, setOrdersWithDetails] = useState<OrderDetail[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                // Obtén la información del usuario
                 const userInformationById = await getUserById(userId);
 
-                // Procesa las órdenes y sus detalles
                 const orders = await Promise.all(
                     (userInformationById.orders || []).map(async (order: IOrder) => {
                         const orderDetailsResponse = await getOrderDetailById(order.id, token);
-                        const orderDetail = orderDetailsResponse?.orderDetail || []; // Asegúrate de obtener el arreglo correcto
+                        const orderDetail = orderDetailsResponse?.orderDetail || [];
                         return {
-                            order, // Información básica de la orden
-                            orderDetail, // Detalles de los productos en la orden
+                            order,
+                            orderDetail,
                         } as OrderDetail;
                     })
                 );
@@ -37,7 +34,28 @@ const MyOrders = ({ userId, token }: { userId: string, token: string }) => {
         fetchOrders();
     }, [userId, token]);
 
-    console.log(ordersWithDetails)
+    const handleChangeStatus = async (orderId: string) => {
+        const newStatus = await changeStatus(orderId, token);
+        if (newStatus) {
+            alert(`Order status changed to: ${newStatus.order.status}`);
+
+            setOrdersWithDetails((prevOrders) =>
+                prevOrders.map((orderDetail) =>
+                    orderDetail.order.id === orderId
+                        ? {
+                              ...orderDetail,
+                              order: {
+                                  ...orderDetail.order,
+                                  status: newStatus.order.status,
+                              },
+                          }
+                        : orderDetail
+                )
+            );
+        } else {
+            alert("Failed to change order status.");
+        }
+    };
 
     return (
         <div className="space-y-4">
@@ -51,18 +69,29 @@ const MyOrders = ({ userId, token }: { userId: string, token: string }) => {
                         <p className="text-gray-500 text-sm">
                             Date: {orderDetail.order.date}
                         </p>
-                        <div className="flex flex-col gap-5">
+                        <p className="text-gray-500 text-sm">
+                            Status: {orderDetail.order.status}
+                        </p>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
+                            onClick={() => handleChangeStatus(orderDetail.order.id)}
+                        >
+                            Change Status
+                        </button>
+                        <div className="flex flex-col gap-5 mt-4">
                             {orderDetail.orderDetail.length > 0 ? (
                                 orderDetail.orderDetail.map((product) => (
                                     <div key={product.id} className="rounded-xl flex justify-between">
                                         <div>
                                             <p className="font-medium">{product.name}</p>
                                             <p className="text-sm text-gray-500">Price: ${product.price}</p>
-                                            <p className="text-sm text-gray-500">Status of the payment:</p>
-                                            <p className="text-sm text-gray-500">Status:</p>
                                         </div>
                                         <div>
-                                            <img src={product.image[0]} alt="" className="max-w-[100px] max-h-[150px]" />
+                                            <img
+                                                src={product.image[0]}
+                                                alt={product.name}
+                                                className="max-w-[100px] max-h-[150px]"
+                                            />
                                         </div>
                                     </div>
                                 ))
@@ -72,6 +101,8 @@ const MyOrders = ({ userId, token }: { userId: string, token: string }) => {
                         </div>
                     </div>
                 ))
+            ) : isLoading ? (
+                <p className="text-gray-500">Loading...</p>
             ) : (
                 <p className="text-gray-500">No orders found.</p>
             )}
