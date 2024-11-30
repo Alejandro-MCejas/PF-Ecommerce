@@ -17,26 +17,26 @@ const TeamMembers = () => {
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-6'>
                 {
                     team.map((member) => (
-                        <div key={member.id} className='w-[300px] h-auto bg-white flex flex-col items-center p-8 rounded-2xl relative group hover:scale-105'>
+                        <div key={member.id} className='w-[200px] h-[200px]  md:w-[300px] md:h-auto bg-white flex flex-col items-center p-8 rounded-2xl relative group hover:scale-105'>
                             <div className='bg-tertiaryColor w-20 h-20 absolute rounded-full top-15 left-10 opacity-0 group-hover:opacity-100'></div>
-                            <div className='w-[200px] h-[200px] rounded-full overflow-hidden mx-auto z-10'>
+                            <div className=' w-[100px] h-[100px] md:w-[200px] md:h-[200px] rounded-full overflow-hidden mx-auto z-10'>
                                 <img 
                                     src={member.image} 
                                     alt={`Foto perfil de ${member.name}`} 
-                                    className='h-full w-full object-cover'
+                                    className='w-[100px] h-[100xp] md:h-full md:w-full object-cover'
                                     onError={(e) => { e.currentTarget.src = '/path/to/default/image.jpg'; }} // Cambia la ruta a la imagen por defecto
                                 />
                             </div>
-                            <h2 className='text-2xl font-bold'>{member.name}</h2>
-                            <p>{member.profession}</p>
+                            <h2 className='text-[10px] md:text-2xl font-bold'>{member.name}</h2>
+                            <p className='text-[10px]'>{member.profession}</p>
                             <div className='flex gap-4 mt-2'>
-                                <Link href={member.linkFacebook} target="_blank" className="hover:text-blue-500 text-gray-300">
+                                <Link href={member.linkFacebook} target="_blank" className="size-[20px] hover:text-blue-500 text-gray-300">
                                     <i className="fab fa-facebook fa-2x"></i>
                                 </Link>
-                                <Link href={member.linkGitHub} target="_blank" className="hover:text-black text-gray-300">
+                                <Link href={member.linkGitHub} target="_blank" className="size-[20px] hover:text-black text-gray-300">
                                     <i className="fab fa-github fa-2x"></i>
                                 </Link>
-                                <Link href={member.linkLinkedIn} target="_blank" className="hover:text-blue-800 text-gray-300">
+                                <Link href={member.linkLinkedIn} target="_blank" className="size-[20px] hover:text-blue-800 text-gray-300">
                                     <i className="fab fa-linkedin fa-2x"></i>
                                 </Link>
                             </div>
