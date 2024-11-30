@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductsService } from './products.service';
 import { Products } from '../entities/products.entity';
@@ -53,12 +53,12 @@ export class ProductsController {
     return await this.productsService.updateProducts(id, products, files);
   }
 
-  
+
   @Put('editProductsHome/:id')
   // @UseGuards(HybridAuthGuard, RoleGuard)
   // @Roles(UserRole.ADMIN)
-  async updateArrayOfProductsHomeController(@Param('id', UUIDValidationPipe) id: string) {
-    return await this.productsService.updateArrayOfProductsHomeService(id)
+  async updateArrayOfProductsHomeController(@Body() arrayOfProducts: Products[]) {
+    return await this.productsService.updateArrayOfProductsHomeService(arrayOfProducts)
   }
 
   @ApiBearerAuth()

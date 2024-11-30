@@ -126,26 +126,51 @@ export class ProductsService {
     return await this.productsRepository.arrayOfProductsHomeRepository()
   }
 
-  async updateArrayOfProductsHomeService(id: string) {
-
-    const product = await this.productsRepository.findOneByProductsId(id)
-
-    if (!product) {
-      throw new NotFoundException(`Products with ID ${id} not found`);
+  async updateArrayOfProductsHomeService(products: Products[]) {
+    if (!products || products.length === 0) {
+      throw new Error('The product list cannot be empty');
     }
-
-    const listOfProducts = await this.productsRepository.arrayOfProductsHomeRepository()
-
-
-    if (!product.isFeatured && listOfProducts.length === 4) {
-
+  
+    // Obtén los productos actualmente destacados
+    const currentFeaturedProducts = await this.productsRepository.arrayOfProductsHomeRepository();
+  
+    // Calcula los productos que serán destacados y deseleccionados
+    const productsToFeature = products.filter(p => 
+      !currentFeaturedProducts.some(cfp => cfp.id === p.id) && !p.isFeatured
+    );
+    const productsToUnfeature = products.filter(p => 
+      currentFeaturedProducts.some(cfp => cfp.id === p.id)
+    );
+  
+    const totalFeaturedCount = 
+      currentFeaturedProducts.length - productsToUnfeature.length + productsToFeature.length;
+  
+    if (totalFeaturedCount > 4) {
       throw new Error('Cannot mark more than 4 products as featured');
     }
-
-    const newStatus = !product.isFeatured
-
-    return await this.productsRepository.updateArrayOfProductsHomeRepository(id, newStatus)
+  
+    const updatedProducts = [];
+  
+    for (const product of products) {
+      // Verifica si el producto existe en la base de datos
+      const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
+      if (!existingProduct) {
+        throw new NotFoundException(`Product with ID ${product.id} not found`);
+      }
+  
+      // Alterna el estado de `isFeatured` basado en el valor recibido
+      existingProduct.isFeatured = !existingProduct.isFeatured;
+  
+      // Actualiza el producto en la base de datos
+      updatedProducts.push(await this.productsRepository.updateArrayOfProductsHomeRepository(product.id, existingProduct.isFeatured));
+    }
+  
+    return {
+      message: 'Products updated successfully',
+      updatedProducts,
+    };
   }
+  
 
 
 }
