@@ -19,6 +19,10 @@ export class ProductsService {
     console.log("Hora actual local:", now);
     return product.map(product => {
       let discountedPrice = product.price;
+<<<<<<< HEAD
+
+      if (product.discount && product.discount > 0) {
+=======
     
       if (product.discount > 0 &&
         product.discountStartDate &&
@@ -26,11 +30,12 @@ export class ProductsService {
         now >= new Date(product.discountStartDate) &&
         now <= new Date(product.discountEndDate)
       ) {
+>>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
         discountedPrice = product.price - (product.price * product.discount) / 100;
       }
-  
+
       discountedPrice = Math.floor(discountedPrice * 100) / 100;
-      
+
       return {
         ...product,
         discountedPrice
@@ -54,8 +59,13 @@ export class ProductsService {
     discountedPrice = Math.floor(discountedPrice * 100) / 100;
     return {
       ...ProductId,
+<<<<<<< HEAD
+      discountedPrice, // Agrega el precio con descuento al producto
+    };
+=======
       discountedPrice, 
   };
+>>>>>>> ada1c31379de9bb7c7ba95dfdafd2bcb28dd1ee7
 
   }
 
@@ -118,25 +128,28 @@ export class ProductsService {
   }
 
   async getProductsWithStock(productsIds: Array<ProductIdAndQuantity>) {
-    const ids = productsIds.map(product => product.id)
-    return await this.productsRepository.findByIds(ids)
-  }
+    const productsWithStock = [];
 
-  async reduceProductStockService(id: string) {
-    const product = await this.findOneProducts(id)
-
-    if (!product) {
-      throw new Error('Product not found')
+    for (const { id, quantity } of productsIds) {
+      const product = await this.findOneProducts(id); // Método que busca un producto
+      if (product && product.stock >= quantity) {
+        productsWithStock.push({ ...product, quantity });
+      }
     }
 
-    if (product.stock === 0) {
-      throw new Error('The product is out of stock ')
-    }
-
-    await this.productsRepository.updateProductsData(id, {
-      stock: product.stock - 1
-    })
+    return productsWithStock
   }
+
+  async reduceProductStockService(id: string, quantity: number) {
+    const product = await this.findOneProducts(id);
+    if (!product) throw new Error('Producto no encontrado');
+
+    if (product.stock < quantity) throw new Error('Stock insuficiente');
+
+    product.stock -= quantity;
+    await this.productsRepository.updateProductStock(product.id, product.stock);
+  }
+
 
   async arrayOfProductsHomeService() {
     return await this.productsRepository.arrayOfProductsHomeRepository()
@@ -146,6 +159,19 @@ export class ProductsService {
     if (!products || products.length === 0) {
       throw new Error('The product list cannot be empty');
     }
+<<<<<<< HEAD
+
+    const listOfProducts = await this.productsRepository.arrayOfProductsHomeRepository()
+
+    if (!product.isFeatured && listOfProducts.length === 4) {
+
+      throw new Error('Cannot mark more than 4 products as featured');
+    }
+
+    const newStatus = !product.isFeatured
+
+    return await this.productsRepository.updateArrayOfProductsHomeRepository(id, newStatus)
+=======
   
     // Obtén los productos actualmente destacados
     const currentFeaturedProducts = await this.productsRepository.arrayOfProductsHomeRepository();
@@ -185,6 +211,7 @@ export class ProductsService {
       message: 'Products updated successfully',
       updatedProducts,
     };
+>>>>>>> 9ca407b17948037e591c60171b9586116fd4164e
   }
   
 

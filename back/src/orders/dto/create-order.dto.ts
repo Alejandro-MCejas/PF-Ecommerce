@@ -3,7 +3,8 @@ import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUI
 import { Orders } from "src/entities/orders.entity";
 
 export interface ProductIdAndQuantity {
-  id: string;
+    id: string,
+    quantity: number
 }
 
 export enum OrderStatus {
