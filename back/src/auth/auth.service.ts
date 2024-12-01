@@ -6,19 +6,32 @@ import { JwtService } from '@nestjs/jwt';
 import { Users } from 'src/entities/users.entity';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly notificationService: NotificationsService
     ) { }
 
 
     async signUpService(user: CreateUserDto) {
         user.password = await bcrypt.hash(user.password, 10)
         const newUser = await this.usersService.createUserService(user)
+
+        try {
+            await this.notificationService.sendEmailService(
+                newUser.email,
+                'Confirmación de cuenta',
+                'email/register-notification',
+                { nombre: newUser.name}
+            )
+        } catch (error) {
+            console.log('Error al enviar el correo de confirmación:', error);
+        }
 
         return newUser
     }

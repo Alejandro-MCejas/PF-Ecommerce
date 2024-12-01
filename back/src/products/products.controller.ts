@@ -28,6 +28,8 @@ export class ProductsController {
   }
 
   @Put('editProductsHome')
+  @UseGuards(HybridAuthGuard, RoleGuard)
+  @Roles(UserRole.ADMIN)
   async updateArrayOfProductsHomeController(@Body() arrayOfProducts: Products[]) {
     return await this.productsService.updateArrayOfProductsHomeService(arrayOfProducts)
   }

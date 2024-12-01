@@ -7,11 +7,12 @@ import { HttpModule } from '@nestjs/axios';
 import { AuthGuard } from './authGuard.guard';
 import { Auth0Guard } from './auth0Guard.guard';
 import { HybridAuthGuard } from './hybridAuthGuard.guard';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 
 @Global()
 @Module({
-  imports: [UsersModule, SharedModule, HttpModule],
+  imports: [UsersModule, SharedModule, HttpModule, NotificationsModule],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard, Auth0Guard, HybridAuthGuard],
   exports: [AuthGuard, Auth0Guard, HybridAuthGuard]
