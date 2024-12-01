@@ -1,4 +1,5 @@
 import { IProduct } from "./IProduct";
+import { IUserInformation } from "./ISession";
 
 export interface OrderDataMP {
     quantity: string;
@@ -38,4 +39,21 @@ interface Order {
 export interface OrderDetailInformation {
   order: Order,
   orderDetail: IProduct[]
+}
+
+export interface IOrderUserBasicInfo { 
+  id:string,
+  date:string
+}
+
+export interface IOrder { 
+  id:string,
+  date:String,
+  user: IUserInformation
+  status:string
+}
+
+export interface OrderDetail { 
+  order:IOrder,
+  orderDetail:IProduct[]
 }

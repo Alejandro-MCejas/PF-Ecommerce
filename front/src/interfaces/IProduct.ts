@@ -1,3 +1,5 @@
+import { ICategories } from "./ICategories"
+
 export interface IReview{
     id:string,
     rating:number,
@@ -26,6 +28,10 @@ export interface IProduct {
     suscription?: boolean,
     description:string
     reviews:IReview[]
+    discount:number,
+    discountedPrice: number,
+    discountStartDate?: Date,
+    discountEndDate?:Date
 }
 
 export interface IProductCart { 
@@ -36,6 +42,8 @@ export interface IProductCart {
     stock:number,
     suscription?: boolean,
     description:string
+    discount:number,
+    discountedPrice: number
 }
 
 export interface EditGameModalProps {
@@ -48,7 +56,9 @@ export interface AddProductProps{
     description:string,
     stock:number,
     suscription:boolean,
-    price:number
+    price:number,
+    categories: ICategories[]
+    discount:number
 }
 
 export interface ProductDetail {
@@ -57,11 +67,14 @@ export interface ProductDetail {
 
 export interface EditGameInformationProps{
     id:string,
-    name:string,
-    price:number,
-    stock:number,
+    name?:string,
+    price?:number,
+    stock?:number,
     suscription?:boolean,
-    description:string
+    description?:string
+    discount?:number
+    discountStartDate: Date,
+    discountEndDate:Date
 }
 
 

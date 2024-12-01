@@ -27,7 +27,8 @@ export class UsersRepository {
     async findOneUserRepository(id: string) {
         const user = await this.usersRepository.findOne({
             where: { id },
-            select: ['id', 'name', 'email', 'address', 'phone', 'isSuscription',]
+            select: ['id', 'name', 'email', 'address', 'phone', 'isSuscription',],
+            relations: ['orders']
         })
 
 
@@ -56,6 +57,16 @@ export class UsersRepository {
 
     async findUserByEmailRepository(email: string) {
         return await this.usersRepository.findOne({ where: { email } })
+    }
+
+    async findUserByEmailOrSubRepository(email: string, sub: string) {
+        return await this.usersRepository.findOne({
+            where: [{ email }, { sub }],
+        });
+    }
+
+    async updateUserSubRepository(userId: string, sub: string) {
+        await this.usersRepository.update(userId, { sub });
     }
 }
 

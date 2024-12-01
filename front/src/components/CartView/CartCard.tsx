@@ -22,74 +22,56 @@ export const CartView = () => {
 
     useEffect(() => {
         if (cart.length > 0) {
-            const totalAmount = cart.reduce((sum, product) => sum + product.price, 0);
-
-            // Usa la función de callback de setOrderData con el tipo adecuado
-            setOrderData((prevOrderData: OrderDataMP) => ({
-                ...prevOrderData,
-                amount: totalAmount,
-                description: "Products in cart"
-            }));
+          // Convertir explícitamente `price` a número en cada iteración
+          const totalAmount = cart.reduce((sum, product) => {
+            const price = typeof product.price === "number" ? product.price : parseFloat(product.price as string);
+            return sum + (isNaN(price) ? 0 : price) + 5 ; // Si `price` no es válido, suma 0
+          }, 0);
+      
+          setOrderData((prevOrderData: OrderDataMP) => ({
+            ...prevOrderData,
+            amount: totalAmount,
+            description: "Products in cart",
+          }));
         }
-    }, [cart, setOrderData]);
-
-    // const handleOnClick = async () => {
-    //     setIsButtonVisible(false); // Oculta el botón de "Purchase"
-    //     setIsLoading(true)
-    //     fetch("http://localhost:8080/create_preference", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(orderData),
-    //     })
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((preference) => {
-    //             setPreferenceId(preference.id);
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //             setIsButtonVisible(true); // Vuelve a mostrar el botón en caso de error
-    //             setIsLoading(false)
-    //         }).finally(() => {
-    //             setIsLoading(false);
-    //         })
-    // }
-    const handleOnClick = async () => {
+      }, [cart, setOrderData]);
+      
+    
+      const handleOnClick = async () => {
         setIsButtonVisible(false);
         setIsLoading(true);
-
+    
         try {
             const productsId = cart.map((product: { id: string }) => ({ id: product.id }));
-
-            const orderData = {
+    
+            const orderDataToSend = {
                 userId: userData?.user.id,
                 products: productsId,
+                amount: orderData.amount, // Incluye el monto total actualizado
             };
 
-            const orderResponse = await createOrder(orderData);
-
+            const orderResponse = await createOrder(orderDataToSend);
+    
             if (orderResponse) {
-                console.log('Orden creada:', orderResponse);
+                console.log("Orden creada:", orderResponse);
                 const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id);
-
+    
                 if (mercadoPagoOrder && mercadoPagoOrder.id) {
                     setPreferenceId(mercadoPagoOrder.id);
                 } else {
-                    throw new Error('Error al obtener la preferencia de Mercado Pago');
+                    throw new Error("Error al obtener la preferencia de Mercado Pago");
                 }
             } else {
-                console.log('Error al crear la orden.');
+                console.log("Error al crear la orden.");
             }
         } catch (error) {
-            console.error('Error en la transacción:', error);
+            console.error("Error en la transacción:", error);
             setIsButtonVisible(true);
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     const renderSpinner = () => {
         if (isLoading) {
@@ -140,11 +122,13 @@ export const CartView = () => {
                                 ))
 
                             }
-                            <p>Total amount: ${orderData.amount}</p>
+                            <div className="my-3 w-full border-white border-t-2 flexi tems-end justify-end">
+                                <p className="w-full text-white text-[20px] font-semibold flex justify-end items-end">Total amount: ${orderData.amount}</p>
+                            </div>
 
                             {isButtonVisible && (
                                 <button
-                                    className="w-1/2 bg-green-600 rounded-lg text-[30px] font-bold hover:bg-green-400"
+                                    className="w-full bg-green-600 rounded-lg text-[30px] font-bold hover:bg-green-400"
                                     onClick={handleOnClick}
                                 >
                                     Purchase

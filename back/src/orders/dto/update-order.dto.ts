@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateOrderDto, ProductId } from './create-order.dto';
+import { CreateOrderDto, ProductIdAndQuantity } from './create-order.dto';
 import { ArrayNotEmpty, IsArray, IsOptional, IsUUID } from 'class-validator';
 
 export class UpdateOrderDto extends PartialType(CreateOrderDto) {
@@ -15,13 +15,13 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {
 
     @ApiProperty({
         example: [
-            { 'id': '' }
+            { 'id': '', 'quantity': '' }
         ]
     })
     @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
-    products?: ProductId[];
+    products?: ProductIdAndQuantity[];
 
 
 }

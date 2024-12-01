@@ -30,5 +30,13 @@ export class UsersService {
   async findUserByEmailService(email: string) {
     return await this.usersRepository.findUserByEmailRepository(email)
   }
+
+  async findUserByEmailOrSubService(email: string, sub: string) {
+    return await this.usersRepository.findUserByEmailOrSubRepository(email, sub);
+  }
+
+  async updateUserSubService(userId: string, sub: string) {
+    return await this.usersRepository.updateUserSubRepository(userId, sub);
+  }
 }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFiles, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductsService } from './products.service';
 import { Products } from '../entities/products.entity';
@@ -23,10 +23,15 @@ export class ProductsController {
   }
 
   @Get('productsHome')
-  // @UseGuards(HybridAuthGuard, RoleGuard)
-  // @Roles(UserRole.ADMIN)
   async arrayOfProductsHomeController() {
     return await this.productsService.arrayOfProductsHomeService()
+  }
+
+  @Put('editProductsHome')
+  @UseGuards(HybridAuthGuard, RoleGuard)
+  @Roles(UserRole.ADMIN)
+  async updateArrayOfProductsHomeController(@Body() arrayOfProducts: Products[]) {
+    return await this.productsService.updateArrayOfProductsHomeService(arrayOfProducts)
   }
 
 
@@ -40,8 +45,8 @@ export class ProductsController {
   @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @UseInterceptors(FilesInterceptor('images', 3))
-  async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
-    return await this.productsService.createProducts(products, files);
+  async createProducts(@Body() products: CreateProductDto, @UploadedFiles() files: Express.Multer.File[],@Body('categories') categoriesId: string,) {
+    return await this.productsService.createProducts(products, files, categoriesId);
   }
 
   @ApiBearerAuth()
@@ -53,13 +58,8 @@ export class ProductsController {
     return await this.productsService.updateProducts(id, products, files);
   }
 
+
   
-  @Put('editProductsHome/:id')
-  // @UseGuards(HybridAuthGuard, RoleGuard)
-  // @Roles(UserRole.ADMIN)
-  async updateArrayOfProductsHomeController(@Param('id', UUIDValidationPipe) id: string) {
-    return await this.productsService.updateArrayOfProductsHomeService(id)
-  }
 
   @ApiBearerAuth()
   @Delete(':id')

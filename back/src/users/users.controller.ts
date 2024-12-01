@@ -24,8 +24,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(HybridAuthGuard, RoleGuard)
-  @Roles(UserRole.ADMIN)
+  // @UseGuards(HybridAuthGuard, RoleGuard)
+  // @Roles(UserRole.ADMIN)
   async findOneUserController(@Param('id') id: string, @Res() res: Response) {
     const user = await this.usersService.findOneUserService(id);
     return res.status(200).json(user)

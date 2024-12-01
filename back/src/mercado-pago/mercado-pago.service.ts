@@ -101,9 +101,9 @@ export class MercadoPagoService {
 
       // Definir las URLs de retroceso correctamente
       const backUrls = {
-        success: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        failure: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        pending: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        success: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        failure: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        pending: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
       };
 
       // Crear la preferencia con los productos y las URLs de retroceso
@@ -117,9 +117,9 @@ export class MercadoPagoService {
 
       // Ahora, asignar el 'merchant_order_id' a las URLs
       const updatedBackUrls = {
-        success: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        failure: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        pending: `http:localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        success: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        failure: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+        pending: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
       };
 
       // Actualizar la preferencia con las URLs correctas
@@ -150,5 +150,6 @@ export class MercadoPagoService {
     }
   }
 
+  
 }
 

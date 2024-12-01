@@ -34,7 +34,11 @@ export const fetchingProductByID = async (id: string): Promise<IProduct> => {
 }
 
 export const editProductInformationByID = async (product: EditGameInformationProps, token: string): Promise<EditGameInformationProps> => {
+
+    console.log(product)
+    debugger
     try {
+
         const response = await fetch(`${API_URL}/products/${product.id}`, {
             method: "PUT",
             headers: {
@@ -51,7 +55,8 @@ export const editProductInformationByID = async (product: EditGameInformationPro
             throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
         const newGameInfo = await response.json()
-        console.log(newGameInfo)
+        console.log("Esta es la informacion nueva ", newGameInfo)
+        debugger
         return newGameInfo;
     } catch (error) {
         console.error("Error updating product:", error);
@@ -72,6 +77,16 @@ export const addProduct = async (product: AddProductProps, token: string): Promi
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
+    product.categories.forEach((category: { id: string; name: string }) => {
+        formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
+    });
+
+    console.log("Las categorias inyectadas son", product.categories)
+    debugger
+    // Añadir descuento al FormData
+    formData.append('discount', product.discount.toString())
+
+
 
     // // Imprimir el contenido de FormData
     // for (const pair of formData.entries()) {
@@ -139,7 +154,7 @@ export const addReview = async (review: AddReviewProps, token: string) => {
     }
 };
 
-export const deleteReview = async (id:string) =>{
+export const deleteReview = async (id: string) => {
     try {
         const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
             method: "DELETE",
@@ -154,26 +169,46 @@ export const deleteReview = async (id:string) =>{
     }
 }
 
-export const getProductsHome = async () =>{
+export const getProductsHome = async () => {
     try {
         const response = await fetch(`${API_URL}/products/productsHome`)
-        console.log(response)
         const products = await response.json()
+        console.log(products)
         return products;
     } catch (error) {
         console.log(error)
     }
 }
 
+interface productId {
+    id: string;
+}
 
-export const changeProductsHome = async () =>{
+export const changeProductsHome = async (
+    productsIdArr: productId[],
+    token: string
+) => {
     try {
-        const response = await fetch(`${API_URL}/products/productsHome`)
-        console.log(response)
-        const products = response.json()
+        const response = await fetch(`${API_URL}/products/editProductsHome`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json", // Indica que el body es JSON
+            },
+            body: JSON.stringify(productsIdArr), // Convierte el objeto a JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const products = await response.json(); // Espera a que se resuelva la promesa
+        console.log("Response JSON:", products);
         return products;
     } catch (error) {
-        console.log(error)
+        console.error("Error in changeProductsHome:", error);
+        throw error; // Relanzar el error para manejarlo en el código que llama esta función
     }
-}
+};
+
 

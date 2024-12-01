@@ -1,14 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Products } from "../entities/products.entity";
 import { In, MoreThan, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import { CategoriesRepository } from "src/categories/categories.repository";
 
 @Injectable()
 export class ProductsRepository {
     constructor(@InjectRepository(Products) private readonly productsRepository: Repository<Products>,
-
+    private readonly categoriesRepository:CategoriesRepository,
     ) { }
     async findProductsData(): Promise<Products[]> {
         return await this.productsRepository.find({ relations: ['categories'] });
@@ -26,13 +27,27 @@ export class ProductsRepository {
         return await this.productsRepository.findOne({ where: { id }, relations: ['reviews', 'categories'] })
     }
 
-    async createProductsData(products: CreateProductDto, image: string[]): Promise<Products> {
+    async createProductsData(products: CreateProductDto, image: string[], categoriesId:string | undefined): Promise<Products> {
+        let categoriesEntity = null;
+
+    // Solo buscar la categoría si categoriesId es proporcionado
+    if (categoriesId) {
+        categoriesEntity = await this.categoriesRepository.findOneCategoryRepository(categoriesId);
+
+        if (!categoriesEntity) {
+            throw new Error('Category not found'); // Lanza un error si no se encuentra la categoría
+        }
+    }
+
+    // Crear el producto con las categorías si fueron proporcionadas
         const newProduct = this.productsRepository.create({
             ...products,
             image: image,
+            categories: categoriesEntity ? [categoriesEntity] : [], // Si categoriesEntity existe, asigna el array con la categoría, sino asigna un array vacío
         });
 
-        return await this.productsRepository.save(newProduct);
+    // Guardar el producto creado
+        return await this.productsRepository.save(newProduct);;
     }
 
     async updateProductsData(id: string, product: UpdateProductDto): Promise<Products> {
@@ -72,6 +87,12 @@ export class ProductsRepository {
         await this.productsRepository.update(id, { isFeatured })
 
         return this.productsRepository.findOneBy({ id })
-    }   
+    }
+
+    async updateProductStock(id: string, stock: number) {
+        if (stock < 0) throw new BadRequestException('El stock no puede ser negativo');
+        await this.productsRepository.update(id, { stock });
+    }
+
 
 }

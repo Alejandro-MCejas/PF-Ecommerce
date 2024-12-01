@@ -15,6 +15,9 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { SharedModule } from './shared-module/shared-module.module';
 import { SuscriptionModule } from './suscription/suscription.module';
 import { MercadoPagoModule } from './mercado-pago/mercado-pago.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CronModule } from './cron/cron.module';
+
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -23,7 +26,7 @@ import { MercadoPagoModule } from './mercado-pago/mercado-pago.module';
   }), TypeOrmModule.forRootAsync({
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => configService.get('typeorm'),
-  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, AuthModule, ReviewsModule, SharedModule, SuscriptionModule, MercadoPagoModule],
+  }),ProductsModule, UsersModule, OrdersModule, OrderDetailModule, CategoriesModule, CloudinaryModule, AuthModule, ReviewsModule, SharedModule, SuscriptionModule, MercadoPagoModule, NotificationsModule, CronModule],
   controllers: [AppController],
   providers: [AppService],
 })

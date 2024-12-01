@@ -7,17 +7,18 @@ import { addProduct } from '@/helpers/productHelper';
 import AddNewGameButton from '../AddNewGameButton/AddNewGameButton';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/Authcontext';
+import { fetchingCategories } from '@/helpers/categoiresHelper';
+import { ICategories } from '@/interfaces/ICategories';
 
-const AddProductForm = () => {
+const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
 
-    const {userData} = useAuth()
-    const router = useRouter()
 
-    // const initialState = 
+    const { userData } = useAuth()
+    const router = useRouter()
 
     const [newGame, setNewGame] = useState<AddProductProps>({
         name: "",
@@ -25,11 +26,10 @@ const AddProductForm = () => {
         images: [],
         stock: 0,
         description: "",
+        categories: [],
         suscription: false,
+        discount: 0
     })
-
-    // const userSession = JSON.parse(localStorage.getItem('userSession') || "{}");
-    // const role: string = userSession.userData?.rol;
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -62,21 +62,44 @@ const AddProductForm = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("New game submitted:", newGame);
-    
+
         if (!userData?.token) {
             console.error('User token is missing. Please log in again.');
             return; // Salir de la función si el token no está presente
         }
-    
+
         try {
             const newProduct = await addProduct(newGame, userData.token);
+            console.log(newProduct)
+            debugger
             window.location.reload();
             console.log('Product added:', newProduct);
         } catch (error) {
             console.error('Error adding product:', error);
         }
     };
-    
+
+    const handleDiscountChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = parseFloat(event.target.value); // Convertir a número
+        setNewGame((prevGame) => ({
+            ...prevGame,
+            discount: value, // Ahora es un número
+        }));
+    };
+
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCategoryId = event.target.value; // Obtener el id de la categoría seleccionada
+        const selectedCategory = categories.find((category) => category.id === selectedCategoryId); // Buscar la categoría completa
+
+        if (selectedCategory) {
+            setNewGame((prevGame) => ({
+                ...prevGame,
+                categories: [selectedCategory], // Asignar el objeto completo con id y name
+            }));
+        }
+    };
+
+
 
     const openModal = () => {
         setIsOpen(true);
@@ -114,19 +137,22 @@ const AddProductForm = () => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
+
+
+
     if (userData?.user.admin !== "admin") return null;
 
     return (
         <div className="mt-10">
             <button
-                className="bg-violet-600 text-white text-[64px] w-[600px] h-[200px] tracking-widest font-black rounded-md hover:bg-violet-400 transition"
+                className="bg-violet-600 text-white text-[64px] w-[600px] h-[200px] tracking-widest font-black rounded-md hover:bg-violet-400 transition "
                 onClick={openModal}
             >
                 Add New Game
             </button>
 
             {isOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-3xl">
                         <h2 className="w-full flex justify-center items-center text-xl font-bold mb-4">Add New Product</h2>
                         <div className="w-full max-w-[1500px] flex gap-4">
@@ -179,6 +205,7 @@ const AddProductForm = () => {
                             </div>
                             <div className='flex flex-col justify-evenly items-center w-1/2'>
                                 {/* Input fields */}
+                                <label htmlFor="name" className='w-full flex justify-start items-start'>Put a name for the product:</label>
                                 <input
                                     type="text"
                                     placeholder="Product title"
@@ -187,6 +214,7 @@ const AddProductForm = () => {
                                     onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
+                                <label htmlFor="stock" className='w-full flex justify-start items-start'>Select a stock:</label>
                                 <input
                                     type="number"
                                     placeholder="Quantity Stock"
@@ -195,6 +223,7 @@ const AddProductForm = () => {
                                     onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
+                                <label htmlFor="price" className='w-full flex justify-start items-start'>Select a price:</label>
                                 <input
                                     type="text"
                                     placeholder="Price"
@@ -203,53 +232,54 @@ const AddProductForm = () => {
                                     onChange={handleInputChange}
                                     className="p-2 border border-gray-500 rounded w-full"
                                 />
-                                <select className="p-2 border border-gray-500 rounded w-full">
-                                    <option>Category 1</option>
-                                    <option>Category 2</option>
-                                    <option>Category 3</option>
-                                    <option>Category 4</option>
-                                    <option>Category 5</option>
-                                    <option>Category 6</option>
+                                <label htmlFor="category" className='w-full flex justify-start items-start'>Select a price:</label>
+                                <select
+                                    id="categories"
+                                    className="p-2 border border-gray-500 rounded w-full"
+                                    value={newGame.categories[0]?.id || ""} // Muestra el id de la primera categoría seleccionada o vacío
+                                    onChange={handleCategoryChange}
+                                >
+                                    <option value="">Select a Category</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
                                 </select>
+
                             </div>
                         </div>
                         <div className='flex flex-col w-full justify-evenly items-start my-3 p-3'>
                             {/* Checkbox and Select options */}
                             <label className="flex items-center w-2/4 gap-4">
-                                <input 
-                                    type="checkbox" 
-                                    className="hidden peer" 
+                                Is in CyberGamer?
+                                <input
+                                    type="checkbox"
+                                    className="hidden peer"
                                     name="suscription"
                                     checked={newGame.suscription}
                                     onChange={handleCheckboxChange}
                                 />
                                 <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span>
-                                Is in CyberGamer?
+
                             </label>
-                            <label className="flex items-center w-2/4 gap-4">
+                            <label className="flex items-center w-3/4 gap-4 bg-red-100">
                                 <input type="checkbox" className="hidden peer" />
-                                <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span>
-                                Have any discount?
-                                <select className="p-1 w-1/4 border border-gray-500 rounded">
-                                    <option>5%</option>
-                                    <option>10%</option>
-                                    <option>15%</option>
-                                    <option>20%</option>
-                                    <option>25%</option>
-                                    <option>30%</option>
-                                    <option>35%</option>
-                                    <option>40%</option>
-                                    <option>45%</option>
-                                    <option>50%</option>
-                                    <option>55%</option>
-                                    <option>60%</option>
-                                    <option>65%</option>
-                                    <option>70%</option>
-                                    <option>75%</option>
-                                    <option>80%</option>
-                                    <option>85%</option>
-                                    <option>90%</option>
-                                    <option>95%</option>
+                                {/* <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span> */}
+                                <p className='w-1/2'>Have any discount?</p>
+                                <select
+                                    className="p-1 w-full border border-gray-500 rounded"
+                                    value={newGame.discount}
+                                    onChange={handleDiscountChange}
+                                >
+                                    <option value="">No Discount</option>
+                                    {[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95].map(
+                                        (discount) => (
+                                            <option key={discount} value={`${discount}`}>
+                                                {discount}%
+                                            </option>
+                                        )
+                                    )}
                                 </select>
                             </label>
                             {/* Product description */}
