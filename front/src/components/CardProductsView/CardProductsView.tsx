@@ -11,12 +11,12 @@ export const CardProductsView = ({ product }: { product: IProduct }) => {
         >
             {/* Mostrar el tag si discount > 0 */}
             {product.discount > 0 && (
-                <div className="absolute top-1 right-1 flex items-center bg-transparent">
+                <div className="absolute top-0 right-0 flex items-center bg-transparent">
                     <FontAwesomeIcon
                         icon={faTag}
-                        className="text-red-500 w-[50px] h-[50px]"
+                        className="text-red-500 w-[70px] h-[70px]"
                     />
-                    <p className="absolute text-white text-sm font-bold">
+                    <p className="absolute top-6 right-3 text-white text-lg font-bold">
                         {parseInt(product.discount.toString(), 10)}%
                     </p>
                 </div>

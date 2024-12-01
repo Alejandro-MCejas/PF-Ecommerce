@@ -73,8 +73,8 @@ export interface EditGameInformationProps{
     suscription?:boolean,
     description?:string
     discount?:number
-    discountStartDate: Date,
-    discountEndDate:Date
+    discountStartDate?: Date,
+    discountEndDate?:Date
 }
 
 

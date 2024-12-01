@@ -2,6 +2,7 @@ import Image from "next/image";
 import gifImage from "../../../public/gif.gif"
 import RandomProductsComponent from "@/components/RandomProductCard/RandomProductCard";
 import { fetchingProducts } from "@/helpers/productHelper";
+import EditGameSuscriptionModal from "../EditGameSuscriptionModal/EditGameSuscriptionModal";
 
 const CyberGamer = () => {
 
@@ -17,7 +18,7 @@ const CyberGamer = () => {
                     className="w-full h-[700px] blur-md" ></Image>
                 <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
                     <div className="w-full flex justify-evenly items-center">
-                        <RandomProductsComponent/>
+                        <EditGameSuscriptionModal/>
                     </div>
                 </div>
             </div>
