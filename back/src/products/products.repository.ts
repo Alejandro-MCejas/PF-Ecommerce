@@ -83,7 +83,25 @@ export class ProductsRepository {
 
     }
 
+    async arrayOfProductsSuscriptionRepository() {
+
+        return await this.productsRepository.find({
+            where: {
+                isFeatured: true
+            },
+            take: 2,
+            relations: ['categories']
+        })
+
+    }
+
     async updateArrayOfProductsHomeRepository(id: string, isFeatured: boolean) {
+        await this.productsRepository.update(id, { isFeatured })
+
+        return this.productsRepository.findOneBy({ id })
+    }
+
+    async updateArrayOfProductsSuscriptionRepository(id: string, isFeatured: boolean) {
         await this.productsRepository.update(id, { isFeatured })
 
         return this.productsRepository.findOneBy({ id })

@@ -212,3 +212,46 @@ export const changeProductsHome = async (
 };
 
 
+export const getProductSuscription = async () => {
+    try {
+        const response = await fetch(`${API_URL}/products/productSuscription`)
+        const products = await response.json()
+        console.log(products)
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+interface productId {
+    id: string;
+}
+
+export const changeProductSuscription = async (
+    productsIdArr: productId[],
+    token: string
+) => {
+    try {
+        const response = await fetch(`${API_URL}/products/editProductSuscription`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json", // Indica que el body es JSON
+            },
+            body: JSON.stringify(productsIdArr), // Convierte el objeto a JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const products = await response.json(); // Espera a que se resuelva la promesa
+        console.log("Response JSON:", products);
+        return products;
+    } catch (error) {
+        console.error("Error in changeProductsHome:", error);
+        throw error; // Relanzar el error para manejarlo en el código que llama esta función
+    }
+};
+
+
