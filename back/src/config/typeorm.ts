@@ -4,6 +4,8 @@ import { DataSource, DataSourceOptions } from "typeorm";
 
 configDotenv({ path: '.env' });
 
+const isRender = process.env.RENDER === 'true'
+
 const config = {
     type: 'postgres',
     database: process.env.DB_NAME,
@@ -16,9 +18,7 @@ const config = {
     synchronize: true, // TRUE
     logging: false,
     dropSchema: false,
-  /*  ssl: {
-        rejectUnauthorized: false
-    }*/
+    ssl: isRender ? { rejectUnauthorized: false } : false
 }
 export default registerAs('typeorm', () => config);
 export const connectionSource = new DataSource(config as DataSourceOptions);
