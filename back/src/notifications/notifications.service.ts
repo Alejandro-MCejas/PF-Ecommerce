@@ -28,7 +28,8 @@ export class NotificationsService {
     }
 
     async sendEmailWithPDFService(to: string, subject: string, templateName: string, context: any) {
-        const html = await renderTemplate(templateName, context)
+        const updatedContext = { ...context, subject }
+        const html = await renderTemplate(templateName, updatedContext)
         const pdfBuffer = await generatePDF(html)
 
         const mailOptions = {
