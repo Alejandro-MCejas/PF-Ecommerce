@@ -41,12 +41,7 @@ export const createPaymentMercadoPago = async (orderId: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${orderData.token}`, // si es necesario
       },
-      // body: JSON.stringify({
-      //     userId: orderData.userId,
-      //     products: orderData.products,
-      // }),
     })
 
     if (!response.ok) {

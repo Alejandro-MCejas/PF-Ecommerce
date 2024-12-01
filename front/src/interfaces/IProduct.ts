@@ -38,6 +38,7 @@ export interface IProductCart {
     id:string,
     name: string,
     image: string[],
+    quantity?:number
     price:number,
     stock:number,
     suscription?: boolean,
@@ -84,5 +85,6 @@ export interface CardCartProp {
     image:string[],
     stock:number,
     price:number,
+    quantity?:number,
     onDelete: () => void
 }

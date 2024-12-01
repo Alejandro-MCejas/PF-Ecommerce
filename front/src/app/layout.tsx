@@ -27,15 +27,9 @@ export default function RootLayout({
           <AuthProvider>
             <CartProvider>
               {/* <BrowserRouter> */}
-              <div className=" flex z-50">
-                <NavBar />
-              </div>
-              <div className="z-20">
+              <NavBar />
               {children}
-              </div>
-              <div className="flex z-50">
-                <Footer />
-              </div>
+              <Footer />
               {/* </BrowserRouter> */}
             </CartProvider>
           </AuthProvider>
