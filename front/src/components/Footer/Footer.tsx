@@ -17,20 +17,29 @@ const Footer = () => {
         script.async = true;
         script.type = "text/javascript";
         document.head.appendChild(script);
-
-        const handleScriptLoad = function () {
-            const initLandbot = function () {
-                if (!myLandbot) {
-                    myLandbot = new Landbot.Livechat({
-                        configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2680897-3RYNY7L8GJGD0TTO/index.json',
-                    });
-                }
-            };
+    
+        const initLandbot = () => {
+            if (!myLandbot) {
+                myLandbot = new Landbot.Livechat({
+                    configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2680897-3RYNY7L8GJGD0TTO/index.json',
+                });
+            }
+        };
+    
+        const handleScriptLoad = () => {
             window.addEventListener('mouseover', initLandbot, { once: true });
             window.addEventListener('touchstart', initLandbot, { once: true });
         };
+    
         script.onload = handleScriptLoad;
+    
+        return () => {
+            document.head.removeChild(script);
+            window.removeEventListener('mouseover', initLandbot);
+            window.removeEventListener('touchstart', initLandbot);
+        };
     }, []);
+    
 
     // return(
     //     <div className="bg-purple-900 flex flex-col items-center py-2">

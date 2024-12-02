@@ -13,10 +13,7 @@ interface ProductPageProps {
 const ProductPage = async ({ params }: ProductPageProps) => {
     const { productID } = await params;
     const productByID = await fetchingProductByID(productID);
-
-    console.log("GAME" ,productByID)
-
-    // console.log(, productByID.categories)
+   
     debugger
     return (
         <div>
