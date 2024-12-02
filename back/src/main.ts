@@ -7,12 +7,17 @@ import { CategoriesSeed } from './seed/categories/categories.seed';
 import { auth } from 'express-openid-connect';
 import { auth0Config } from './config/auth0';
 import { loggerGlobal } from './middlewares/loggerGlobal.middleware';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(loggerGlobal)
-
+  // app.useGlobalPipes(new ValidationPipe({
+  //   whitelist: false,       // Elimina propiedades no definidas en el DTO
+  //   forbidNonWhitelisted: false, // Lanza un error si se envían propiedades no permitidas
+  //   transform: false,        // Convierte datos automáticamente al tipo definido en el DTO
+  // }));
 
   // Configura CORS antes de ejecutar el seeding
   app.enableCors({

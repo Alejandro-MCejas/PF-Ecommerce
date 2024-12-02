@@ -77,6 +77,18 @@ export class ProductsService {
       }
     }
 
+    if(products.stock <= 0){
+      throw new NotFoundException("El stock del producto es invalido")
+    }
+
+    if(products.price < 0){
+      throw new NotFoundException("El precio del producto es invalido")
+    }
+
+    if(products.discount <= 0){
+      throw new NotFoundException("El discount del producto es invalido")
+    }
+    
 
     return await this.productsRepository.createProductsData(newProducts, imageUrls, categoriesId)
   }
@@ -86,6 +98,18 @@ export class ProductsService {
 
     if (!product) {
       throw new NotFoundException(`Products with ID ${id} not found`);
+    }
+
+    if(products.stock <= 0){
+      throw new NotFoundException("El stock del producto es invalido")
+    }
+
+    if(products.price < 0){
+      throw new NotFoundException("El precio del producto es invalido")
+    }
+
+    if(products.discount <= 0){
+      throw new NotFoundException("El discount del producto es invalido")
     }
 
     const imageUrls: string[] = Array.isArray(product.image) ? [...product.image] : []
