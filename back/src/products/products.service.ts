@@ -61,6 +61,12 @@ export class ProductsService {
 
   async createProducts(products: CreateProductDto, files: Express.Multer.File[], categoriesId: string): Promise<Products> {
 
+    if(typeof products.suscription === 'string'){
+      if (products.suscription === 'true'){
+        products.suscription = true;
+      } 
+    }
+
     const newProducts = {
       ...products,
       discountStartDate: products.discountStartDate || null,
@@ -76,6 +82,8 @@ export class ProductsService {
         imageUrls.push(imageUrl.secure_url);
       }
     }
+
+    
 
     if(products.stock <= 0){
       throw new NotFoundException("El stock del producto es invalido")
@@ -95,6 +103,17 @@ export class ProductsService {
 
   async updateProducts(id: string, products: UpdateProductDto, files: Express.Multer.File[]): Promise<Products> {
     const product = await this.productsRepository.findOneByProductsId(id);
+
+    if (typeof products.suscription === 'string') {
+      if (products.suscription === 'true') {
+          products.suscription = true;
+      } else if (products.suscription === 'false') {
+          products.suscription = false;
+      } else {
+          throw new BadRequestException('Invalid value for suscription. It must be "true" or "false".');
+      }
+    }
+  
 
     if (!product) {
       throw new NotFoundException(`Products with ID ${id} not found`);
