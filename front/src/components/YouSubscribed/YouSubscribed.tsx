@@ -11,14 +11,14 @@ const SubscriptionStatus = () => {
   const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
   
   // Verificar si el usuario está suscrito o no
-  const isSubscribed = true; // Cambiar a false para probar el estado "no suscrito"
+ // Cambiar a false para probar el estado "no suscrito"
   
   useEffect(() => {
     // Asegurarse de que el userData y userData.user.id estén disponibles
-    if (userData?.user?.id && isSubscribed) {
+    if (userData?.user?.id && userData.user.isSuscription) {
       fetchExpirationDate(userData.user.id);
     }
-  }, [userData, isSubscribed]); // Asegurarse de que la verificación de userData esté en las dependencias
+  }, [userData, userData?.user.isSuscription]); // Asegurarse de que la verificación de userData esté en las dependencias
 
   const fetchExpirationDate = async (userId: string) => {
     try {
@@ -61,7 +61,7 @@ const SubscriptionStatus = () => {
 
   return (
     <div>
-      {isSubscribed ? (
+      {userData?.user.isSuscription ? (
         <>
           <div className="text-sm text-gray-600">
             You are subscribed at{" "}
