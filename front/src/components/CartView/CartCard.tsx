@@ -20,19 +20,22 @@ export const CartView = () => {
 
   useEffect(() => {
     if (cart.length > 0) {
-      // Calcular el monto total basado en la cantidad y precio de cada producto
       const totalAmount = cart.reduce((sum, product) => {
         const price = typeof product.price === "number" ? product.price : parseFloat(product.price as string);
-        const quantity = product.quantity || 1; // Si no hay cantidad, se toma como 1
+        const quantity = product.quantity ?? 1; // Usa nullish coalescing para evitar `undefined`
         return sum + (isNaN(price) ? 0 : price * quantity);
       }, 0);
   
+      // Redondear a 2 decimales para evitar discrepancias
+      const roundedTotal = Math.round(totalAmount * 100) / 100;
+  
       setOrderData((prevOrderData) => ({
         ...prevOrderData,
-        amount: totalAmount, // Actualizar el monto total calculado
+        amount: roundedTotal, // Actualizar el monto total calculado
       }));
     }
   }, [cart, setOrderData]);
+  
   
   
 
@@ -41,28 +44,27 @@ export const CartView = () => {
     setIsLoading(true);
   
     try {
-      // Incluye la cantidad junto con el ID del producto
       const productsData = cart.map((product) => ({
         id: product.id,
-        quantity: product.quantity || 1, // Si no hay cantidad, se toma 1 como predeterminado
+        quantity: product.quantity ?? 1, // Asegúrate de que la cantidad siempre esté definida
       }));
   
       const totalAmount = cart.reduce((sum, product) => {
         const price = typeof product.price === "number" ? product.price : parseFloat(product.price as string);
-        const quantity = product.quantity || 1; // Asegurarse de multiplicar por la cantidad
+        const quantity = product.quantity ?? 1; // Usa nullish coalescing
         return sum + (isNaN(price) ? 0 : price * quantity);
       }, 0);
   
-      // Crear los datos para enviar la orden
+      const roundedTotal = Math.round(totalAmount * 100) / 100; // Redondear a 2 decimales
+  
+      // Crear los datos para enviar al backend
       const orderDataToSend = {
         userId: userData?.user.id,
         products: productsData,
-        amount: totalAmount, // Usar el monto total calculado
+        amount: roundedTotal,
       };
   
-      console.log(orderDataToSend); // Verifica los datos calculados
-      debugger;
-  
+      console.log(orderDataToSend); // Verifica los datos enviados
       const orderResponse = await createOrder(orderDataToSend);
   
       if (orderResponse) {
@@ -84,6 +86,7 @@ export const CartView = () => {
       setIsLoading(false);
     }
   };
+  
   
 
   const renderSpinner = () => {
