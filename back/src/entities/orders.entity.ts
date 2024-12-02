@@ -17,11 +17,9 @@ export class Orders {
     @ManyToOne(() => Users, user => user.orders)
     user: Users
 
-    @OneToOne(() => OrderDetails, orderDetail => orderDetail.order) // Sin cascade aquí
+    @OneToOne(() => OrderDetails, orderDetail => orderDetail.order)
     orderDetails: OrderDetails;
     
-    
-
     @OneToMany(() => mercadoPago, payment => payment.order)
     mercadoPago: mercadoPago[];
     
