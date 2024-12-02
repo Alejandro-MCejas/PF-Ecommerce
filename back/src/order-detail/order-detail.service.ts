@@ -5,15 +5,16 @@ import { OrderDetailRepository } from './order-detail.repository';
 
 @Injectable()
 export class OrderDetailService {
-  constructor(private readonly orderDetailRepository: OrderDetailRepository){}
+  constructor(private readonly orderDetailRepository: OrderDetailRepository) {}
 
   async findAllOrderDetailsService() {
     return await this.orderDetailRepository.findAllOrderDetailsRepository();
   }
 
-  async findOneOrderDetailService(id: string) {
-    return await this.orderDetailRepository.findOneOrderDetailRepository(id);
+  async findOneOrderDetailService(orderId: string) {
+    return await this.orderDetailRepository.findOneOrderDetailRepository(orderId);
   }
+  
 
   async createOrderDetailService(createOrderDetailDto: CreateOrderDetailDto) {
     return await this.orderDetailRepository.createOrderDetailRepository(createOrderDetailDto);

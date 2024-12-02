@@ -87,7 +87,7 @@ export class ProductsRepository {
 
         return await this.productsRepository.find({
             where: {
-                isFeatured: true
+                suscription: true
             },
             take: 2,
             relations: ['categories']
@@ -101,8 +101,8 @@ export class ProductsRepository {
         return this.productsRepository.findOneBy({ id })
     }
 
-    async updateArrayOfProductsSuscriptionRepository(id: string, isFeatured: boolean) {
-        await this.productsRepository.update(id, { isFeatured })
+    async updateArrayOfProductsSuscriptionRepository(id: string, suscription: boolean) {
+        await this.productsRepository.update(id, { suscription })
 
         return this.productsRepository.findOneBy({ id })
     }

@@ -7,9 +7,9 @@ import { UsersService } from 'src/users/users.service';
 import { CreateSuscriptionDto } from './dto/create-suscription.dto';
 import { Suscription } from 'src/entities/suscription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { MercadoPagoConfig, PaymentRefund, Preference } from 'mercadopago';
 
 @Injectable()
 export class SuscriptionService {
@@ -145,7 +145,7 @@ export class SuscriptionService {
         throw new Error(`El userId ${userId} no es un UUID válido`);
     }
 
-    const priceSuscription = 5;
+    const priceSuscription = 10;
 
     const user = await this.userRepository.findOneUserRepository(userId);
     if (!user) {
@@ -218,4 +218,54 @@ export class SuscriptionService {
     // Devolver el preferenceId generado al frontend.
     return { preferenceId };
   }
+
+
+  // CANCELAR SUSCRIPCION
+
+  async cancelSuscription(userId: string): Promise<string> {
+    if (!isUUID(userId)) {
+        throw new Error(`El userId ${userId} no es un UUID válido`);
+    }
+
+    const user = await this.userRepository.findOneUserRepository(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const activeSubscription = await this.suscriptionRepository.findOne({
+        where: { user: { id: userId }, status: 'active' },
+    });
+
+    if (!activeSubscription) {
+        throw new Error('No active subscription found');
+    }
+
+    const paymentId = activeSubscription.paymentId;
+    console.log(paymentId)
+    // if (!paymentId) {
+    //     throw new Error('No paymentId found for the active subscription');
+    // }
+
+    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
+    const paymentRefund = new PaymentRefund(client);
+
+    try {
+        await paymentRefund.create({
+            payment_id: paymentId,
+            body: { amount: activeSubscription.price },
+        });
+
+        user.isSuscription = false;
+        await this.userRepository.updateUserRepository(userId, user);
+
+        activeSubscription.status = 'cancelled';
+        await this.suscriptionRepository.save(activeSubscription);
+
+        return 'Subscription successfully cancelled and refunded';
+    } catch (error) {
+        console.error('Error al realizar el reembolso:', error);
+        throw new Error('Failed to process refund');
+    }
+  }
+
 }

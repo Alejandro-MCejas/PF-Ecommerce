@@ -35,7 +35,11 @@ export const AddToCart = ({ id, name, image, description, stock, price }: { id: 
                     confirmButtonColor: "#3085d6",
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        addToCart({ id, name, image, description, stock, price });
+                        addToCart({
+                            id, name, image, description, stock, price,
+                            discount: 0,
+                            discountedPrice: 0
+                        });
                         Swal.fire("Added!", "The product has been added to your cart.", "success");
                     }
                 });
