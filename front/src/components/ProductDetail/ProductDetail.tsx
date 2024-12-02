@@ -100,7 +100,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     };
 
     return (
-        <div>
+        <div className="w-full">
             {/* Imagen e informacion */}
             < div className="flex w-full justify-evenly items-center " >
                 {/* Imagen */}
@@ -130,7 +130,15 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                     setRating={setRating}
                                 />
                             </div>
-                            <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                            {
+                                product.suscription === true ? (
+                                    <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                                ): (
+                                    <div>
+
+                                    </div>
+                                )
+                            }
                         </div>
                         <div>
                             {/* Mostrar el precio dinámicamente */}

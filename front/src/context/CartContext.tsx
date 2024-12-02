@@ -7,6 +7,7 @@ interface CombinedContextType {
   cart: IProductCart[];
   addToCart: (product: IProductCart) => void;
   removeFromCart: (productId: string) => void;
+  updateProductQuantity: (productId: string, quantity: number) => void; // Nueva función
   clearCart: () => void;
   cartCount: number;
   preferenceId: string | null;
@@ -32,24 +33,40 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  // Funciones para manejar el carrito
+  // Función para agregar un producto al carrito
   const addToCart = (product: IProductCart) => {
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex((p) => p.id === product.id);
       let updatedCart;
+
       if (existingProductIndex !== -1) {
         // Si el producto ya está en el carrito, actualiza la cantidad
         updatedCart = [...prevCart];
-        // updatedCart[existingProductIndex].quantity += product.quantity;
+        updatedCart[existingProductIndex].quantity = 
+          (updatedCart[existingProductIndex].quantity || 0) + (product.quantity || 1);
       } else {
-        // Si el producto no está en el carrito, agrégalo
-        updatedCart = [...prevCart, product];
+        // Si el producto no está en el carrito, agrégalo con cantidad inicial
+        updatedCart = [...prevCart, { ...product, quantity: product.quantity || 1 }];
       }
+      
+
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       return updatedCart;
     });
   };
 
+  // Función para actualizar la cantidad de un producto en el carrito
+  const updateProductQuantity = (productId: string, quantity: number) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((product) =>
+        product.id === productId ? { ...product, quantity } : product
+      );
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  // Función para eliminar un producto del carrito
   const removeFromCart = (productId: string) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.filter((product) => product.id !== productId);
@@ -58,6 +75,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  // Función para limpiar el carrito
   const clearCart = () => {
     setCart([]);
     localStorage.setItem('cart', '[]');
@@ -69,6 +87,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         cart,
         addToCart,
         removeFromCart,
+        updateProductQuantity, // Incluye la nueva función en el contexto
         clearCart,
         cartCount: cart.length,
         preferenceId,
@@ -90,11 +109,6 @@ export const useCart = () => {
   }
   return context;
 };
-
-
-
-
-
 
 
 

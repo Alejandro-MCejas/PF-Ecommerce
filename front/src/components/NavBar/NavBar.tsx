@@ -56,7 +56,7 @@ const NavBar = () => {
   }
 
   return (
-    <div className="w-full bg-[#232323] p-4 md:p-8">
+    <div className="w-full bg-[#232323] p-4 md:p-8 z-50">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
         <Link href="/">
           <div className="flex items-center justify-evenly md:justify-start">
@@ -149,12 +149,6 @@ const NavBar = () => {
           <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
             <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
             {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
-          </Link>
-        )}
-
-        {role === "admin" && (
-          <Link href="/dashboard" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
-            Admin configuration
           </Link>
         )}
       </div>

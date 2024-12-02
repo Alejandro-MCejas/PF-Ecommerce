@@ -27,11 +27,25 @@ export class ProductsController {
     return await this.productsService.arrayOfProductsHomeService()
   }
 
+  @Get('productSuscription')
+  async arrayOfProductsSuscriptionController() {
+      console.log('Accessed productSuscription endpoint');
+      return await this.productsService.arrayOfProductsSuscriptionService();
+  }
+  
+
   @Put('editProductsHome')
   @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async updateArrayOfProductsHomeController(@Body() arrayOfProducts: Products[]) {
     return await this.productsService.updateArrayOfProductsHomeService(arrayOfProducts)
+  }
+
+  @Put('editProductSuscription')
+  @UseGuards(HybridAuthGuard, RoleGuard)
+  @Roles(UserRole.ADMIN)
+  async updateArrayOfProductsSuscriptionController(@Body() arrayOfProducts: Products[]) {
+    return await this.productsService.updateArrayOfProductSuscriptionService(arrayOfProducts)
   }
 
 
