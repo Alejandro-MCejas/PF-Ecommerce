@@ -54,4 +54,5 @@ export class Products {
 
     @Column({ default: false })
     isFeatured: boolean;
+  quantity: any;
 }

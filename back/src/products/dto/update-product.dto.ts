@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDecimal, IsInt, IsOptional, IsPositive, IsString, Length } from 'class-validator';
+import { IsArray, IsBoolean, IsDecimal, IsInt, IsOptional, IsPositive, IsString, Length } from 'class-validator';
 
 export class UpdateProductDto {
 
@@ -34,6 +34,10 @@ export class UpdateProductDto {
     @IsPositive()
     @IsOptional()
     price?: number;
+
+    @IsOptional()
+    @IsBoolean()
+    suscription?: boolean;
 
     @IsDecimal({decimal_digits:'2'})
     @IsPositive()
