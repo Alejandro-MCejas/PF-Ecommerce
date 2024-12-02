@@ -218,57 +218,65 @@ export class ProductsService {
     };
   }
 
-  async updateArrayOfProductSuscriptionService(products: Products[]) {
-    if (!products || products.length !== 4) {
-      throw new Error('You must provide exactly 4 products');
+  async updateArrayOfProductSuscriptionService(products: { id: string }[]) {
+    if (!products || products.length === 0) {
+      throw new Error('The product list cannot be empty');
     }
 
     // Obtén los productos actualmente destacados
     const currentFeaturedProducts = await this.productsRepository.arrayOfProductsSuscriptionRepository();
 
-    // Encuentra los productos que coinciden con los actualmente destacados (para eliminar)
+    // Identifica productos a añadir o quitar de suscripción
+    const productIds = products.map((p) => p.id);
+
     const productsToUnfeature = currentFeaturedProducts.filter((cfp) =>
-      products.some((p) => p.id === cfp.id)
+      productIds.includes(cfp.id)
     );
 
-    // Encuentra los productos que no están destacados y serán nuevos destacados
     const productsToFeature = products.filter(
       (p) => !currentFeaturedProducts.some((cfp) => cfp.id === p.id)
     );
 
-    if (productsToFeature.length !== 2 || productsToUnfeature.length !== 2) {
-      throw new Error('You must provide exactly 2 products to replace the current ones');
-    }
-
+    // Mantener un máximo de 2 productos con `suscription: true`
     const updatedProducts = [];
 
-    // Eliminar los productos actualmente destacados que coinciden
+    // Retirar productos de suscripción
     for (const product of productsToUnfeature) {
       const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
       if (!existingProduct) {
         throw new NotFoundException(`Product with ID ${product.id} not found`);
       }
 
-      existingProduct.isFeatured = false;
+      existingProduct.suscription = false;
       await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, false);
       updatedProducts.push(existingProduct);
     }
 
-    // Agregar los nuevos productos como destacados
+    // Agregar productos a suscripción
     for (const product of productsToFeature) {
+      if (updatedProducts.filter((p) => p.suscription).length >= 2) break;
+
       const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
       if (!existingProduct) {
         throw new NotFoundException(`Product with ID ${product.id} not found`);
       }
 
-      existingProduct.isFeatured = true;
+      existingProduct.suscription = true;
       await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, true);
       updatedProducts.push(existingProduct);
     }
 
+    // Si hay más de 2 productos con suscripción, corregir automáticamente
+    const extraFeatured = updatedProducts.filter((p) => p.suscription).slice(2);
+    for (const product of extraFeatured) {
+      product.suscription = false;
+      await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, false);
+    }
+
     return {
       message: 'Products updated successfully',
-      updatedProducts,
+      updatedProducts: updatedProducts.slice(0, 2), // Devuelve los 2 productos finales con suscripción
     };
   }
+
 }
