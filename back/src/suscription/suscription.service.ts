@@ -204,6 +204,10 @@ export class SuscriptionService {
         });
         preferenceId = response.id; // Extraer el ID de la preferencia.
         console.log('Preference creada con ID:', preferenceId);
+
+        savedSuscription.paymentId = response.id; // Asignamos el paymentId
+        await this.suscriptionRepository.save(savedSuscription)
+
     } catch (error) {
         console.error('Error al crear la preferencia de pago:', error);
         throw new Error('Failed to create payment preference');
@@ -240,11 +244,14 @@ export class SuscriptionService {
         throw new Error('No active subscription found');
     }
 
+    console.log('Estado de la suscripción:', activeSubscription.status);
+  console.log('paymentId de la suscripción:', activeSubscription.paymentId);
+
     const paymentId = activeSubscription.paymentId;
-    console.log(paymentId)
-    // if (!paymentId) {
-    //     throw new Error('No paymentId found for the active subscription');
-    // }
+    console.log('paymentId:',paymentId)
+    if (!paymentId) {
+        throw new Error('No paymentId found for the active subscription');
+    }
 
     const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
     const paymentRefund = new PaymentRefund(client);
@@ -255,17 +262,18 @@ export class SuscriptionService {
             body: { amount: activeSubscription.price },
         });
 
+        console.log('Reembolso realizado con éxito:', paymentRefund);
+
         user.isSuscription = false;
         await this.userRepository.updateUserRepository(userId, user);
 
         activeSubscription.status = 'cancelled';
         await this.suscriptionRepository.save(activeSubscription);
 
-        return 'Subscription successfully cancelled and refunded';
+        return paymentId ;
     } catch (error) {
         console.error('Error al realizar el reembolso:', error);
         throw new Error('Failed to process refund');
     }
   }
-
 }
