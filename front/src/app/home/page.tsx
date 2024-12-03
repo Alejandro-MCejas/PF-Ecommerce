@@ -20,8 +20,6 @@ const home = async () => {
 
     const products = await fetchingProducts()
 
-
-
     return (
         <div className="w-full min-h-screen bg-backgroundLayout">
             <h2 className="text-[30px] md:text-[64px] font-black text-center neon-text mb-4">Latest releases</h2>

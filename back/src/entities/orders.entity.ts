@@ -18,8 +18,8 @@ export class Orders {
     user: Users
 
     @OneToOne(() => OrderDetails, orderDetail => orderDetail.order)
-    orderDetails: OrderDetails
-
+    orderDetails: OrderDetails;
+    
     @OneToMany(() => mercadoPago, payment => payment.order)
     mercadoPago: mercadoPago[];
     
