@@ -34,6 +34,14 @@ export interface IProduct {
     discountEndDate?:Date
 }
 
+export interface IProductOrderDetailInfo {
+    id:string,
+    name: string,
+    image: string[],
+    categories: Categories[],
+    price:number
+}
+
 export interface IProductCart { 
     id:string,
     name: string,
