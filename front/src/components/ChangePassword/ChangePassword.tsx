@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-
+const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
 const ChangePassword = () => {
   const [email, setEmail] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -9,18 +9,19 @@ const ChangePassword = () => {
     setEmail(event.target.value);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.MouseEvent) => {
     event.preventDefault();
 
     try {
       // Realizar el POST al backend
-      const response = await fetch("http://localhost:3000/api/reset-password", {
+      const response = await fetch(`${APIURL}/auth/forgot-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
+console.log(response);
 
       if (response.ok) {
         Swal.fire({
@@ -48,8 +49,7 @@ const ChangePassword = () => {
   return (
     <div className="text-sm text-gray-600">
       {showForm ? (
-        <form
-          onSubmit={handleSubmit}
+        <div
           className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2"
         >
           <label htmlFor="email" className="text-gray-700">
@@ -66,7 +66,7 @@ const ChangePassword = () => {
           />
           <div className="flex space-x-2">
             <button
-              type="submit"
+              onClick={handleSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Send Email
@@ -79,7 +79,7 @@ const ChangePassword = () => {
               Cancel
             </button>
           </div>
-        </form>
+        </div>
       ) : (
         <button
           onClick={() => setShowForm(true)}
@@ -90,6 +90,5 @@ const ChangePassword = () => {
       )}
     </div>
   );
-};
-
+}
 export default ChangePassword;

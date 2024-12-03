@@ -2,7 +2,7 @@ import { ILoginProps, IRegisterProps } from "@/interfaces/IRegisterProp";
 
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
-console.log(APIURL)
+
 
 
 
