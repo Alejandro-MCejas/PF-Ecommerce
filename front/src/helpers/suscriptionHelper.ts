@@ -69,7 +69,7 @@ export const getSuscriptionInformation = async (userId:string): Promise <Subscri
         const response = await fetch(`${API_URL}/suscription/${userId}`)
         const information = await response.json()
         console.log(information)
-        debugger
+        // debugger
         return information
     } catch (error) {
         console.log(error)

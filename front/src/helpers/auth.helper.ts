@@ -1,4 +1,5 @@
 import { ILoginProps, IRegisterProps } from "@/interfaces/IRegisterProp";
+import Swal from "sweetalert2";
 
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
@@ -148,7 +149,7 @@ export async function login(userData: ILoginProps) {
       },
       body: JSON.stringify(userData)
     });
-  
+
     if (res.ok) {
       return res.json()
     } else {
@@ -160,35 +161,39 @@ export async function login(userData: ILoginProps) {
   }
 }
 
-// auth.helper.ts
 
-/*
-const mockUsers = [
-  { name: "admin", password: "admin123", role: "administrator" },
-  { name: "user", password: "user123", role: "user" },
-  { name: "controller", password: "controller123", role: "controller" },
-];
-
-export async function login(userData: ILoginProps) {
-  const user = mockUsers.find(
-    (u) => u.name === userData.name && u.password === userData.password
-  );
-  
-  if (user) {
-    const mockResponse = {
-      token: "fake-jwt-token",
-      user: {
-        id: Date.now(),
-        name: user.name,
-        role: user.role,
+export const changePassword = async (email: string) => {
+  try {
+    // Realizar el POST al backend
+    const response = await fetch("http://localhost:3000/auth/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    };
-    return mockResponse;
-  } else {
-    throw new Error("Failed to login: Incorrect username or password");
-  }
+      body: JSON.stringify({ email }),
+    });
 
-}*/
+    if (response.ok) {
+      Swal.fire({
+        title: "Email Sent!",
+        text: "Check your inbox to reset your password.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+  } catch (error) {
+    Swal.fire({
+      title: "Error",
+      text: error instanceof Error ? error.message : "Failed to send email.",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  }
+}
+
 export async function getTokken() {
   try {
     const res = await fetch(`localhost:3000/auth/profile`, {
