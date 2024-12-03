@@ -6,7 +6,7 @@ import { Response } from 'express';
 
 @Controller('suscription')
 export class SuscriptionController {
-  constructor(private readonly suscriptionService: SuscriptionService) {}
+  constructor(private readonly suscriptionService: SuscriptionService) { }
 
   @Get(':userId')
   async suscription(@Param('userId') userId:string){

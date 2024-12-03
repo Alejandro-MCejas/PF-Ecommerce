@@ -1,8 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Orders } from './orders.entity'
 import { UserRole } from 'src/users/enum/role.enum'
 import { Reviews } from './reviews.entity'
 import { Suscription } from './suscription.entity'
+import { Products } from './products.entity'
 
 
 
@@ -44,4 +45,12 @@ export class Users {
 
     @Column({ unique: true, nullable: true })
     sub: string;
+
+    @ManyToMany(() => Products, product => product.favoriteByUsers)
+    @JoinTable()
+    favoriteProducts: Products[]
+
+    @ManyToMany(() => Products, product => product.usersClaimed)
+    @JoinTable()
+    claimedProducts: Products[]
 }

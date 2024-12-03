@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 
+
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) { }
@@ -37,6 +38,22 @@ export class UsersService {
 
   async updateUserSubService(userId: string, sub: string) {
     return await this.usersRepository.updateUserSubRepository(userId, sub);
+  }
+
+  async addFavoriteProductService(userId: string, productId: string) {
+    return await this.usersRepository.addFavoriteProductRepository(userId, productId);
+  }
+
+  async findAllFavoritesProductsService(userId: string) {
+    return await this.usersRepository.findAllFavoritesProductsRepository(userId)
+  }
+
+  async removeFavoriteProductService(userId: string, productId: string) {
+    return await this.usersRepository.removeFavoriteProductRepository(userId, productId)
+  }
+
+  async claimProductService(userId: string, productId: string) {
+    return await this.usersRepository.claimProductRepository(userId, productId) 
   }
 }
 

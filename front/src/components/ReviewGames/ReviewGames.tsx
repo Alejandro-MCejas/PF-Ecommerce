@@ -6,6 +6,7 @@ import { AddReviewProps, IProduct } from "@/interfaces/IProduct";
 import { useEffect, useState } from "react";
 import ProductReviewCard from "../ProductReviewCard/ProductReviewCard";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ReviewGames = ({ product }: { product: IProduct }) => {
     const { userData } = useAuth();
@@ -65,16 +66,18 @@ const ReviewGames = ({ product }: { product: IProduct }) => {
             ) : (
                 <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
                     <h2 className="text-gray-500 text-[20px] font-semibold">To make your review, please log in.</h2>
-                    <a href="/login" className="text-violet-500 text-[20px] font-serif">
+                    <Link href="/login" className="text-violet-500 text-[20px] font-serif">
                         Login
-                    </a>
+                    </Link>
                 </div>
             )}
             <h2 className="ml-10 mb-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
             <div className="flex flex-col justify-evenly gap-7">
-                {product.reviews.map((review) => (
-                    <ProductReviewCard key={review.id} id={review.id} review={review.comment} />
-                ))}
+                {product.reviews
+                    .filter((review) => review.comment?.trim() !== "") // Filtrar comentarios vacíos
+                    .map((review) => (
+                        <ProductReviewCard key={review.id} id={review.id} review={review.comment} />
+                    ))}
             </div>
         </div>
     );

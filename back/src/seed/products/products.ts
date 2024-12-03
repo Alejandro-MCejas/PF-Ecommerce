@@ -100,7 +100,7 @@ export const productsMock = [
         image: ["https://res.cloudinary.com/dvpenabty/image/upload/v1731433637/sjrrg7vxeplgjmywdzg5.jpg",
             "https://res.cloudinary.com/dvpenabty/image/upload/v1731433638/l72umbvdmxpykmjbfkvj.jpg"],
         description: "Juego de batalla real multijugador gratuito.",
-        price: 0.00,
+        price: 10.00,
         stock: 9999,
         categories: ["Aventura"],
         suscription: false,

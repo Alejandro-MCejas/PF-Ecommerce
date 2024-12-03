@@ -7,9 +7,9 @@ import { UsersService } from 'src/users/users.service';
 import { CreateSuscriptionDto } from './dto/create-suscription.dto';
 import { Suscription } from 'src/entities/suscription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
-import { MercadoPagoConfig, PaymentRefund, Preference } from 'mercadopago';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 @Injectable()
 export class SuscriptionService {
@@ -52,7 +52,6 @@ export class SuscriptionService {
     };
   }
   
-  
   async createSuscription(createSuscription: CreateSuscriptionDto): Promise<{ preferenceId: string }> {
     const { userId } = createSuscription;
 
@@ -60,7 +59,7 @@ export class SuscriptionService {
         throw new Error(`El userId ${userId} no es un UUID válido`);
     }
 
-    const priceSuscription = 10;
+    const priceSuscription = 5;
 
     const user = await this.userRepository.findOneUserRepository(userId);
     if (!user) {
@@ -119,12 +118,6 @@ export class SuscriptionService {
         });
         preferenceId = response.id; // Extraer el ID de la preferencia.
         console.log('Preference creada con ID:', preferenceId);
-
-        savedSuscription.paymentId = response.id; // Asignamos el paymentId
-        await this.suscriptionRepository.save(savedSuscription)
-        console.log(savedSuscription)
-        console.log(response)
-
     } catch (error) {
         console.error('Error al crear la preferencia de pago:', error);
         throw new Error('Failed to create payment preference');
@@ -140,58 +133,27 @@ export class SuscriptionService {
     return { preferenceId };
   }
 
-
-  // CANCELAR SUSCRIPCION
-
   async cancelSuscription(userId: string): Promise<string> {
     if (!isUUID(userId)) {
-        throw new Error(`El userId ${userId} no es un UUID válido`);
+      throw new Error(`El userId ${userId} no es un UUID válido`);
     }
 
     const user = await this.userRepository.findOneUserRepository(userId);
     if (!user) {
-        throw new Error('User not found');
+      throw new Error('User not found');
     }
 
-    const activeSubscription = await this.suscriptionRepository.findOne({
-        where: { user: { id: userId }, status: 'active' },
-    });
+    console.log('Actualizando usuario:', userId);
 
-    if (!activeSubscription) {
-        throw new Error('No active subscription found');
+    const updatedUser = await this.userRepository.updateUserRepository(userId, { isSuscription: false });
+
+    if (!updatedUser) {
+      throw new Error('Failed to update user');
     }
 
-    console.log('Estado de la suscripción:', activeSubscription.status);
-  console.log('paymentId de la suscripción:', activeSubscription.paymentId);
+    console.log('Usuario actualizado:', updatedUser);
 
-    const paymentId = activeSubscription.paymentId;
-    console.log('paymentId:',paymentId)
-    if (!paymentId) {
-        throw new Error('No paymentId found for the active subscription');
-    }
-
-    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-7372204931376506-111513-31b44745f8978a1ef22c2f14a303b736-2095892005' });
-    const paymentRefund = new PaymentRefund(client);
-
-    try {
-        await paymentRefund.create({
-            payment_id: paymentId,
-            body: { amount: activeSubscription.price },
-        });
-
-        console.log('Reembolso realizado con éxito:', paymentRefund);
-
-        user.isSuscription = false;
-        await this.userRepository.updateUserRepository(userId, user);
-
-        activeSubscription.status = 'cancelled';
-        await this.suscriptionRepository.save(activeSubscription);
-
-        return paymentId ;
-    } catch (error) {
-        console.error('Error al realizar el reembolso:', error);
-        throw new Error('Failed to process refund');
-    }
+    return `Suscription status for user ${userId} set to false`;
   }
 
   async darDeBaja(userId:string, id:string){
