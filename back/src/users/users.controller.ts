@@ -57,10 +57,17 @@ export class UsersController {
 
   @Put(':id')
   // @UseGuards(HybridAuthGuard)
-  async updateUserController(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
-    const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
-    return res.status(200).json({ message: `El usuario con el id: ${updatedUser.id} ha sido actualizado` });
+  async updateUserController(
+      @Param('id') id: string,
+      @Body() updateUserDto: UpdateUserDto,
+      @Res() res: Response
+  ) {
+      const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
+  
+      // Devuelve directamente el usuario actualizado en la respuesta
+      return res.status(200).json(updatedUser);
   }
+  
 
   @Delete(':id')
   @UseGuards(HybridAuthGuard, RoleGuard)
