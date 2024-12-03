@@ -60,20 +60,32 @@ const MyInformation = () => {
         }
       
         setIsSaving(true);
-        try {
-          const updatedUser = await updateUser(userId, {
-            name: userName,
-            email: userEmail,
-            address: userAddress,
-            phone: userPhone,
-          }, token);
       
+        try {
+          // Llamada a la API para actualizar al usuario
+          const updatedUser = await updateUser(
+            userId,
+            {
+              name: userName,
+              email: userEmail,
+              address: userAddress,
+              phone: userPhone,
+            },
+            token
+          );
+      
+          // Validar que `updatedUser` tenga los datos necesarios
+          if (!updatedUser || !updatedUser.id) {
+            throw new Error("Error: Los datos del usuario actualizado son inválidos.");
+          }
+      
+          // Actualizar el estado global/local del usuario
           setUserData({
-            token,
+            token, // Mantener el token actual
             user: updatedUser,
           });
       
-          // Sincroniza el estado local inmediatamente
+          // Sincronizar los estados locales del formulario con los datos actualizados
           setUserName(updatedUser.name || "");
           setUserEmail(updatedUser.email || "");
           setUserAddress(updatedUser.address || "");
@@ -86,6 +98,20 @@ const MyInformation = () => {
             confirmButtonText: "OK",
           });
         } catch (error: any) {
+          // Manejo de errores específicos, como un token inválido
+          if (error.response?.status === 401) {
+            Swal.fire({
+              title: "Sesión expirada",
+              text: "Por favor, inicie sesión nuevamente.",
+              icon: "warning",
+              confirmButtonText: "OK",
+            });
+            // Opcional: Limpia el estado del usuario o redirige al login
+            setUserData(null);
+            return;
+          }
+      
+          // Mensaje genérico para otros errores
           Swal.fire({
             title: "Error al actualizar",
             text: error.message || "No se pudieron actualizar los datos del usuario.",
@@ -96,9 +122,11 @@ const MyInformation = () => {
           setIsSaving(false);
         }
       };
+      
       if (!userData || !userData.user) {
-        return <p>Loading...</p>; // O un spinner o mensaje más elaborado
+        return <p>Loading...</p>; // Puedes personalizar este mensaje o agregar un spinner
       }
+      
      
     return (
         <form className="space-y-4">

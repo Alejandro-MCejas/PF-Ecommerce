@@ -1,51 +1,49 @@
 "use client";
 
-import Link from 'next/link';
-import Search from '../Search';
-import { useCart } from '@/context/CartContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '@/context/Authcontext';
-import { useEffect, useState } from 'react';
-import ProfileClient from '../useUse/useClient';
+import Link from "next/link";
+import Search from "../Search";
+import { useCart } from "@/context/CartContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "@/context/Authcontext";
+import { useEffect, useState } from "react";
+import ProfileClient from "../useUse/useClient";
 
-import Swal from 'sweetalert2';
-import { useRouter } from 'next/navigation';
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
-import logoApp from "../../../public/logoApp.png"
-import Image from 'next/image';
+import logoApp from "../../../public/logoApp.png";
+import Image from "next/image";
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  const { userData , setUserData} = useAuth(); 
-  const router = useRouter()
+  const { userData, setUserData } = useAuth();
+  const router = useRouter();
   const role = userData?.user?.admin;
   const [clientRendered, setClientRendered] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false); // Maneja la visibilidad del menú desplegable.
-  
- const handleClose = () => {
-     // Cierre de sesión local
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleClose = () => {
     localStorage.clear();
     setUserData(null);
     const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        customClass: { container: 'mt-12' },
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      customClass: { container: "mt-12" },
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
     });
     Toast.fire({
-        icon: "success",
-        title: "Thank you for visiting our website, come back soon"
+      icon: "success",
+      title: "Thank you for visiting our website, come back soon",
     });
-    router.push('/');
-
-}
+    router.push("/");
+  };
 
   useEffect(() => {
     setClientRendered(true);
@@ -58,39 +56,15 @@ const NavBar = () => {
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8 z-50">
       <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
-        <Link href="/">
-          <div className="flex items-center justify-evenly md:justify-start">
-            <Image
-              src={logoApp}
-              alt="Logo"
-              className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
-            >
-            </Image>
-            <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
-              Cybergames
-            </span>
-            <div className='md:hidden'>
-              <div
-                className="bg-white rounded-full w-[50px] h-[50px] flex justify-center items-center cursor-pointer relative"
-                onClick={() => setMenuOpen(!menuOpen)}
-              >
-                <FontAwesomeIcon icon={faUser} className="text-[20px]" />
-                {menuOpen && (
-                  <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
-                    <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleClose}
-                      className="block text-sm mt-2 text-left hover:text-[#A065FF] w-full"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+        <Link href="/" className="flex items-center justify-evenly md:justify-start">
+          <Image
+            src={logoApp}
+            alt="Logo"
+            className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
+          />
+          <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
+            Cybergames
+          </span>
         </Link>
 
         <div className="flex justify-center md:justify-center w-full">
@@ -107,7 +81,7 @@ const NavBar = () => {
               </span>
             </div>
           ) : (
-            <div className='hidden md:block'>
+            <div className="hidden md:block">
               <div
                 className="bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center cursor-pointer relative"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -141,7 +115,7 @@ const NavBar = () => {
         <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Games
         </Link>
-        <Link href={"/subscription"} className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
           Subscription
         </Link>
 

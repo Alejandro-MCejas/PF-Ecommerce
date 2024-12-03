@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { Request, Response } from 'express';
+import { ForgotPasswordDto } from './dto/ForgotPasswordDto.dto';
+import { structureOfForgotPasswordDto } from './dto/structureOfForgotPassword.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -100,4 +102,23 @@ export class AuthController {
       res.redirect('http://localhost:3000/?error=callback_failed');
     }
   }
+
+
+  @Post('forgot-password')
+  async forgotPasswordController(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    await this.authService.forgotPasswordService(forgotPasswordDto.email)
+    return { message: 'Si el email está registrado, recibirás un enlace de recuperación.' }
+  }
+
+  @Post('reset-password')
+  async resetPasswordController(@Body() resetPasswordDto: structureOfForgotPasswordDto) {
+
+    if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
+      throw new BadRequestException('The passwords do not match')
+    }
+
+    return await this.authService.resetPasswordService(resetPasswordDto.token, resetPasswordDto.newPassword)
+  }
+
+
 }

@@ -60,9 +60,9 @@ const Login = () => {
 
       // Redirige según el rol del usuario
       if (user.admin === "admin") {
-        router.push("/dashboard");
+        router.push("/home");
       } else if (user.admin === "user") {
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         router.push("/"); // Redirige a la página principal si no tiene un rol específico
       }

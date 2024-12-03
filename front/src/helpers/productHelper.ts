@@ -77,9 +77,11 @@ export const addProduct = async (product: AddProductProps, token: string): Promi
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
-    product.categories.forEach((category: { id: string; name: string }) => {
-        formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
-    });
+    formData.append('categories', product.categories.toString())
+
+    // product.categories.forEach((category: { id: string; name: string }) => {
+    //     formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
+    // });
 
     console.log("Las categorias inyectadas son", product.categories)
     debugger
@@ -153,6 +155,18 @@ export const addReview = async (review: AddReviewProps, token: string) => {
         throw error;
     }
 };
+
+export const averageProductReview = async (id: string) => {
+    try {
+        const response = await fetch(`${API_URL}/reviews/${id}/average`);
+        const data = await response.json();
+        return data; // Asegúrate de devolver el objeto completo (con averageRating)
+    } catch (error) {
+        console.error("Error fetching average product review:", error);
+        return null; // Devuelve null si hay un error
+    }
+};
+
 
 export const deleteReview = async (id: string) => {
     try {

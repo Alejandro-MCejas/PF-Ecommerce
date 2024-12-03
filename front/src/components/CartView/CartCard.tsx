@@ -36,9 +36,6 @@ export const CartView = () => {
     }
   }, [cart, setOrderData]);
   
-  
-  
-
   const handleOnClick = async () => {
     setIsButtonVisible(false);
     setIsLoading(true);
@@ -64,7 +61,6 @@ export const CartView = () => {
         amount: roundedTotal,
       };
   
-      console.log(orderDataToSend); // Verifica los datos enviados
       const orderResponse = await createOrder(orderDataToSend);
   
       if (orderResponse) {

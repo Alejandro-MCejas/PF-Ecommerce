@@ -34,6 +34,14 @@ export interface IProduct {
     discountEndDate?:Date
 }
 
+export interface IProductOrderDetailInfo {
+    id:string,
+    name: string,
+    image: string[],
+    categories: Categories[],
+    price:number
+}
+
 export interface IProductCart { 
     id:string,
     name: string,
@@ -58,7 +66,7 @@ export interface AddProductProps{
     stock:number,
     suscription:boolean,
     price:number,
-    categories: ICategories[]
+    categories: string,
     discount:number
 }
 

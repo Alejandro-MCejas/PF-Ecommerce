@@ -38,19 +38,25 @@ export class UsersRepository {
         return user
     }
 
-    async updateUserRepository(id: string, user: UpdateUserDto) {
-        const existingUser = await this.usersRepository.findOne({ where: { id } })
-
+    async updateUserRepository(id: string, user: UpdateUserDto): Promise<Users | null> {
+        const existingUser = await this.usersRepository.findOne({ where: { id } });
+    
         if (!existingUser) {
-            return null
+            console.log(`Usuario con ID ${id} no encontrado`);
+            return null;
         }
-
-        Object.assign(existingUser, user)
-
-        await this.usersRepository.save(existingUser)
-
-        return existingUser
+    
+        console.log('Usuario antes de actualizar:', existingUser);
+    
+        Object.assign(existingUser, user);
+    
+        const updatedUser = await this.usersRepository.save(existingUser, { reload: true });
+    
+        console.log('Usuario después de actualizar:', updatedUser);
+    
+        return updatedUser;
     }
+    
 
     async deleteUserRepository(id: string) {
         const userToDelete = await this.usersRepository.findOne({ where: { id } })
