@@ -28,3 +28,23 @@ export const suscribeCybergamer = async (userId: string): Promise<PreferenceResp
         throw error;
     }
 };
+
+
+export const cancelSuscription=  async (userId:string, token:string) => {
+    try {
+        const response = await fetch(`${API_URL}/suscrption/cancel/${userId}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        if (response.ok) {
+          alert("Subscription canceled successfully");
+        } else {
+          alert("Failed to cancel subscription");
+        }
+      } catch (error) {
+        console.error("Error canceling subscription:", error);
+      }
+}

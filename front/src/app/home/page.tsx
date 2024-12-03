@@ -14,6 +14,7 @@ import { faPlaystation } from "@fortawesome/free-brands-svg-icons/faPlaystation"
 import { faXbox } from "@fortawesome/free-brands-svg-icons";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { fetchingProducts } from "@/helpers/productHelper";
+import Link from "next/link";
 
 const home = async () => {
 
@@ -66,7 +67,7 @@ const home = async () => {
                                 <li className="flex justify-start items-center gap-4 text-[20px] md:text-[38px] text-violet-500"><FontAwesomeIcon icon={faGamepad} className="w-[25px] md:w-[50px] h-[25px] md:h-[50px] text-violet-500" />Exclusive discounts</li>
                                 <li className="flex justify-start items-center gap-4 text-[20px] md:text-[38px] text-violet-500"><FontAwesomeIcon icon={faGamepad} className="w-[25px] md:w-[50px] h-[25px] md:h-[50px] text-violet-500" />All the latest news about videogames</li>
                             </ul>
-                            <a href="/suscription" className="text-white font-bold bg-blue-500 w-[150px] text-center rounded-lg p-1 text-[20px] md:text-[38px] tracking-wide hover:bg-blue-300"> More information </a>
+                            <Link href="/suscription" className="text-white font-bold bg-blue-500 w-[150px] text-center rounded-lg p-1 text-[20px] md:text-[38px] tracking-wide hover:bg-blue-300"> More information </Link>
                         </div>
 
                     </div>
