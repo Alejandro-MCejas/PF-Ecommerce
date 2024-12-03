@@ -57,7 +57,7 @@ const SuscriptionPriceAdmin = () => {
                                 All the latest news about the world of videogames
                             </li>
                         </ul>
-                        <a href="/subscription" className="text-white font-bold bg-violet-500 rounded-lg p-3 text-[18px] tracking-wide hover:bg-violet-300 hover:tracking-widest">Subscribe now</a>
+                        <link href="/subscription" className="text-white font-bold bg-violet-500 rounded-lg p-3 text-[18px] tracking-wide hover:bg-violet-300 hover:tracking-widest">Subscribe now</link>
                     </div>
                 </div>
             </div>

@@ -56,11 +56,11 @@ const Login = () => {
         icon: "success",
         confirmButtonText: "OK",
       });
-console.log("rol",user.admin);
+
 
       // Redirige según el rol del usuario
       if (user.admin === "admin") {
-        router.push("/dashboardAdmin");
+        router.push("/dashboard");
       } else if (user.admin === "user") {
         router.push("/dashboard");
       } else {

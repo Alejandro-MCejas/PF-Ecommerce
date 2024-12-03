@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 const NavBar = () => {
   const { cartCount } = useCart();
-  const { userData , setUserData} = useAuth(); // Supongo que tienes un método `logout` en tu AuthContext.
+  const { userData , setUserData} = useAuth(); 
   const router = useRouter()
   const role = userData?.user?.admin;
   const [clientRendered, setClientRendered] = useState(false);
