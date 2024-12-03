@@ -207,6 +207,8 @@ export class SuscriptionService {
 
         savedSuscription.paymentId = response.id; // Asignamos el paymentId
         await this.suscriptionRepository.save(savedSuscription)
+        console.log(savedSuscription)
+        console.log(response)
 
     } catch (error) {
         console.error('Error al crear la preferencia de pago:', error);
@@ -275,5 +277,27 @@ export class SuscriptionService {
         console.error('Error al realizar el reembolso:', error);
         throw new Error('Failed to process refund');
     }
+  }
+
+  async darDeBaja(userId:string, id:string){
+    if(!isUUID(userId)){
+      throw new Error(`uuid ${userId} not found`);
+    }
+
+    const user = await this.userRepository.findOneUserRepository(userId)
+    if(!user){
+      throw new Error(`User id ${userId} not found`)
+    }
+
+    const sub = await this.suscriptionRepository.findOne({where: {id}});
+    await this.suscriptionRepository.delete(id);
+
+    if(user.isSuscription === true){
+      user.isSuscription = false;
+      await this.userRepository.updateUserRepository(userId, user)
+    }
+
+    return sub;
+
   }
 }
