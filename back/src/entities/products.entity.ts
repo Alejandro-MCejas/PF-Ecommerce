@@ -1,9 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrderDetails } from "./orderDetails.entity";
+// import { OrderDetails } from "./orderDetails.entity";
 import { Categories } from "./categories.entity";
 import { Reviews } from "./reviews.entity";
 import { Suscription } from "./suscription.entity";
 import { OrderProduct } from './orderProduct.entity';
+import { Users } from "./users.entity";
 
 
 
@@ -54,5 +55,10 @@ export class Products {
 
   @Column({ default: false })
   isFeatured: boolean;
-  quantity: any;
+
+  // @Column()
+  // quantity: number;
+
+  @ManyToMany(() => Users, user => user.favoriteProducts)
+  favoriteByUsers: Users[]
 }

@@ -6,7 +6,6 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { mercadoPago } from 'src/entities/mercadoPago.entity';
 // import { Products } from 'src/entities/products.entity';
 import { OrderDetailRepository } from 'src/order-detail/order-detail.repository';
-import { ProductIdAndQuantity } from 'src/orders/dto/create-order.dto';
 import { OrdersService } from 'src/orders/orders.service';
 import { ProductsService } from 'src/products/products.service';
 import { Repository } from 'typeorm';
@@ -60,33 +59,31 @@ export class MercadoPagoService {
       }
   
       const preference = new Preference(this.client);
-  
-      // URLs de retroceso
-      const backUrls = {
-        success: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        failure: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-        pending: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-      };
-  
-      const response = await preference.create({
+      
+      // Actualizar la preferencia con las URLs correctas
+      const updatedResponse = await preference.create({
         body: {
           items: products,
-          back_urls: backUrls,
+          back_urls:{
+            success: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+            failure: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+            pending: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+          },
           auto_return: preferenceData.auto_return || 'approved',
         },
       });
   
       const mercadoPago = this.mercadoPagoRepository.create({
-        pagoId: response.id,
+        pagoId: updatedResponse.id,
         totalAmount: orderDetail.price,
         externalReference: orderDetailId,
         order: orderDetail.order,
         pagoStatus: 'pending',
       });
-  
+
       await this.mercadoPagoRepository.save(mercadoPago);
-  
-      return response;
+
+      return updatedResponse;
     } catch (error) {
       console.error(`Error al crear el pago: ${error.message}`);
       throw new Error(`Error en MercadoPago: ${error.message}`);

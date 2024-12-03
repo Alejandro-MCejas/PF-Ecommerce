@@ -38,5 +38,17 @@ export class UsersService {
   async updateUserSubService(userId: string, sub: string) {
     return await this.usersRepository.updateUserSubRepository(userId, sub);
   }
+
+  async addFavoriteProductService(userId: string, productId: string) {
+    return await this.usersRepository.addFavoriteProductRepository(userId, productId);
+  }
+
+  async findAllFavoritesProductsService(userId: string) {
+    return await this.usersRepository.findAllFavoritesProductsRepository(userId)
+  }
+
+  async removeFavoriteProductService(userId: string, productId: string) {
+    return await this.usersRepository.removeFavoriteProductRepository(userId, productId)
+  }
 }
 
