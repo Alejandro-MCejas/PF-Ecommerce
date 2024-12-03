@@ -65,8 +65,8 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Put(':id')
-  @UseGuards(HybridAuthGuard, RoleGuard)
-  @Roles(UserRole.ADMIN)
+  // @UseGuards(HybridAuthGuard, RoleGuard)
+  // @Roles(UserRole.ADMIN)
   @UseInterceptors(FilesInterceptor('images', 3))
   async updateProducts(@Param('id') id: string, @Body() products: UpdateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
     return await this.productsService.updateProducts(id, products, files);

@@ -61,4 +61,7 @@ export class Products {
 
   @ManyToMany(() => Users, user => user.favoriteProducts)
   favoriteByUsers: Users[]
+
+  @ManyToMany(() => Users, user => user.claimedProducts)
+  usersClaimed: Users[]
 }

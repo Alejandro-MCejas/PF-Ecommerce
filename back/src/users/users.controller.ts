@@ -49,18 +49,35 @@ export class UsersController {
     return res.status(200).json(user)
   }
 
+  @Post(':id/claim/productId')
+  async claimProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
+    const claimedProduct = await this.usersService.claimProductService(userId, productId);
+    return res.json({ message: `The product ${claimedProduct.name} was claimed` })
+  }
+
   @Post()
   async createUserController(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
-    const newUser = await this.usersService.createUserService(createUserDto);
-    return res.status(201).json(newUser);
+    try {
+      const newUser = await this.usersService.createUserService(createUserDto);
+      return res.status(201).json(newUser);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   @Put(':id')
-  @UseGuards(HybridAuthGuard)
-  async updateUserController(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
-    const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
-    return res.status(200).json({ message: `El usuario con el id: ${updatedUser.id} ha sido actualizado` });
+  // @UseGuards(HybridAuthGuard)
+  async updateUserController(
+      @Param('id') id: string,
+      @Body() updateUserDto: UpdateUserDto,
+      @Res() res: Response
+  ) {
+      const updatedUser = await this.usersService.updateUserService(id, updateUserDto);
+  
+      // Devuelve directamente el usuario actualizado en la respuesta
+      return res.status(200).json(updatedUser);
   }
+  
 
   @Delete(':id')
   @UseGuards(HybridAuthGuard, RoleGuard)

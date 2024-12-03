@@ -60,7 +60,7 @@ const Login = () => {
 
       // Redirige según el rol del usuario
       if (user.admin === "admin") {
-        router.push("/dashboard");
+        router.push("/home");
       } else if (user.admin === "user") {
         router.push("/home");
       } else {

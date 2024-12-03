@@ -7,13 +7,227 @@
     <title>
         <%= subject %>
     </title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #232323;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            border: 2px solid #A065FF;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+        }
+
+        .title {
+            color: #A065FF;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .message {
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 500px; /* Limitar el ancho máximo */
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .product:hover {
+            transform: scale(1.02);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px; /* Altura fija para todas las imágenes */
+            object-fit: cover; /* Mantener la proporción de las imágenes */
+            border-radius: 10px 10px 0 0; /* Bordes redondeados en la parte superior */
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #A065FF;
+            margin: 10px 0;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: #f4f4f4;
+            margin: 5px 0;
+        }
+
+        .product-discount {
+            font-size: 16px;
+            color: #ffcc00;
+            margin: 5px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 20px;
+            background-color: #f4f4f4;
+            color: #232323;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #dcdcdc;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #bfbfbf;
+        }
+
+        .footer a {
+            color: #A065FF;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 24px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+
+            .product-name {
+                font-size: 18px;
+            }
+
+            .product-price {
+                font-size: 16px;
+            }
+
+            .product-discount {
+                font-size: 14px;
+            }
+
+            .cta-button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+
+            .footer {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 20px;
+            }
+
+            .message {
+                font-size: 12px;
+            }
+
+            .product-name {
+                font-size: 16px;
+            }
+
+            .product-price {
+                font-size: 14px;
+            }
+
+            .product-discount {
+                font-size: 12px;
+            }
+
+            .cta-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .footer {
+                font-size: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>¡Hola, <%= nombre %>!</h1>
-    <p>Este es tu recordatorio diario para revisar nuestras ofertas y promociones.</p>
-    <a href="https://pf-ecommerce2024.vercel.app/" style="color: #f0a500; text-decoration: none;">Explora nuestras
-        promociones</a>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://res.cloudinary.com/dvpenabty/image/upload/v1733093069/logo_g8qfvy.png"
+                alt="CyberGames Logo">
+        </div>
+        <div class="title">
+            ¡Ofertas Exclusivas para Ti!
+        </div>
+        <p class="message">
+            Aquí están los 3 productos con mayor descuento que no querrás perderte:
+        </p>
+        <div class="product-list">
+            <% products.forEach(product => { %>
+                <div class="product">
+                    <img src="<%= product.image[0] %>" alt="<%= product.name %>">
+                    <div class="product-name">
+                        <%= product.name %>
+                    </div>
+                    <div class="product-price">Precio: $<%= parseFloat(product.price).toFixed(2) %>
+                    </div>
+                    <div class="product-discount">Descuento: <%= parseFloat(product.discount) %>%</div>
+                </div>
+            <% }) %>
+        </div>
+        <a href="https://pf-ecommerce2024.vercel.app/" class="cta-button">Explorar Más Productos</a>
+        <div class="footer">
+            <p>© 2024 CyberGames. Todos los derechos reservados.</p>
+            <a href="#">Política de Privacidad</a> | <a href="#">Términos de Servicio</a>
+        </div>
+    </div>
 </body>
 
 </html>
