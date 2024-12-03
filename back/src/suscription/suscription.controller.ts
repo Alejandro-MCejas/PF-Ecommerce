@@ -1,6 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get,Param, Post, Res,} from '@nestjs/common';
 import { SuscriptionService } from './suscription.service';
-import { Products } from 'src/entities/products.entity';
 import { CreateSuscriptionDto } from './dto/create-suscription.dto';
 import { UUIDValidationPipe } from 'src/validator/uuid-validation.pipes';
 import { Response } from 'express';
@@ -10,7 +9,7 @@ export class SuscriptionController {
   constructor(private readonly suscriptionService: SuscriptionService) {}
 
   @Get(':userId')
-  async suscription(@Param('userId') userId:string): Promise<Products[]>{
+  async suscription(@Param('userId') userId:string){
     return await this.suscriptionService.getSuscription(userId)
   }
 
