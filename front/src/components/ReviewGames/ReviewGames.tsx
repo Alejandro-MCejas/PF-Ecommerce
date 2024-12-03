@@ -73,9 +73,11 @@ const ReviewGames = ({ product }: { product: IProduct }) => {
             )}
             <h2 className="ml-10 mb-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
             <div className="flex flex-col justify-evenly gap-7">
-                {product.reviews.map((review) => (
-                    <ProductReviewCard key={review.id} id={review.id} review={review.comment} />
-                ))}
+                {product.reviews
+                    .filter((review) => review.comment?.trim() !== "") // Filtrar comentarios vacíos
+                    .map((review) => (
+                        <ProductReviewCard key={review.id} id={review.id} review={review.comment} />
+                    ))}
             </div>
         </div>
     );

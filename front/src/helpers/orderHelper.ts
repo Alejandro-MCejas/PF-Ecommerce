@@ -1,4 +1,5 @@
-import { IOrder, OrderData, OrderDetail, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
+// import { IOrder, OrderData, OrderDetail, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
+import { IOrder, IOrderResponse, OrderData, OrderDetailInformation, OrderResponse } from "@/interfaces/IOrder";
 import { IProduct } from "@/interfaces/IProduct";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -24,6 +25,7 @@ export const createOrder = async (orderData: OrderData): Promise<OrderResponse |
     }
 
     const order = await response.json();
+    console.log
     return order;
   } catch (error) {
     console.error("Error creando la orden:", error);
@@ -41,12 +43,7 @@ export const createPaymentMercadoPago = async (orderId: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${orderData.token}`, // si es necesario
       },
-      // body: JSON.stringify({
-      //     userId: orderData.userId,
-      //     products: orderData.products,
-      // }),
     })
 
     if (!response.ok) {
@@ -61,27 +58,33 @@ export const createPaymentMercadoPago = async (orderId: string) => {
   }
 };
 
-export const getOrderDetailById = async (orderId: string, token: string): Promise<OrderDetail | null> => {
+export const getOrderDetailById = async (orderId: string): Promise<IOrderResponse | null> => {
   try {
     const response = await fetch(`${API_URL}/orders/${orderId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-      }
+        // Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
-      throw new Error(`Error fetching order detail: ${response.statusText}`);
+      throw new Error(`Error al obtener el detalle de la orden: ${response.statusText}`);
     }
 
-    const orderDetail: OrderDetail = await response.json();
-    // console.log(orderDetail)
+    const orderDetail: IOrderResponse = await response.json();
+    console.log(orderDetail)
     return orderDetail;
-
   } catch (error) {
-    console.error('Error fetching order detail:', error);
-    return null; // Asegura que la función siempre devuelva un valor
+    console.error("Error al obtener el detalle de la orden:", error);
+    return null;
   }
 };
+
+// Interfaz para cambiar el estado de una orden
+interface ChangeStatusResponse {
+  message: string;
+  order: IOrder;
+}
+
 
 interface changeStatus{
   message:string,

@@ -1,6 +1,7 @@
 
 import { CardProductsView } from "@/components/CardProductsView/CardProductsView"
 import { FilterForm } from "@/components/FilterForm/FilterForm"
+import FilterFormMobile from "@/components/FilterFormMobile/FilterFormMobile"
 import AddGame from "@/components/ModalAddGame/ModalAddGame"
 import { fetchingCategories } from "@/helpers/categoiresHelper"
 import { fetchingProducts } from "@/helpers/productHelper"
@@ -18,11 +19,15 @@ const products = async () => {
                     categories={allCategories}
                 />
             </div>
+            <div className="block md:hidden">
+                <FilterFormMobile />
+            </div>
             <div className="max-w-[1500px] w-full mx-auto mt-5">
                 <div className="flex">
                     <div className="w-2/12 hidden md:block">
                         <FilterForm />
                     </div>
+
                     <div className="w-full md:w-10/12 flex flex-wrap justify-center gap-3">
                         {
                             products.map((game, index) => (

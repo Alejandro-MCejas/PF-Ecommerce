@@ -20,8 +20,6 @@ const home = async () => {
 
     const products = await fetchingProducts()
 
-
-
     return (
         <div className="w-full min-h-screen bg-backgroundLayout">
             <h2 className="text-[30px] md:text-[64px] font-black text-center neon-text mb-4">Latest releases</h2>
@@ -54,7 +52,7 @@ const home = async () => {
 
                 </div>
             </div>
-            <h2 className="text-[30px] md:text-[64px] font-black text-center text-violet-500 mb-4">Suscribe and start winning</h2>
+            <h2 className="text-[30px] md:text-[64px]  font-extralight tracking-wide neon-text text-center text-violet-500 mb-2">Suscribe and start winning</h2>
             <div className="w-full md:max-w-[1500px] mx-auto md:p-10 ">
                 <div className="w-[350px] h-[500px] md:w-[800px] md:h-[700px] border-2 border-blue-600 rounded-md mx-auto shadow-custom-blue hover:shadow-custom-blue-hover hover:-translate-y-5 transition-transform duration-300">
                     <div className="w-full h-full">

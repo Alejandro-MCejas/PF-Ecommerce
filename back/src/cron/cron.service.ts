@@ -11,7 +11,13 @@ export class CronService {
     async sendDailyEmail() {
         console.log('Enviando correo diario...');
 
-        const users = ['alejandro.06555@gmail.com', 'agustinanahirblanco@gmail.com', 'valensparvoli@gmail.com',]
+        const users = [
+            'alejandro.06555@gmail.com',
+            'agustinanahirblanco@gmail.com',
+            'valensparvoli@gmail.com',
+            'rossettia_martin@hotmail.com',
+            'Anselmo.twitch@gmail.com'
+        ];
 
         await Promise.all(users.map(email => this.notificationsService.sendEmailService(
             email,

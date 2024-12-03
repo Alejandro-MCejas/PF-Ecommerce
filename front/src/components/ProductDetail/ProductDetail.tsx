@@ -10,6 +10,11 @@ import { deleteProductByID, editProductInformationByID } from "@/helpers/product
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
 import ModalApplyDiscount from "../ModalAddDiscount/ModalAddDiscount";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { addFavorite, eliminateFavorite, getFavorites } from "@/helpers/userHelper";
+import Favorites from "../Dashboard/Favorites";
+import FavoriteButton from "../FavoriteButton/FavoriteButton";
 
 interface ProductDetail {
     product: IProduct;
@@ -20,6 +25,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
+    // const [favorite, setFavorite] = useState<boolean>(false)
 
     const price = typeof product.price === "string" ? parseFloat(product.price) : product.price;
     const discount = typeof product.discount === "string" ? parseFloat(product.discount) : product.discount;
@@ -100,7 +106,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     };
 
     return (
-        <div>
+        <div className="w-full">
             {/* Imagen e informacion */}
             < div className="flex w-full justify-evenly items-center " >
                 {/* Imagen */}
@@ -121,16 +127,44 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 {/* Informacion */}
                 < div className="w-1/2 min-w-[700px] min-h-[750px] max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
                     <div className="w-full h-[750px] flex flex-col justify-evenly items-start p-10">
+                        <div className="w-full flex justify-end items-end">
+                            <FavoriteButton
+                                userId={userData?.user.id || ""}
+                                productId={product.id}
+                            />     
+                        </div>
                         <div className="flex flex-col justify-evenly items-start h-[200px] mt-0">
                             <h2 className="text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
-                                <StarRating
-                                    rating={rating}
-                                    setRating={setRating}
-                                />
+                                {
+                                    userData ? (
+                                        <StarRating
+                                            productId={product.id}
+                                            userId={userData?.user.id}
+                                            token={userData?.token}
+                                            onReviewSubmitted={() => {
+                                                // Actualiza la lista de reseñas o realiza otra acción
+                                                console.log("Review submitted successfully!");
+                                            }}
+                                        />
+                                    ) : (
+                                        <div>
+                                            You must be loggin to vote
+                                        </div>
+                                    )
+                                }
+
                             </div>
-                            <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                            {
+                                product.suscription === true ? (
+                                    <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                                ) : (
+                                    <div>
+
+                                    </div>
+                                )
+                            }
                         </div>
                         <div>
                             {/* Mostrar el precio dinámicamente */}

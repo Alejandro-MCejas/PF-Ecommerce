@@ -28,3 +28,16 @@ export const suscribeCybergamer = async (userId: string): Promise<PreferenceResp
         throw error;
     }
 };
+
+
+export const cancelSuscription = async (userId:string):Promise<string | undefined> =>{
+    try {
+        const response = await fetch(`${API_URL}/suscription/cancel/${userId}`,{
+            method:"POST"
+        })
+        const cancelResponse = await response.json()
+        return cancelResponse
+    } catch (error) {
+        console.log(error)
+    }
+}
