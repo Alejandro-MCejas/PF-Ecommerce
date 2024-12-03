@@ -49,4 +49,8 @@ export class Users {
     @ManyToMany(() => Products, product => product.favoriteByUsers)
     @JoinTable()
     favoriteProducts: Products[]
+
+    @ManyToMany(() => Products, product => product.usersClaimed)
+    @JoinTable()
+    claimedProducts: Products[]
 }
