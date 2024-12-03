@@ -1,122 +1,125 @@
-import { changeStatus, getOrderDetailById } from "@/helpers/orderHelper";
-import { getUserById } from "@/helpers/userHelper";
-import { IOrder, OrderDetail, OrderDetailInformation } from "@/interfaces/IOrder";
+"use client";
+
 import { useEffect, useState } from "react";
+import { getUserById } from "@/helpers/userHelper";
+import { getOrderDetailById } from "@/helpers/orderHelper";
+import { IOrderResponse } from "@/interfaces/IOrder";
+import { IProduct } from "@/interfaces/IProduct";
+import ModalOrderInformation from "../ModalOrderInformation/ModalOrderInformation";
 
-const MyOrders = ({ userId, token }: { userId: string, token: string }) => {
-    const [ordersWithDetails, setOrdersWithDetails] = useState<OrderDetail[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+const MyOrders = ({ userId }: { userId: string }) => {
+  const [orders, setOrders] = useState<IOrderResponse[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<IOrderResponse | null>(null); // Orden seleccionada
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false); // Carga de detalles
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado del modal
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const userInformationById = await getUserById(userId);
-
-                const orders = await Promise.all(
-                    (userInformationById.orders || []).map(async (order: IOrder) => {
-                        const orderDetailsResponse = await getOrderDetailById(order.id, token);
-                        const orderDetail = orderDetailsResponse?.orderDetail || [];
-                        return {
-                            order,
-                            orderDetail,
-                        } as OrderDetail;
-                    })
-                );
-
-                setOrdersWithDetails(orders);
-            } catch (error) {
-                console.error("Error fetching orders:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchOrders();
-    }, [userId, token]);
-
-    const handleChangeStatus = async (orderId: string) => {
-        const newStatus = await changeStatus(orderId, token);
-        if (newStatus) {
-            alert(`Order status changed to: ${newStatus.order.status}`);
-
-            setOrdersWithDetails((prevOrders) =>
-                prevOrders.map((orderDetail) =>
-                    orderDetail.order.id === orderId
-                        ? {
-                              ...orderDetail,
-                              order: {
-                                  ...orderDetail.order,
-                                  status: newStatus.order.status,
-                              },
-                          }
-                        : orderDetail
-                )
-            );
-        } else {
-            alert("Failed to change order status.");
+  // Cargar todas las órdenes del usuario
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const userInformation = await getUserById(userId);
+        if (!userInformation || !userInformation.orders) {
+          console.error("No orders found for this user.");
+          return;
         }
+
+        const ordersData: IOrderResponse[] = userInformation.orders.map((order: any) => ({
+          order: {
+            id: order.id,
+            date: order.date,
+            status: order.status,
+            user: order.user,
+          },
+          orderDetail: {
+            id: "", // No se requiere cargar detalle completo inicialmente
+            price: 0,
+            products: [],
+          },
+        }));
+
+        setOrders(ordersData);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    return (
-        <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Your Orders</h2>
-            {ordersWithDetails.length > 0 ? (
-                ordersWithDetails.map((orderDetail) => (
-                    <div key={orderDetail.order.id} className="border p-4 rounded-lg">
-                        <p className="text-gray-700 font-medium">
-                            Order ID: {orderDetail.order.id}
-                        </p>
-                        <p className="text-gray-500 text-sm">
-                            Date: {orderDetail.order.date}
-                        </p>
-                        <p className="text-gray-500 text-sm">
-                            Status: {orderDetail.order.status}
-                        </p>
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
-                            onClick={() => handleChangeStatus(orderDetail.order.id)}
-                        >
-                            Change Status
-                        </button>
-                        <div className="flex flex-col gap-5 mt-4">
-                            {orderDetail.orderDetail.length > 0 ? (
-                                orderDetail.orderDetail.map((product) => (
-                                    <div key={product.id} className="rounded-xl flex justify-between">
-                                        <div>
-                                            <p className="font-medium">{product.name}</p>
-                                            <p className="text-sm text-gray-500">Price: ${product.price}</p>
-                                        </div>
-                                        <div>
-                                            <img
-                                                src={product.image[0]}
-                                                alt={product.name}
-                                                className="max-w-[100px] max-h-[150px]"
-                                            />
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No products found in this order.</p>
-                            )}
-                        </div>
-                    </div>
-                ))
-            ) : isLoading ? (
-                <p className="text-gray-500">Loading...</p>
-            ) : (
-                <p className="text-gray-500">No orders found.</p>
-            )}
+    fetchOrders();
+  }, [userId]);
+
+  // Manejar la carga de detalles de una orden y abrir el modal
+  const handleViewDetails = async (orderId: string) => {
+    setIsLoadingDetails(true); // Inicia la carga
+    try {
+      const orderDetail = await getOrderDetailById(orderId); // Llamada al helper
+      if (!orderDetail) {
+        console.error("Order detail not found.");
+        return;
+      }
+
+      // Construir el objeto detallado
+      const detailedOrder = {
+        order: orders.find((o) => o.order.id === orderId)?.order!,
+        orderDetail: orderDetail.orderDetail,
+      };
+      setSelectedOrder(detailedOrder); // Actualiza la orden seleccionada
+      setIsModalOpen(true); // Abre el modal
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+    } finally {
+      setIsLoadingDetails(false); // Finaliza la carga
+    }
+  };
+
+  // Cerrar el modal
+  const handleCloseModal = () => {
+    setSelectedOrder(null); // Limpia la orden seleccionada
+    setIsModalOpen(false); // Cierra el modal
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-semibold">Your Orders</h2>
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {orders.map((order) => (
+            <div key={order.order.id} className="border p-4 rounded-lg">
+              <p>
+                <strong>Order ID:</strong> {order.order.id}
+              </p>
+              <p>
+                <strong>Order date:</strong> {order.order.date}
+              </p>
+              <p>
+                <strong>Status:</strong> {order.order.status}
+              </p>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+                onClick={() => handleViewDetails(order.order.id)}
+              >
+                {isLoadingDetails && selectedOrder?.order.id === order.order.id
+                  ? "Loading..."
+                  : "View Details"}
+              </button>
+            </div>
+          ))}
         </div>
-    );
+      )}
+
+      {/* Modal para mostrar los detalles */}
+      <ModalOrderInformation
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        selectedOrder={selectedOrder}
+      />
+    </div>
+  );
 };
 
 export default MyOrders;
 
-
-
-// const [selectedOrder, setSelectedOrder] = useState<number|null>(null);
-
-// const handleTrackClick = (orderId:number) => {
-//     // Alterna el estado de la orden seleccionada para mostrar u ocultar detalles de tracking
-//     setSelectedOrder(selectedOrder === orderId ? null : orderId);
-// };
