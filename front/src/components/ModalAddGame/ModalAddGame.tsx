@@ -26,7 +26,7 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
         images: [],
         stock: 0,
         description: "",
-        categories: [],
+        categories: "",
         suscription: false,
         discount: 0
     })
@@ -89,16 +89,12 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedCategoryId = event.target.value; // Obtener el id de la categoría seleccionada
-        const selectedCategory = categories.find((category) => category.id === selectedCategoryId); // Buscar la categoría completa
 
-        if (selectedCategory) {
-            setNewGame((prevGame) => ({
-                ...prevGame,
-                categories: [selectedCategory], // Asignar el objeto completo con id y name
-            }));
-        }
+        setNewGame((prevGame) => ({
+            ...prevGame,
+            categories: selectedCategoryId, // Asignar el id directamente como string
+        }));
     };
-
 
 
     const openModal = () => {
@@ -236,7 +232,7 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
                                 <select
                                     id="categories"
                                     className="p-2 border border-gray-500 rounded w-full"
-                                    value={newGame.categories[0]?.id || ""} // Muestra el id de la primera categoría seleccionada o vacío
+                                    value={newGame.categories} // Asignar el estado actual de `categories`
                                     onChange={handleCategoryChange}
                                 >
                                     <option value="">Select a Category</option>
@@ -246,7 +242,6 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
                                         </option>
                                     ))}
                                 </select>
-
                             </div>
                         </div>
                         <div className='flex flex-col w-full justify-evenly items-start my-3 p-3'>

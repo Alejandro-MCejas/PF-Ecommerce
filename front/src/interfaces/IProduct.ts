@@ -58,7 +58,7 @@ export interface AddProductProps{
     stock:number,
     suscription:boolean,
     price:number,
-    categories: ICategories[]
+    categories: string,
     discount:number
 }
 

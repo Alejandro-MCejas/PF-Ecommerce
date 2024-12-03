@@ -46,14 +46,49 @@ export interface IOrderUserBasicInfo {
   date:string
 }
 
-export interface IOrder { 
-  id:string,
-  date:String,
-  user: IUserInformation
-  status:string
+// export interface IOrder { 
+//   id:string,
+//   date:string,
+//   user: IUserInformation
+//   status:string
+// }
+
+// export interface orderProducts {
+//     id:string
+//     product:IProduct
+//     quantity:number
+// }
+// export interface OrderDetail {
+//   id:string,
+//   price?:number, 
+//   order:IOrder,
+//   detailOrder:orderProducts[]
+// }
+
+// export interface IOrderDetail{
+//   order:IOrder,
+// }
+
+export interface IOrderProduct {
+  productId: string;
+  productName: string;
+  quantity: number;
 }
 
-export interface OrderDetail { 
-  order:IOrder,
-  orderDetail:IProduct[]
+export interface IOrderDetail {
+  id: string;
+  price: number;
+  products: IOrderProduct[];
+}
+
+export interface IOrder {
+  id: string;
+  date: string; // Fecha en formato ISO o string
+  status: string; // Estado del pedido
+  user: IUserInformation; // Información del usuario asociado al pedido
+}
+
+export interface IOrderResponse {
+  order: IOrder;
+  orderDetail: IOrderDetail;
 }

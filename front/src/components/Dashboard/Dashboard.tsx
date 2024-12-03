@@ -59,7 +59,7 @@ const Dashboard = () => {
             case "favorites":
                 return <Favorites />;
             case "orders":
-                return <Orders userId={userData.user.id} token={userData.token} />;
+                return <Orders userId={userData.user.id} />;
             default:
                 return null;
         }

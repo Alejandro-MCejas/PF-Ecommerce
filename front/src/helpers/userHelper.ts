@@ -1,6 +1,18 @@
+import { IOrder } from "@/interfaces/IOrder";
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
-export const getUserById = async (userId:string) =>{
+
+interface userById {
+  id: string;
+  name: string; 
+  email: string; 
+  address: string; 
+  phone: string;
+  isSuscription: boolean;
+  orders: IOrder[];
+}
+
+export const getUserById = async (userId:string) : Promise<userById | undefined> =>{
     try {
         const res = await fetch(`${APIURL}/users/${userId}`, {
             method: "GET",

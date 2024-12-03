@@ -125,15 +125,29 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             <h2 className="text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
-                                <StarRating
-                                    rating={rating}
-                                    setRating={setRating}
-                                />
+                                {
+                                    userData ? (
+                                        <StarRating
+                                            productId={product.id}
+                                            userId={userData?.user.id}
+                                            token={userData?.token}
+                                            onReviewSubmitted={() => {
+                                                // Actualiza la lista de reseñas o realiza otra acción
+                                                console.log("Review submitted successfully!");
+                                            }}
+                                        />
+                                    ):(
+                                        <div>
+                                            You must be loggin to vote
+                                        </div>
+                                    )
+                                }
+
                             </div>
                             {
                                 product.suscription === true ? (
                                     <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
-                                ): (
+                                ) : (
                                     <div>
 
                                     </div>
