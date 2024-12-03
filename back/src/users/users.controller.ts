@@ -23,6 +23,24 @@ export class UsersController {
     return res.status(200).json(users);
   }
 
+  @Get(':id/favorites')
+  async findAllFavoritesProductsController(@Param('id') userId: string, @Res() res: Response) {
+    const favoriteProducts = await this.usersService.findAllFavoritesProductsService(userId);
+    return res.json(favoriteProducts);
+  }
+
+  @Post(':id/favorites/:productId')
+  async addFavoriteProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
+    const favoriteProduct = await this.usersService.addFavoriteProductService(userId, productId);
+    return res.json({ message: `The product ${favoriteProduct.name} was added to favorites` });
+  }
+
+  @Delete(':id/favorites/:productId')
+  async removeFavoriteProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
+    const favoriteProduct = await this.usersService.removeFavoriteProductService(userId, productId);
+    return res.json({ message: `The product ${favoriteProduct.name} was removed from favorites` });
+  }
+
   @Get(':id')
   // @UseGuards(HybridAuthGuard, RoleGuard)
   // @Roles(UserRole.ADMIN)
