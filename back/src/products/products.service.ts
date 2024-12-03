@@ -298,4 +298,8 @@ export class ProductsService {
     };
   }
 
+  async findTopDiscountedProductsService(limit: number = 3) {
+    return this.productsRepository.findTopDiscountedProductsRepository(limit)
+  }
+
 }
