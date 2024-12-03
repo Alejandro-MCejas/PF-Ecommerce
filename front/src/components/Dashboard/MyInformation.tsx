@@ -13,7 +13,7 @@ const MyInformation = () => {
     const [userPhone, setUserPhone] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false); // Control de estado para guardar
-    console.log(userData);
+    console.log("Datos del usuario en el contexto:", userData);
 
     // Sincronizar valores iniciales cuando `userData` cambia
     useEffect(() => {
@@ -45,57 +45,61 @@ const MyInformation = () => {
         }
     };
 
-    // const handleSave = async () => {
-    //     const userId = userData?.user?.id;
-    //     const token = userData?.token;
-
-    //     if (!userId || !token) {
-    //         Swal.fire({
-    //             title: "Error",
-    //             text: "No se encontró el ID del usuario o el token. Por favor, inicie sesión nuevamente.",
-    //             icon: "error",
-    //             confirmButtonText: "OK",
-    //         });
-    //         return;
-    //     }
-
-    //     setIsSaving(true); // Activar el indicador de carga
-    //     try {
-    //         const updatedUser = await updateUser(
-    //             userId,
-    //             {
-    //                 name: userName,
-    //                 email: userEmail,
-    //                 address: userAddress,
-    //                 phone: userPhone,
-    //             },
-    //             token
-    //         );
-
-    //         setUserData({
-    //             token: userData.token, // Mantener el token
-    //             user: updatedUser, // Actualizar los datos del usuario en el contexto
-    //         });
-
-    //         setIsEditing(false); // Salir del modo de edición
-    //         Swal.fire({
-    //             title: "Actualización exitosa",
-    //             text: "Los datos del usuario se actualizaron correctamente.",
-    //             icon: "success",
-    //             confirmButtonText: "OK",
-    //         });
-    //     } catch (error: any) {
-    //         Swal.fire({
-    //             title: "Error al actualizar",
-    //             text: error.message || "No se pudieron actualizar los datos del usuario.",
-    //             icon: "error",
-    //             confirmButtonText: "OK",
-    //         });
-    //     } finally {
-    //         setIsSaving(false); // Desactivar el indicador de carga
-    //     }
-    // };
-
+    const handleSave = async () => {
+        const userId = userData?.user?.id;
+        const token = userData?.token;
+      
+        if (!userId || !token) {
+          Swal.fire({
+            title: "Error",
+            text: "No se encontró el ID del usuario o el token. Por favor, inicie sesión nuevamente.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      
+        setIsSaving(true);
+        try {
+          const updatedUser = await updateUser(userId, {
+            name: userName,
+            email: userEmail,
+            address: userAddress,
+            phone: userPhone,
+          }, token);
+      
+          setUserData({
+            token,
+            user: updatedUser,
+          });
+      
+          // Sincroniza el estado local inmediatamente
+          setUserName(updatedUser.name || "");
+          setUserEmail(updatedUser.email || "");
+          setUserAddress(updatedUser.address || "");
+          setUserPhone(updatedUser.phone || "");
+      
+          Swal.fire({
+            title: "Actualización exitosa",
+            text: "Los datos del usuario se actualizaron correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error: any) {
+          Swal.fire({
+            title: "Error al actualizar",
+            text: error.message || "No se pudieron actualizar los datos del usuario.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        } finally {
+          setIsSaving(false);
+        }
+      };
+      if (!userData || !userData.user) {
+        return <p>Loading...</p>; // O un spinner o mensaje más elaborado
+      }
+     
     return (
         <form className="space-y-4">
             <div className="flex flex-col">
@@ -155,7 +159,7 @@ const MyInformation = () => {
                 {isEditing ? (
                     <button
                         type="button"
-                        // onClick={handleSave}
+                        onClick={handleSave}
                         disabled={isSaving} // Desactivar mientras se guarda
                         className={`px-6 py-3 rounded-lg font-semibold mt-4 ${isSaving ? "bg-gray-400" : "bg-purple-500 text-white"
                             }`}
