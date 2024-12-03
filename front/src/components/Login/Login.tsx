@@ -155,7 +155,9 @@ const Login = () => {
             <div className="text-sm text-gray-600">
         Don&apos;t remember your password?{" "}
        
-        <ChangePassword />
+        <ChangePassword 
+          
+        />
       </div>
           </div>
         </div>

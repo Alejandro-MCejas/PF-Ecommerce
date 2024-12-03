@@ -22,10 +22,10 @@ const CyberGamer = () => {
                     </div>
                 </div>
             </div>
-
+{/* 
             <div className="w-full bg-white shadow-inner h-[50px] flex justify-center items-center">
                 <h2 className="text-black font-bold tracking-widest shadow-md text-[30px]"> Exclusive discounts</h2>
-            </div>
+            </div> */}
 
 
         </div>
