@@ -112,5 +112,15 @@ export class ProductsRepository {
         await this.productsRepository.update(id, { stock });
     }
 
+    async findTopDiscountedProductsRepository(limit: number){
+        return await this.productsRepository.find({
+            order: {
+                discount: 'DESC',
+            }, 
+            take: limit,
+            relations: ['categories']
+        })
+    }
+
 
 }
