@@ -14,7 +14,7 @@ const CardCart: React.FC<CardCartProp> = ({name, id, price, stock, image,onDelet
                     <button className="w-[280px] bg-purple-700 text-white font-bold text-center rounded-sm shadow-md" onClick={onDelete}>Eliminate</button>
                     <button className="w-[280px] bg-purple-700 text-white font-bold text-center rounded-sm shadow-md">Buy now</button>
                 </div>
-                <h2 className="w-full flex justify-end items-center text-black font-bold text-[20px]">Shipping cost</h2>
+                {/* <h2 className="w-full flex justify-end items-center text-black font-bold text-[20px]">Shipping cost</h2> */}
             </div>
             <div>
                 <StockCounter
@@ -25,7 +25,7 @@ const CardCart: React.FC<CardCartProp> = ({name, id, price, stock, image,onDelet
             </div>
             <div className="flex flex-col justify-between items-end">
                 <h2 className="text-[40px] font-bold">${price}</h2>
-                <h2 className="text-[20px] font-semibold">$5</h2>
+                {/* <h2 className="text-[20px] font-semibold">$5</h2> */}
             </div>
         </div>
     )
