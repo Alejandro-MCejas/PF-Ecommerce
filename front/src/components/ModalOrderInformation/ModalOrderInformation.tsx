@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { IOrderResponse } from "@/interfaces/IOrder";
-import { IProduct } from "@/interfaces/IProduct"; // Asegúrate de tener esta interfaz
-import { fetchingProductByID } from "@/helpers/productHelper"; // Helper para obtener el producto por ID
+import { IProduct } from "@/interfaces/IProduct";
+import { fetchingProductByID } from "@/helpers/productHelper";
+import { changeStatus } from "@/helpers/orderHelper"; // Importa el helper
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedOrder: IOrderResponse | null;
+  userToken: string; // Asegúrate de pasar el token del usuario como prop
 }
 
 const ModalOrderInformation: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   selectedOrder,
+  userToken,
 }) => {
   const [detailedProducts, setDetailedProducts] = useState<IProduct[]>([]); // Estado para almacenar los productos detallados
-
+  const [isUpdating, setIsUpdating] = useState(false); // Estado para manejar el botón de actualización
+  const router = useRouter()
   useEffect(() => {
     const fetchProductDetails = async () => {
       if (selectedOrder) {
@@ -40,6 +45,29 @@ const ModalOrderInformation: React.FC<ModalProps> = ({
       fetchProductDetails(); // Llama a la función si el modal está abierto y hay una orden seleccionada
     }
   }, [isOpen, selectedOrder]);
+
+  const handleChangeStatus = async () => {
+    if (!selectedOrder) return;
+
+    setIsUpdating(true); // Bloquea el botón mientras se realiza la actualización
+    try {
+      const updatedStatus = await changeStatus(selectedOrder.order.id, userToken);
+
+      if (updatedStatus) {
+        alert(`Order status changed to: ${updatedStatus.order.status}`);
+
+      } else {
+        alert("Failed to change order status. Try again later.");
+      }
+      router.refresh()
+    } catch (error) {
+      console.error("Error changing order status:", error);
+      alert("An error occurred while changing the order status.");
+    } finally {
+      
+      setIsUpdating(false); // Libera el botón
+    }
+  };
 
   if (!isOpen || !selectedOrder) return null; // No renderiza si no está abierto o no hay orden seleccionada
 
@@ -74,9 +102,6 @@ const ModalOrderInformation: React.FC<ModalProps> = ({
                   <p>
                     <strong>Name:</strong> {product.name}
                   </p>
-                  {/* <p>
-                    <strong>Quantity:</strong> {product.quantity}
-                  </p> */}
                   <p>
                     <strong>Price:</strong> ${product.price}
                   </p>
@@ -92,12 +117,21 @@ const ModalOrderInformation: React.FC<ModalProps> = ({
             ))}
           </div>
         </div>
-        <button
-          className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        <div className="mt-4 flex space-x-4">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={handleChangeStatus}
+            disabled={isUpdating} // Desactiva el botón mientras se actualiza
+          >
+            {isUpdating ? "Updating..." : "Change Status"}
+          </button>
+          <button
+            className="bg-gray-500 text-white px-4 py-2 rounded"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

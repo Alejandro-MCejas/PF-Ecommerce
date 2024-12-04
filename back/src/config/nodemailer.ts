@@ -8,7 +8,10 @@ export const nodemailerConfig = {
     auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS
-    }
+    },
+    tls: {
+        rejectUnauthorized: false, // Permite certificados autofirmados
+      },
 }
 
 export const createTransporter = () => nodemailer.createTransport(nodemailerConfig)

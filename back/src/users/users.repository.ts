@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { Products } from "src/entities/products.entity";
+import { ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 
 
 @Injectable()
@@ -130,29 +131,50 @@ export class UsersRepository {
         return product
     }
 
+
+
     async claimProductRepository(userId: string, productId: string) {
+        // Carga al usuario con la relación `claimedProducts`
         const user = await this.usersRepository.findOne({
             where: { id: userId },
-        })
+            relations: ['claimedProducts'],
+        });
 
-        if (!user) throw new Error('User not found');
-        if (!user.isSuscription) throw new Error('User is not suscribed')
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        if (!user.isSuscription) {
+            throw new BadRequestException('User is not subscribed');
+        }
 
         const product = await this.productsRepository.findOne({
-            where: {id: productId}
-        })
+            where: { id: productId },
+        });
 
-        if (!product) throw new Error('Product not found')
-        if (!product.suscription) throw new Error('Product is not suscription')
+        if (!product) {
+            throw new NotFoundException('Product not found');
+        }
 
-        const isAlreadyClaimed = user.claimedProducts.some(p => p.id === productId)
+        if (!product.suscription) {
+            throw new BadRequestException('Product is not for subscription');
+        }
 
-        if(isAlreadyClaimed) throw new Error('Product is already claimed')
+        // Verifica si el producto ya fue reclamado
+        const isAlreadyClaimed = user.claimedProducts?.some((p) => p.id === productId);
 
-        user.claimedProducts.push(product)
-        await this.usersRepository.save(user)
-        return {product, user}
+        if (isAlreadyClaimed) {
+            throw new ConflictException('This product is already reclaimed');
+        }
+
+        // Agrega el producto a la lista de productos reclamados
+        user.claimedProducts.push(product);
+        await this.usersRepository.save(user);
+
+        return { product, user };
     }
+
+
 }
 
 

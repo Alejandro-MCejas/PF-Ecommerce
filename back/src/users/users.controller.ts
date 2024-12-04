@@ -49,7 +49,7 @@ export class UsersController {
     return res.status(200).json(user)
   }
 
-  @Post(':id/claim/productId')
+  @Post(':id/claim/:productId')
   async claimProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
     const claimedProduct = await this.usersService.claimProductService(userId, productId);
     return res.json({ message: `The product ${claimedProduct.name} was claimed` })
