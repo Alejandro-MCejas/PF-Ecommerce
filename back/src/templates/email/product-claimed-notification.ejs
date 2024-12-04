@@ -9,7 +9,7 @@
     </title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #232323;
@@ -18,175 +18,100 @@
 
         .container {
             max-width: 600px;
-            margin: 30px auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: #1a1a1a;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-            text-align: center;
+            border-radius: 10px;
             border: 2px solid #A065FF;
-        }
-
-        .header {
-            margin-bottom: 20px;
+            text-align: center;
         }
 
         .header img {
-            width: 100%;
             max-width: 150px;
             height: auto;
+            margin-bottom: 15px;
         }
 
         .title {
-            color: #A065FF;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
-            margin: 20px 0;
+            color: #A065FF;
+            margin-bottom: 20px;
         }
 
         .message {
-            line-height: 1.8;
             font-size: 16px;
-            margin-bottom: 20px;
+            line-height: 1.5;
             color: #e0e0e0;
+            margin-bottom: 20px;
         }
 
         .product {
+            display: flex;
+            align-items: center;
             background-color: #2a2a2a;
+            padding: 10px;
             border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            width: 100%;
-            max-width: 500px;
-            text-align: left;
+            margin-bottom: 20px;
+            color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .product img {
-            width: 100%;
-            height: 200px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 10px 10px 0 0;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+        .product-info {
+            flex: 1;
         }
 
         .product-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #A065FF;
-            margin: 10px 0;
-        }
-
-        .product-price {
-            font-size: 18px;
-            color: #f4f4f4;
-            margin: 5px 0;
-        }
-
-        .product-discount {
-            font-size: 16px;
-            color: #ffcc00;
             margin: 5px 0;
         }
 
         .token {
             font-size: 16px;
             color: #A065FF;
-            margin: 20px 0;
+            font-weight: bold;
+            margin-top: 20px;
         }
 
         .footer {
-            margin-top: 30px;
-            font-size: 14px;
+            font-size: 12px;
             color: #bfbfbf;
+            margin-top: 20px;
         }
 
         .footer a {
             color: #A065FF;
             text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 768px) {
-            .title {
-                font-size: 24px;
-            }
-
-            .message {
-                font-size: 14px;
-            }
-
-            .product-name {
-                font-size: 18px;
-            }
-
-            .product-price {
-                font-size: 16px;
-            }
-
-            .product-discount {
-                font-size: 14px;
-            }
-
-            .footer {
-                font-size: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .title {
-                font-size: 20px;
-            }
-
-            .message {
-                font-size: 12px;
-            }
-
-            .product-name {
-                font-size: 16px;
-            }
-
-            .product-price {
-                font-size: 14px;
-            }
-
-            .product-discount {
-                font-size: 12px;
-            }
-
-            .footer {
-                font-size: 10px;
-            }
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <div class="header">
             <img src="https://res.cloudinary.com/dvpenabty/image/upload/v1733093069/logo_g8qfvy.png"
                 alt="CyberGames Logo">
         </div>
-        <div class="title">
-            Product Claimed Successfully!
-        </div>
-        <p class="message">
-            Congratulations! You have successfully claimed the following product:
-        </p>
+        <div class="title">Product Claimed Successfully!</div>
+        <p class="message">Congratulations! You have successfully claimed the following product:</p>
         <div class="product">
-            < img src="<%= product.image[0] %>" alt="<%= product.name %>">
+            <img src="<%= product.image[0] %>" alt="<%= product.name %>">
+            <div class="product-info">
                 <div class="product-name">
                     <%= product.name %>
                 </div>
-                <div class="product-price">$<%= product.price %>
-                </div>
-                <div class="product-discount">
-                    <%= product.discount %>
-                </div>
+            </div>
         </div>
         <p class="token">Your token: <%= gameToken %>
         </p>
@@ -195,7 +120,6 @@
             <p><a href="https://pf-ecommerce2024.vercel.app/">Visit our website</a></p>
         </div>
     </div>
-
 </body>
 
 </html>
