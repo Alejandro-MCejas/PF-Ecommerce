@@ -65,9 +65,9 @@ export class MercadoPagoService {
         body: {
           items: products,
           back_urls:{
-            success: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-            failure: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
-            pending: `http://localhost:4000/cart/paymentResult/orderDetailId:${orderDetailId}`,
+            success: `https://pf-ecommerce2024.vercel.app/cart/paymentResult/orderDetailId:${orderDetailId}`,
+            failure: `https://pf-ecommerce2024.vercel.app/cart/paymentResult/orderDetailId:${orderDetailId}`,
+            pending: `https://pf-ecommerce2024.vercel.app/cart/paymentResult/orderDetailId:${orderDetailId}`,
           },
           auto_return: preferenceData.auto_return || 'approved',
         },
