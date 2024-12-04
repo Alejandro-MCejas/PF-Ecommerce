@@ -1,17 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  
+  const [token, setToken] = useState<string | null>(null);
+
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token"); // Extraer token de la URL
+
+  // Extrae el token de la URL sin usar useSearchParams
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setToken(params.get("token"));
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,19 +32,20 @@ const ResetPassword = () => {
       setError("Passwords do not match.");
       return;
     }
-console.log(token, newPassword, confirmPassword);
-const requestData = {
-    token,
-    newPassword,
-    confirmPassword,
-  };
+
+    const requestData = {
+      token,
+      newPassword,
+      confirmPassword,
+    };
+
     try {
       const response = await fetch("http://localhost:3000/auth/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData ),
+        body: JSON.stringify(requestData),
       });
 
       if (!response.ok) {

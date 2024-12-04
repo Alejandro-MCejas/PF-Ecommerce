@@ -6,8 +6,10 @@ import { getOrderDetailById } from "@/helpers/orderHelper";
 import { IOrderResponse } from "@/interfaces/IOrder";
 import { IProduct } from "@/interfaces/IProduct";
 import ModalOrderInformation from "../ModalOrderInformation/ModalOrderInformation";
+import { useAuth } from "@/context/Authcontext";
 
 const MyOrders = ({ userId }: { userId: string }) => {
+  const { userData } = useAuth()
   const [orders, setOrders] = useState<IOrderResponse[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<IOrderResponse | null>(null); // Orden seleccionada
   const [isLoading, setIsLoading] = useState(true);
@@ -58,13 +60,13 @@ const MyOrders = ({ userId }: { userId: string }) => {
         console.error("Order detail not found.");
         return;
       }
-  
+
       const foundOrder = orders.find((o) => o.order.id === orderId);
       if (!foundOrder) {
         console.error("Order not found.");
         return;
       }
-  
+
       const detailedOrder = {
         order: foundOrder.order,
         orderDetail: orderDetail.orderDetail,
@@ -77,7 +79,7 @@ const MyOrders = ({ userId }: { userId: string }) => {
       setIsLoadingDetails(false);
     }
   };
-  
+
   // Cerrar el modal
   const handleCloseModal = () => {
     setSelectedOrder(null); // Limpia la orden seleccionada
@@ -117,11 +119,18 @@ const MyOrders = ({ userId }: { userId: string }) => {
       )}
 
       {/* Modal para mostrar los detalles */}
-      <ModalOrderInformation
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        selectedOrder={selectedOrder}
-      />
+      {
+        userData && (
+          <ModalOrderInformation
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            selectedOrder={selectedOrder}
+            userToken={userData.token} // Pasa el token desde el contexto
+          />
+        )
+      }
+
+
     </div>
   );
 };

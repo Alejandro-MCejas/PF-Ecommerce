@@ -268,4 +268,14 @@ export const changeProductSuscription = async (
     }
 };
 
-
+export const reclaimeProduct = async(userId:string , productId:string) => {
+    try {
+        const response = await fetch(`${API_URL}/users/${userId}/claim/${productId}`,{
+            method:"POST",
+        })
+        const messageResponse = await response.json()
+        return messageResponse;
+    } catch (error) {
+        console.log(error)
+    }
+}
