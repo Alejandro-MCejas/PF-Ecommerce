@@ -56,7 +56,7 @@ export class SuscriptionService {
     const { userId } = createSuscription;
 
     if (!isUUID(userId)) {
-        throw new Error(`El userId ${userId} no es un UUID válido`);
+        throw new Error(`UserId ${userId} invalid UUID `);
     }
 
     const priceSuscription = 5;
@@ -117,7 +117,6 @@ export class SuscriptionService {
             },
         });
         preferenceId = response.id; // Extraer el ID de la preferencia.
-        console.log('Preference creada con ID:', preferenceId);
     } catch (error) {
         console.error('Error al crear la preferencia de pago:', error);
         throw new Error('Failed to create payment preference');
@@ -135,7 +134,7 @@ export class SuscriptionService {
 
   async cancelSuscription(userId: string): Promise<string> {
     if (!isUUID(userId)) {
-      throw new Error(`El userId ${userId} no es un UUID válido`);
+      throw new Error(`UserId ${userId} is invalid UUID`);
     }
 
     const user = await this.userRepository.findOneUserRepository(userId);
@@ -143,7 +142,7 @@ export class SuscriptionService {
       throw new Error('User not found');
     }
 
-    console.log('Actualizando usuario:', userId);
+    console.log('Update user:', userId);
 
     const updatedUser = await this.userRepository.updateUserRepository(userId, { isSuscription: false });
 
