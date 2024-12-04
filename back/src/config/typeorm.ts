@@ -17,7 +17,7 @@ const config = {
     migrations: ['dist/migrations/*{.js,.ts}'],
     synchronize: true, // TRUE
     logging: false,
-    dropSchema: false,
+    dropSchema: true,
     ssl: isRender ? { rejectUnauthorized: false } : false
 }
 export default registerAs('typeorm', () => config);
