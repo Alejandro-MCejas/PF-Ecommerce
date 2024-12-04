@@ -44,7 +44,7 @@ const ReviewGames = ({ product }: { product: IProduct }) => {
 
     return (
         <div className="my-5">
-            <h2 className="ml-10 mb-4 text-[38px] text-gray-400 font-semibold">Make your own review</h2>
+            <h2 className="ml-10 mb-4 text-[20px] md:text-[38px] text-gray-400 font-semibold">Make your own review</h2>
             {userData?.user.admin === "user" ? (
                 <div className="w-full max-w-[1400px] mx-auto h-[210px] flex flex-col items-center">
                     <textarea
@@ -71,7 +71,7 @@ const ReviewGames = ({ product }: { product: IProduct }) => {
                     </Link>
                 </div>
             )}
-            <h2 className="ml-10 mb-5 text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
+            <h2 className="ml-10 mb-5 text-[20px] md:text-[38px] text-gray-400 font-semibold">Product Reviews</h2>
             <div className="flex flex-col justify-evenly gap-7">
                 {product.reviews
                     .filter((review) => review.comment?.trim() !== "") // Filtrar comentarios vacíos

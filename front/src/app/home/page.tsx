@@ -47,13 +47,13 @@ const home = async () => {
                     <div className="w-1/2 flex justify-evenly items-center">
                         <FontAwesomeIcon icon={faPlaystation} className="text-[20px] md:text-[50px] flex justify-end" />
                         <FontAwesomeIcon icon={faXbox} className="text-[20px] md:text-[50px] flex justify-end" />
-                        <Image src={logoNintendo} alt={"logo"} className="w-[70px] md:w-[150px] h-[50px] flex justify-end" ></Image>
+                        {/* <Image src={logoNintendo} alt={"logo"} className="w-[70px] md:w-[150px] h-[50px] flex justify-end" ></Image> */}
                     </div>
 
                 </div>
             </div>
             <h2 className="text-[30px] md:text-[64px]  font-extralight tracking-wide neon-text text-center text-violet-500 mb-2">Suscribe and start winning</h2>
-            <div className="w-full md:max-w-[1500px] mx-auto md:p-10 ">
+            <div className="p-7 w-full md:max-w-[1500px] mx-auto md:p-10 ">
                 <div className="w-[350px] h-[500px] md:w-[800px] md:h-[700px] border-2 border-blue-600 rounded-md mx-auto shadow-custom-blue hover:shadow-custom-blue-hover hover:-translate-y-5 transition-transform duration-300">
                     <div className="w-full h-full">
                         <div className="w-full h-1/3 flex flex-col justify-evenly items-center">
@@ -67,7 +67,7 @@ const home = async () => {
                                 <li className="flex justify-start items-center gap-4 text-[20px] md:text-[38px] text-violet-500"><FontAwesomeIcon icon={faGamepad} className="w-[25px] md:w-[50px] h-[25px] md:h-[50px] text-violet-500" />Exclusive discounts</li>
                                 <li className="flex justify-start items-center gap-4 text-[20px] md:text-[38px] text-violet-500"><FontAwesomeIcon icon={faGamepad} className="w-[25px] md:w-[50px] h-[25px] md:h-[50px] text-violet-500" />All the latest news about videogames</li>
                             </ul>
-                            <Link href="/suscription" className="text-white font-bold bg-blue-500 w-[150px] text-center rounded-lg p-1 text-[20px] md:text-[38px] tracking-wide hover:bg-blue-300"> More information </Link>
+                            <Link href="/subscription" className="text-white font-bold bg-blue-500 w-[150px] md:w-[250px] text-center rounded-lg p-1 text-[20px] md:text-[38px] tracking-wide hover:bg-blue-300"> More information </Link>
                         </div>
 
                     </div>

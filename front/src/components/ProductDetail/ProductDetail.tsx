@@ -111,7 +111,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             try {
                 const result = await Swal.fire({
                     title: "You will reclaime this free product?",
-                    text: "Are you ready?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -122,17 +121,16 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 if (result.isConfirmed) {
                     try {
                         const response = await reclaimeProduct(userData.user.id, product.id);
-
-                        if (response.ok) {
-                            Swal.fire({
-                                title: "Reclaime!",
-                                text: "Your product has been reclaimed.",
-                                icon: "success",
-                            });
-                        } else {
-                            // Maneja los errores que no lanzan excepción pero devuelven un error HTTP
-                            throw new Error("Failed to reclaime product");
-                        }
+                        Swal.fire({
+                            title: "Reclaime!",
+                            text: "Your product has been reclaimed.",
+                            icon: "success",
+                        });
+                        // if (response) {
+                        // } else {
+                        //     // Maneja los errores que no lanzan excepción pero devuelven un error HTTP
+                        //     throw new Error("Failed to reclaime product");
+                        // }
                     } catch (error) {
                         console.log(error)
                         Swal.fire({
@@ -157,25 +155,40 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     return (
         <div className="w-full">
             {/* Imagen e informacion */}
-            < div className="flex w-full justify-evenly items-center " >
+            < div className="flex flex-col md:flex-row w-full justify-evenly items-center" >
                 {/* Imagen */}
-                < div className="w-1/2 min-w-[550px] min-h-[700px] max-w-[550px] max-h-[750px] flex justify-between items-center" >
-                    <div className="h-[600px] flex flex-col justify-evenly items-center w-[150px]">
+                <div className="flex flex-col md:flex-row w-full md:min-w-[550px] md:min-h-[700px] md:max-w-[550px] md:max-h-[750px] items-center justify-center">
+                    {/* Contenedor de miniaturas */}
+                    <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible w-full md:w-[150px] h-auto md:h-[600px] justify-center items-center md:justify-evenly">
                         {product.image.map((image, index) => (
                             <div
                                 key={index}
-                                className="cursor-pointer m-1 border-2 border-transparent hover:border-blue-500"
-                                onMouseEnter={() => setActiveImage(image)}
+                                className="cursor-pointer border-2 border-transparent hover:border-blue-500 flex-shrink-0"
+                                onClick={() => setActiveImage(image)}
                             >
-                                <img src={image} alt={`Thumbnail ${index}`} className="w-[80px] h-[80px] rounded-sm" />
+                                <img
+                                    src={image}
+                                    alt={`Thumbnail ${index}`}
+                                    className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] object-cover rounded-sm"
+                                />
                             </div>
                         ))}
                     </div>
-                    <img src={activeImage} className="w-[400px] h-[650px] rounded-md" alt="bannerImg" />
-                </div >
+
+                    {/* Contenedor de la imagen principal */}
+                    <div className="flex justify-center items-center w-full max-w-[400px] min-h-[400px] max-h-[450px] md:max-h-[800px] overflow-hidden p-5">
+                        <img
+                            src={activeImage}
+                            alt="bannerImg"
+                            className="w-full max-h-[400px] md:w-[400px] md:h-[650px] object-contain rounded-md"
+                        />
+                    </div>
+                </div>
+
+
                 {/* Informacion */}
-                < div className="w-1/2 min-w-[700px] min-h-[750px] max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
-                    <div className="w-full h-[750px] flex flex-col justify-evenly items-start p-10">
+                < div className="w-full md:w-1/2 md:min-w-[700px] md:min-h-[750px]  md:max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
+                    <div className="w-full md:h-[750px] flex flex-col justify-evenly items-start p-10">
                         <div className="w-full flex justify-end items-end">
                             <FavoriteButton
                                 userId={userData?.user.id || ""}
@@ -183,7 +196,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             />
                         </div>
                         <div className="flex flex-col justify-evenly items-start h-[200px] mt-0">
-                            <h2 className="text-[48px] font-semibold">{product.name}</h2>
+                            <h2 className="text-[30px] md:text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
                                 {
@@ -220,12 +233,12 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             {
                                 discount === 0 ? (
                                     <div>
-                                        <p className="text-[98px] font-black">${product.price}</p>
+                                        <p className="text-[60px] md:text-[98px] font-black">${product.price}</p>
                                     </div>
                                 ) : (
                                     <div>
-                                        <p className="text-[98px] font-black">${discountedPrice}</p>
-                                        <p className="text-[24px] text-gray-500 line-through">
+                                        <p className="text-[60px] md:text-[98px] font-black">${discountedPrice}</p>
+                                        <p className="text-[16px] md:text-[24px] text-gray-500 line-through">
                                             Original: ${product.price}
                                         </p>
                                     </div>
@@ -237,16 +250,16 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                         {
                             product.stock === 0 ? (
                                 <div className="flex flex-col justify-center items-start">
-                                    <p className="text-[36px] font-semibold">No stock available</p>
+                                    <p className="text-[20px] md:text-[36px] font-semibold">No stock available</p>
                                 </div>
                             ) : product.stock < 10 ? (
                                 <div className="flex flex-col justify-center items-start">
-                                    <p className="text-[36px] font-semibold">Stock available</p>
-                                    <p className="text-[26px] font-semibold ">Only {product.stock} games available!</p>
+                                    <p className="text-[20px] md:text-[36px] font-semibold">Stock available</p>
+                                    <p className="text-[20px] md:text-[26px] font-semibold ">Only {product.stock} games available!</p>
                                 </div>
                             ) : (
                                 <div className="flex flex-col justify-center items-start">
-                                    <p className="text-[36px] font-semibold">Stock available</p>
+                                    <p className="text-[20px] md:text-[36px] font-semibold">Stock available</p>
                                 </div>
                             )
                         }
@@ -255,7 +268,9 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             {userData?.user.admin !== "admin" ? (
                                 userData?.user.admin !== "user" ? (
                                     // Mostrar solo botón de comprar si el rol no es admin ni user
-                                    <Link href="/login" className="bg-blue-500 text-white px-4 py-2 rounded">Buy now</Link>
+                                    <div className="w-full flex justify-center items-center">
+                                        <Link href="/login" className="w-full md:w-1/2 bg-violet-500 text-white text-center font-bold px-4 py-2 m-auto rounded hover:bg-violet-300">Buy now</Link>
+                                    </div>
                                 ) : userData.user.isSuscription === true && product.suscription === true ? (
                                     <div className="w-full flex items-center flex-col gap-3">
                                         <AddToCart
@@ -282,24 +297,22 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                             price={discountedPrice !== price ? discountedPrice : price}
                                             image={product.image}
                                         />
-                                        <button className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded">Buy Now</button>
+                                        {/* <button className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded">Buy Now</button> */}
                                     </div>
                                 )
                             ) : (
                                 // Mostrar botones de "Edit", "Subscription" y "Delete" si el rol es admin
-                                <div className="w-full flex items-center gap-4">
-                                    <div className="flex flex-col gap-4">
-                                        <ModalEditGame
+                                <div className="w-full flex flex-col items-center gap-4">
+                                    <ModalEditGame
                                             product={product}
                                         />
                                         <ModalApplyDiscount
                                             product={product}
                                         />
-                                    </div>
-                                    <div className="flex flex-col gap-4">
-                                        <button className="w-[300px] h-[50px] bg-violet-600 text-white px-4 py-2 rounded" onClick={handleAddCyberGamer}>Subscription</button>
                                         <button className="w-[300px] h-[50px] bg-red-500 text-white px-4 py-2 rounded" onClick={handleDeleteGame}>Delete</button>
-                                    </div>
+                                    {/* <div className="flex flex-col gap-4">
+                                        <button className="w-[300px] h-[50px] bg-violet-600 text-white px-4 py-2 rounded" onClick={handleAddCyberGamer}>Subscription</button>
+                                    </div> */}
                                 </div>
                             )}
                         </div>
@@ -309,9 +322,9 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             <div className="mt-10 w-full max-w-[1500px] mx-auto h-[3px] bg-[#ffffff] rounded-3xl" />
 
             {/* Product description */}
-            <div className="p-10 my-5">
-                <h2 className="text-[38px] text-gray-400 font-semibold">Product description</h2>
-                <article className="text-justify text-[28px] text-gray-500 max-w-[1500px]">{product.description}</article >
+            <div className="md:p-10 my-5">
+                <h2 className="text-[20px] md:text-[38px] text-gray-400 font-semibold">Product description</h2>
+                <article className="text-justify text-[15px] md:text-[28px] text-gray-500 max-w-[1500px]">{product.description}</article >
             </div>
         </div>
 

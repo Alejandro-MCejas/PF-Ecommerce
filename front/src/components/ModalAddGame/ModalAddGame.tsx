@@ -139,9 +139,9 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
     if (userData?.user.admin !== "admin") return null;
 
     return (
-        <div className="mt-10">
+        <div className="mt-3 md:mt-10">
             <button
-                className="bg-violet-600 text-white text-[64px] w-[600px] h-[200px] tracking-widest font-black rounded-md hover:bg-violet-400 transition "
+                className="bg-violet-600 text-white text-[30px] md:text-[64px] w-[300px] md:w-[600px] h-[100px] md:h-[200px] tracking-widest font-black rounded-md hover:bg-violet-400 transition "
                 onClick={openModal}
             >
                 Add New Game
@@ -189,7 +189,7 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
                                                     <button
                                                         type="button"
                                                         onClick={() => removeImage(index)}
-                                                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                                                        className="absolute top-0 right-0 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
                                                     >
                                                         ✕
                                                     </button>
@@ -258,7 +258,7 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
                                 <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span>
 
                             </label>
-                            <label className="flex items-center w-3/4 gap-4 bg-red-100">
+                            <label className="flex items-center w-3/4 gap-4">
                                 <input type="checkbox" className="hidden peer" />
                                 {/* <span className="w-6 h-6 border-2 border-black rounded-md flex items-center justify-center mr-2 transition-all duration-300 peer-checked:border-black peer-checked:scale-110 peer-checked:rotate-[360deg] peer-checked:rotate-y-[360deg] peer-checked:content-['✓'] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black/20 peer-focus:ring-offset-0 hover:border-black hover:bg-black hover:scale-105 before:content-['✓'] before:text-transparent peer-checked:before:text-black before:transition-all before:duration-300"></span> */}
                                 <p className='w-1/2'>Have any discount?</p>

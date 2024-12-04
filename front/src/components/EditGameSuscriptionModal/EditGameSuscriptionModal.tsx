@@ -86,7 +86,7 @@ const EditGameSuscriptionModal = () => {
             <div className="w-[800px] md:w-[1500px] flex justify-evenly items-center">
                 <div className="w-1/2 md:w-full flex flex-wrap md:flex-nowrap justify-evenly items-center">
                     {productInCard.map((game, index) => (
-                        <div className="w-1/2 flex justify-center" key={index}>
+                        <div className="w-1/4 md:w-1/2 flex justify-center" key={index}>
                             <SuscriptionGameCard
                                 imagenUrl={
                                     game.image &&
@@ -95,6 +95,9 @@ const EditGameSuscriptionModal = () => {
                                         ? game.image[0]
                                         : undefined
                                 }
+                                title={game.name}
+                                price={game.price}
+                                id={game.id}
                             />
                         </div>
                     ))}
@@ -106,9 +109,15 @@ const EditGameSuscriptionModal = () => {
     return (
         <div className="top-0">
           <div className="flex flex-col w-[1500px] justify-center items-center">
-            <div className="w-full flex justify-evenly items-center">
+            <div className="w-1/4 md:w-full flex justify-evenly items-center">
               {productInCard.map((game, index) => (
-                <SuscriptionGameCard key={index} imagenUrl={game.image[0]} />
+                <SuscriptionGameCard 
+                  key={index} 
+                  imagenUrl={game.image[0]} 
+                  title={game.name}
+                  id={game.id}
+                  price={game.price}
+                />
               ))}
             </div>
             <div className="mt-10">
@@ -122,8 +131,8 @@ const EditGameSuscriptionModal = () => {
           </div>
     
           {isOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1000px] h-[700px]">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-5">
+              <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1000px] h-auto md:h-[700px]">
                 <h2 className="text-2xl mb-4">Choose 4 games for change</h2>
                 <div className="w-full">
                   <div className="overflow-y-auto max-h-[400px]">
