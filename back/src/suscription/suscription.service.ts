@@ -109,9 +109,9 @@ export class SuscriptionService {
             body: {
                 items,
                 back_urls: {
-                  success: `http://localhost:4000/subscription/paymentResult/feedback?status=approved&userId=${userId}`,
-                  failure: `http://localhost:4000/subscription/paymentResult/feedback?status=failure&userId=${userId}`,
-                  pending: `http://localhost:4000/subscription/paymentResult/feedback?status=pending&userId=${userId}`,
+                  success: `https://pf-ecommerce2024.vercel.app/subscription/paymentResult/feedback?status=approved&userId=${userId}`,
+                  failure: `https://pf-ecommerce2024.vercel.app/subscription/paymentResult/feedback?status=failure&userId=${userId}`,
+                  pending: `https://pf-ecommerce2024.vercel.app/subscription/paymentResult/feedback?status=pending&userId=${userId}`,
                 },
                 external_reference: userId,
             },

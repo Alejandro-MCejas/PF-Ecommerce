@@ -2,7 +2,7 @@ import { ILoginProps, IRegisterProps } from "@/interfaces/IRegisterProp";
 import Swal from "sweetalert2";
 
 
-const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
+const API_URL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
 
 
 
@@ -12,7 +12,7 @@ export async function register(userData: IRegisterProps, parentId?: string) {
   console.log(userData);
 
   try {
-    const url = new URL(`${APIURL}/auth/signup`);
+    const url = new URL(`${API_URL}/auth/signup`);
     // Añadir parentId como parámetro de consulta si está disponible
     if (parentId) {
       url.searchParams.append("parentId", parentId);
@@ -46,7 +46,7 @@ export async function register(userData: IRegisterProps, parentId?: string) {
 //USUARIO POR ID
 export async function getUser(userId: string) {
   try {
-    const res = await fetch(`${APIURL}/users/${userId}`, {
+    const res = await fetch(`${API_URL}/users/${userId}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -71,7 +71,7 @@ export async function updateUser(
   token: string
 ) {
   try {
-    const res = await fetch(`${APIURL}/users/${userId}`, {
+    const res = await fetch(`${API_URL}/users/${userId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -100,7 +100,7 @@ export async function updateUser(
 //ELIMINAR USUARIO
 export async function deleteUser(userId: string) {
   try {
-    const res = await fetch(`${APIURL}/users/${userId}`, {
+    const res = await fetch(`${API_URL}/users/${userId}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
@@ -120,7 +120,7 @@ export async function deleteUser(userId: string) {
 // Obtener todos los usuarios
 export async function getAllUsers() {
   try {
-    const res = await fetch(`${APIURL}/users`, {
+    const res = await fetch(`${API_URL}/users`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -142,7 +142,7 @@ export async function getAllUsers() {
 // Login
 export async function login(userData: ILoginProps) {
   try {
-    const res = await fetch(`${APIURL}/auth/signin`, {
+    const res = await fetch(`${API_URL}/auth/signin`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -165,7 +165,7 @@ export async function login(userData: ILoginProps) {
 export const changePassword = async (email: string) => {
   try {
     // Realizar el POST al backend
-    const response = await fetch("http://localhost:3000/auth/forgot-password", {
+    const response = await fetch(`${API_URL}/auth/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -196,7 +196,7 @@ export const changePassword = async (email: string) => {
 
 export async function getTokken() {
   try {
-    const res = await fetch(`localhost:3000/auth/profile`, {
+    const res = await fetch(`${API_URL}/auth/profile`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -217,7 +217,7 @@ export async function getTokken() {
 
 export const getToken2Prueba = async () => {
   try {
-    const res = await fetch(`${APIURL}/auth/login`, {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: 'GET',
       credentials: 'include', // Para enviar cookies o encabezados de autenticación
       headers: {
