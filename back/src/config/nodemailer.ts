@@ -9,6 +9,7 @@ export const nodemailerConfig = {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS
     }
+   
 }
 
 export const createTransporter = () => nodemailer.createTransport(nodemailerConfig)

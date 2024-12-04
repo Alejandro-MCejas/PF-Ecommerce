@@ -51,28 +51,33 @@ const MyOrders = ({ userId }: { userId: string }) => {
 
   // Manejar la carga de detalles de una orden y abrir el modal
   const handleViewDetails = async (orderId: string) => {
-    setIsLoadingDetails(true); // Inicia la carga
+    setIsLoadingDetails(true);
     try {
-      const orderDetail = await getOrderDetailById(orderId); // Llamada al helper
+      const orderDetail = await getOrderDetailById(orderId);
       if (!orderDetail) {
         console.error("Order detail not found.");
         return;
       }
-
-      // Construir el objeto detallado
+  
+      const foundOrder = orders.find((o) => o.order.id === orderId);
+      if (!foundOrder) {
+        console.error("Order not found.");
+        return;
+      }
+  
       const detailedOrder = {
-        order: orders.find((o) => o.order.id === orderId)?.order!,
+        order: foundOrder.order,
         orderDetail: orderDetail.orderDetail,
       };
-      setSelectedOrder(detailedOrder); // Actualiza la orden seleccionada
-      setIsModalOpen(true); // Abre el modal
+      setSelectedOrder(detailedOrder);
+      setIsModalOpen(true);
     } catch (error) {
       console.error("Error fetching order details:", error);
     } finally {
-      setIsLoadingDetails(false); // Finaliza la carga
+      setIsLoadingDetails(false);
     }
   };
-
+  
   // Cerrar el modal
   const handleCloseModal = () => {
     setSelectedOrder(null); // Limpia la orden seleccionada

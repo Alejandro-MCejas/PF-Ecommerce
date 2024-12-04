@@ -25,7 +25,6 @@ export const createOrder = async (orderData: OrderData): Promise<OrderResponse |
     }
 
     const order = await response.json();
-    console.log
     return order;
   } catch (error) {
     console.error("Error creando la orden:", error);

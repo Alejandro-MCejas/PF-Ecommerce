@@ -22,23 +22,34 @@ export class SuscriptionService {
     private readonly userRepository: UsersRepository,
   ) { }
 
-  async getSuscription(userId: string): Promise<Products[]> {
+  async getSuscription(userId: string): Promise<{ suscription: any; products: Products[] }> {
+    // Verifica que el usuario exista
     const user = await this.userService.findOneUserService(userId);
-
-    if (user.isSuscription === undefined || user.isSuscription === null) {
-      throw new Error('El campo isSuscription del usuario no está definido correctamente');
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`);
     }
-
+  
+    // Busca la suscripción del usuario
+    const suscription = await this.suscriptionRepository.findOne({
+      where: { user },
+    });
+  
+    if (!suscription) {
+      throw new Error(`No active subscription found for user with id ${userId}`);
+    }
+  
+    // Obtiene los productos asociados a la suscripción
     const products = await this.productsService.findProducts();
-
-    if (products.length === 0) {
-      return [];
-    }
-    if (user.isSuscription) {
-      return products.filter(product => product.suscription === true);
-    } else {
-      return products.filter(product => product.suscription === false);
-    }
+  
+    // Filtra los productos según el estado de la suscripción
+    const filteredProducts = user.isSuscription
+      ? products.filter(product => product.suscription === true)
+      : products.filter(product => product.suscription === false);
+  
+    return {
+      suscription,
+      products: filteredProducts,
+    };
   }
   
   async createSuscription(createSuscription: CreateSuscriptionDto): Promise<{ preferenceId: string }> {
@@ -145,5 +156,25 @@ export class SuscriptionService {
     return `Suscription status for user ${userId} set to false`;
   }
 
-  
+  async darDeBaja(userId:string, id:string){
+    if(!isUUID(userId)){
+      throw new Error(`uuid ${userId} not found`);
+    }
+
+    const user = await this.userRepository.findOneUserRepository(userId)
+    if(!user){
+      throw new Error(`User id ${userId} not found`)
+    }
+
+    const sub = await this.suscriptionRepository.findOne({where: {id}});
+    await this.suscriptionRepository.delete(id);
+
+    if(user.isSuscription === true){
+      user.isSuscription = false;
+      await this.userRepository.updateUserRepository(userId, user)
+    }
+
+    return sub;
+
+  }
 }

@@ -40,23 +40,23 @@ export class UsersRepository {
 
     async updateUserRepository(id: string, user: UpdateUserDto): Promise<Users | null> {
         const existingUser = await this.usersRepository.findOne({ where: { id } });
-    
+
         if (!existingUser) {
             console.log(`Usuario con ID ${id} no encontrado`);
             return null;
         }
-    
+
         console.log('Usuario antes de actualizar:', existingUser);
-    
+
         Object.assign(existingUser, user);
-    
+
         const updatedUser = await this.usersRepository.save(existingUser, { reload: true });
-    
+
         console.log('Usuario después de actualizar:', updatedUser);
-    
+
         return updatedUser;
     }
-    
+
 
     async deleteUserRepository(id: string) {
         const userToDelete = await this.usersRepository.findOne({ where: { id } })
@@ -111,21 +111,45 @@ export class UsersRepository {
 
     }
 
-    async removeFavoriteProductRepository(userId: string, productId: string) { 
+    async removeFavoriteProductRepository(userId: string, productId: string) {
         const user = await this.usersRepository.findOne({
             where: { id: userId },
             relations: ['favoriteProducts'],
         })
 
-        if(!user) throw new Error('User not found');
+        if (!user) throw new Error('User not found');
 
         const product = await this.productsRepository.findOne({
             where: { id: productId },
         })
 
-        if(!product) throw new Error('Product not found');
+        if (!product) throw new Error('Product not found');
 
         user.favoriteProducts = user.favoriteProducts.filter(product => product.id !== productId)
+        await this.usersRepository.save(user)
+        return product
+    }
+
+    async claimProductRepository(userId: string, productId: string) {
+        const user = await this.usersRepository.findOne({
+            where: { id: userId },
+        })
+
+        if (!user) throw new Error('User not found');
+        if (!user.isSuscription) throw new Error('User is not suscribed')
+
+        const product = await this.productsRepository.findOne({
+            where: {id: productId}
+        })
+
+        if (!product) throw new Error('Product not found')
+        if (!product.suscription) throw new Error('Product is not suscription')
+
+        const isAlreadyClaimed = user.claimedProducts.some(p => p.id === productId)
+
+        if(isAlreadyClaimed) throw new Error('Product is already claimed')
+
+        user.claimedProducts.push(product)
         await this.usersRepository.save(user)
         return product
     }

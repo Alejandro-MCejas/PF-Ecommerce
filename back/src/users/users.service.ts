@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 
+
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) { }
@@ -49,6 +50,10 @@ export class UsersService {
 
   async removeFavoriteProductService(userId: string, productId: string) {
     return await this.usersRepository.removeFavoriteProductRepository(userId, productId)
+  }
+
+  async claimProductService(userId: string, productId: string) {
+    return await this.usersRepository.claimProductRepository(userId, productId) 
   }
 }
 

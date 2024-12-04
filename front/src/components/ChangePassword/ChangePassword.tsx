@@ -1,64 +1,34 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
-const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
+
+import { changePassword } from "@/helpers/auth.helper";
+import { useState } from "react";
+
 const ChangePassword = () => {
-  const [email, setEmail] = useState("");
+  const [emailToSend, setEmailToSend] = useState<string>("");
   const [showForm, setShowForm] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    setEmailToSend(event.target.value);
   };
 
-  const handleSubmit = async (event: React.MouseEvent) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    const response = await changePassword(emailToSend);
+    console.log(response);
 
-    try {
-      // Realizar el POST al backend
-      const response = await fetch(`${APIURL}/auth/forgot-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-console.log(response);
-
-      if (response.ok) {
-        Swal.fire({
-          title: "Email Sent!",
-          text: "Check your inbox to reset your password.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        setEmail(""); // Limpiar el campo de email
-        setShowForm(false); // Cerrar el formulario
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
-    } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text: error instanceof Error ? error.message : "Failed to send email.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    }
   };
 
   return (
     <div className="text-sm text-gray-600">
       {showForm ? (
-        <div
-          className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2"
-        >
+
+        <div className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2">
+
           <label htmlFor="email" className="text-gray-700">
             Enter your email:
           </label>
           <input
             id="email"
             type="email"
-            value={email}
+            value={emailToSend}
             onChange={handleInputChange}
             className="w-full border rounded-md px-2 py-1"
             placeholder="example@example.com"
@@ -90,5 +60,9 @@ console.log(response);
       )}
     </div>
   );
-}
+
+};
+
+
 export default ChangePassword;
+
