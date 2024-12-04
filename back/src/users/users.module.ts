@@ -6,10 +6,11 @@ import { Users } from 'src/entities/users.entity';
 import { UsersRepository } from './users.repository';
 import { UsersSeed } from 'src/seed/users/users.seed';
 import { Products } from 'src/entities/products.entity';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Products])],
+  imports: [TypeOrmModule.forFeature([Users, Products]), NotificationsModule],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, UsersSeed],
   exports: [UsersService, UsersRepository]

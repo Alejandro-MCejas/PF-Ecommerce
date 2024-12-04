@@ -171,7 +171,7 @@ export class UsersRepository {
         user.claimedProducts.push(product);
         await this.usersRepository.save(user);
 
-        return product;
+        return { product, user };
     }
 
 

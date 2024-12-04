@@ -26,7 +26,7 @@ export class CronService {
         console.log(topDiscountedProducts);
         await Promise.all(users.map(email => this.notificationsService.sendEmailService(
             email,
-            'Correo Diario',
+            'Daily Discounts on CyberGames!',
             'email/daily-notification',
             { products: topDiscountedProducts }
         )))

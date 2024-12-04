@@ -2,11 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) { }
+  constructor(private readonly usersRepository: UsersRepository,
+    private readonly notificationsService: NotificationsService
+  ) { }
+
+  private generateRandomToken(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
 
   async findAllUsersService() {
     return await this.usersRepository.findUsersRepository()
@@ -53,7 +65,18 @@ export class UsersService {
   }
 
   async claimProductService(userId: string, productId: string) {
-    return await this.usersRepository.claimProductRepository(userId, productId) 
+    const { product, user } = await this.usersRepository.claimProductRepository(userId, productId)
+
+    const gameToken = this.generateRandomToken(10)
+
+    await this.notificationsService.sendEmailService(
+      user.email,
+      'Product claimed successfully',
+      'email/product-claimed-notification',
+      { name: user.name, product, gameToken }
+    )
+
+    return product
   }
 }
 
