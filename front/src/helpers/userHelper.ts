@@ -11,6 +11,7 @@ interface userById {
   phone: string;
   isSuscription: boolean;
   orders: IOrder[];
+  claimedProducts:IProduct[]
 }
 
 export const getUserById = async (userId:string) : Promise<userById | undefined> =>{

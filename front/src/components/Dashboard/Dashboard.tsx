@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MyInformation from "./MyInformation";
 import Favorites from "./Favorites";
 import Orders from "./Orders";
+import ReclaimedProducts from "./ReclaimedProducts"; // Importa el nuevo componente
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
 
@@ -60,6 +61,12 @@ const Dashboard = () => {
                 return <Favorites />;
             case "orders":
                 return <Orders userId={userData.user.id} />;
+            case "reclaimedProducts":
+                // Verifica si el usuario está suscrito antes de renderizar esta vista
+                if (userData.user.isSuscription) {
+                    return <ReclaimedProducts />;
+                }
+                return <p>You need a subscription to view this section.</p>;
             default:
                 return null;
         }
@@ -87,13 +94,23 @@ const Dashboard = () => {
                             Favorites
                         </button>
                         <button
-                            className={`text-left py-2 px-4 rounded-lg ${
+                            className={`text-left py-2 px-4 rounded-lg mb-2 ${
                                 activeView === "orders" ? "bg-gray-300" : "hover:bg-gray-200"
                             }`}
                             onClick={() => setActiveView("orders")}
                         >
                             My Orders
                         </button>
+                        {userData.user.isSuscription && ( // Mostrar el botón solo si el usuario está suscrito
+                            <button
+                                className={`text-left py-2 px-4 rounded-lg ${
+                                    activeView === "reclaimedProducts" ? "bg-gray-300" : "hover:bg-gray-200"
+                                }`}
+                                onClick={() => setActiveView("reclaimedProducts")}
+                            >
+                                Reclaimed Products
+                            </button>
+                        )}
                     </div>
                     <div className="w-3/4 pl-4">{renderContent()}</div>
                 </div>
@@ -103,3 +120,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
