@@ -51,12 +51,6 @@
             color: #e0e0e0;
         }
 
-        .product-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
         .product {
             background-color: #2a2a2a;
             border-radius: 10px;
@@ -64,24 +58,15 @@
             margin: 10px 0;
             width: 100%;
             max-width: 500px;
-            /* Limitar el ancho máximo */
             text-align: left;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease;
-        }
-
-        .product:hover {
-            transform: scale(1.02);
         }
 
         .product img {
             width: 100%;
             height: 200px;
-            /* Altura fija para todas las imágenes */
             object-fit: cover;
-            /* Mantener la proporción de las imágenes */
             border-radius: 10px 10px 0 0;
-            /* Bordes redondeados en la parte superior */
         }
 
         .product-name {
@@ -103,21 +88,10 @@
             margin: 5px 0;
         }
 
-        .cta-button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 20px;
-            background-color: #f4f4f4;
-            color: #232323;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 30px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #dcdcdc;
-            transform: scale(1.05);
+        .token {
+            font-size: 16px;
+            color: #A065FF;
+            margin: 20px 0;
         }
 
         .footer {
@@ -157,11 +131,6 @@
                 font-size: 14px;
             }
 
-            .cta-button {
-                padding: 10px 20px;
-                font-size: 16px;
-            }
-
             .footer {
                 font-size: 12px;
             }
@@ -188,11 +157,6 @@
                 font-size: 12px;
             }
 
-            .cta-button {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
             .footer {
                 font-size: 10px;
             }
@@ -208,30 +172,30 @@
                 alt="CyberGames Logo">
         </div>
         <div class="title">
-            Exclusive Offers for You!
+            Product Claimed Successfully!
         </div>
         <p class="message">
-            Here are the top 3 products with the biggest discounts that you don't want to miss:
+            Congratulations! You have successfully claimed the following product:
         </p>
-        <div class="product-list">
-            <% products.forEach(product=> { %>
-                <div class="product">
-                    <img src="<%= product.image[0] %>" alt="<%= product.name %>">
-                    <div class="product-name">
-                        <%= product.name %>
-                    </div>
-                    <div class="product-price">Price: $<%= parseFloat(product.price).toFixed(2) %>
-                    </div>
-                    <div class="product-discount">Discount: <%= parseFloat(product.discount) %>%</div>
+        <div class="product">
+            < img src="<%= product.image[0] %>" alt="<%= product.name %>">
+                <div class="product-name">
+                    <%= product.name %>
                 </div>
-                <% }) %>
+                <div class="product-price">$<%= product.price %>
+                </div>
+                <div class="product-discount">
+                    <%= product.discount %>
+                </div>
         </div>
-        <a href="https://pf-ecommerce2024.vercel.app/" class="cta-button">Explore More Products</a>
+        <p class="token">Your token: <%= gameToken %>
+        </p>
         <div class="footer">
-            <p>© 2024 CyberGames. All rights reserved.</p>
-            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            <p>Thank you for choosing CyberGames!</p>
+            <p><a href="https://pf-ecommerce2024.vercel.app/">Visit our website</a></p>
         </div>
     </div>
+
 </body>
 
 </html>
