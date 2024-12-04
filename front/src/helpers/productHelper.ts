@@ -6,11 +6,21 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const fetchingProducts = async (): Promise<IProduct[]> => {
     try {
         const response = await fetch(`${API_URL}/products`);
+
+        // Verifica que la respuesta es exitosa (status 200-299)
+        if (!response.ok) {
+            console.error(
+                `Error fetching products: ${response.status} ${response.statusText}`
+            );
+            return [];
+        }
+
+        // Intenta parsear la respuesta como JSON
         const products = await response.json();
 
-        // Verificación adicional para garantizar que es un array
+        // Verifica que el resultado sea un array
         if (Array.isArray(products)) {
-            return products;
+            return products as IProduct[];
         } else {
             console.warn("The data fetched is not an array:", products);
             return [];
@@ -20,6 +30,7 @@ export const fetchingProducts = async (): Promise<IProduct[]> => {
         return [];
     }
 };
+
 
 
 
