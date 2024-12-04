@@ -17,16 +17,11 @@ const CyberGamer = () => {
                     layout="fill"
                     className="w-full h-[450px] md:h-[700px] blur-md " ></Image>
                 <div className="relative z-10 flex flex-col w-full max-w-[1500px] mx-auto items-center justify-evenly h-full bg-opacity-50 ">
-                    <div className="w-full flex justify-evenly items-center">
+                    <div className="w-1/2 md:w-full flex justify-center md:ustify-evenly items-center">
                         <EditGameSuscriptionModal/>
                     </div>
                 </div>
             </div>
-{/* 
-            <div className="w-full bg-white shadow-inner h-[50px] flex justify-center items-center">
-                <h2 className="text-black font-bold tracking-widest shadow-md text-[30px]"> Exclusive discounts</h2>
-            </div> */}
-
 
         </div>
     )

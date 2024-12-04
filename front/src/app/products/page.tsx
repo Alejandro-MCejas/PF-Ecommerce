@@ -22,9 +22,9 @@ const products = async () => {
             <div className="block md:hidden">
                 <FilterFormMobile />
             </div>
-            <div className="max-w-[1500px] w-full mx-auto mt-5">
+            <div className="max-w-[1500px] w-full mx-auto mt-5 z-10">
                 <div className="flex">
-                    <div className="w-2/12 hidden md:block">
+                    <div className="w-2/12 hidden md:block z-10">
                         <FilterForm />
                     </div>
 

@@ -129,7 +129,7 @@ const MyInformation = () => {
       
      
     return (
-        <form className="space-y-4">
+        <form className="gap-3 space-y-4">
             <div className="flex flex-col">
                 <label className="text-gray-700">Full name</label>
                 <input
@@ -154,7 +154,7 @@ const MyInformation = () => {
                     disabled={!isEditing}
                 />
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col md:flex-row md:space-x-4">
                 <div className="flex-1 flex flex-col">
                     <label className="text-gray-700">Address</label>
                     <input

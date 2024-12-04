@@ -72,8 +72,8 @@ const SuscriptionInformationCard = () => {
     return (
         <div className="w-full md:w-full flex relative">
             {/* Imagen izquierda */}
-            <div className="absolute left-[10px] top-[0px]  md:left-[100px] md:top-[100px] z-10">
-                <Image src={marioImg} alt="Mario" className=" w-[100px] md:w-[500px]" />
+            <div className="absolute left-[10px] top-[0px] md:left-[100px] md:top-[100px] z-10">
+                <Image src={marioImg} alt="Mario" className=" w-[100px] md:w-[400px]" />
             </div>
             <div className="w-full max-w-[800px] md:max-w-[1500px] mx-auto p-10 z-0">
                 {/* Carta de suscripción */}
