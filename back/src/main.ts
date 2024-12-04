@@ -12,13 +12,12 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(loggerGlobal)
   // app.useGlobalPipes(new ValidationPipe({
   //   whitelist: false,       // Elimina propiedades no definidas en el DTO
   //   forbidNonWhitelisted: false, // Lanza un error si se envían propiedades no permitidas
   //   transform: false,        // Convierte datos automáticamente al tipo definido en el DTO
   // }));
-
+  
   // Configura CORS antes de ejecutar el seeding
   app.enableCors({
     origin: ['http://localhost:3000', 'http://localhost:4000', 'https://pf-ecommerce2024.vercel.app'], // Permite solo este origen
@@ -27,7 +26,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
     exposedHeaders: ['Authorization'], // Encabezados expuestos al cliente
   });
-
+  
+  app.use(loggerGlobal)
   app.use(auth({
     ...auth0Config,
     routes: {
