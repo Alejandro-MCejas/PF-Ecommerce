@@ -30,9 +30,9 @@ const TeamMembers = () => {
                             <h2 className='text-[10px] md:text-2xl font-bold'>{member.name}</h2>
                             <p className='text-[10px]'>{member.profession}</p>
                             <div className='flex gap-4 mt-2'>
-                                <Link href={member.linkFacebook} target="_blank" className="size-[20px] hover:text-blue-500 text-gray-300">
+                                {/* <Link href={member.linkFacebook} target="_blank" className="size-[20px] hover:text-blue-500 text-gray-300">
                                     <i className="fab fa-facebook fa-2x"></i>
-                                </Link>
+                                </Link> */}
                                 <Link href={member.linkGitHub} target="_blank" className="size-[20px] hover:text-black text-gray-300">
                                     <i className="fab fa-github fa-2x"></i>
                                 </Link>

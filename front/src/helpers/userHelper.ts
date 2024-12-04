@@ -66,3 +66,11 @@ export const addFavorite = async (userId:string , productId:string) : Promise<IP
     console.log(error)
   }
 }
+
+export const logout = async ()=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
