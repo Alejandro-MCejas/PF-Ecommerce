@@ -13,7 +13,7 @@ const MyInformation = () => {
     const [userPhone, setUserPhone] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false); // Control de estado para guardar
-    console.log("Datos del usuario en el contexto:", userData);
+  
 
     // Sincronizar valores iniciales cuando `userData` cambia
     useEffect(() => {

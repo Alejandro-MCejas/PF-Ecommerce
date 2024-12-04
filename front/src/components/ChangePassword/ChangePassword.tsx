@@ -2,16 +2,27 @@ import { changePassword } from "@/helpers/auth.helper";
 import { useState } from "react";
 
 const ChangePassword = () => {
-  const [emailToSend, setEmailToSend] = useState<string>("");
-  const [showForm, setShowForm] = useState(false);
+  const [emailToSend, setEmailToSend] = useState<string>(""); // Estado para el email
+  const [showForm, setShowForm] = useState(false); // Estado para mostrar/ocultar el formulario
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null); // Mensaje de retroalimentación
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailToSend(event.target.value);
+    setEmailToSend(event.target.value); // Actualiza el estado del email
   };
 
-  const handleSubmit = async () => {
-    const response = await changePassword(emailToSend);
-    console.log(response);
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Previene el comportamiento por defecto
+    event.stopPropagation(); // Evita que el evento burbujee al formulario padre
+
+    try {
+      const response = await changePassword(emailToSend); // Llamada a la API para cambiar la contraseña
+      console.log("Response from password change:", response);
+      setFeedbackMessage("An email has been sent to reset your password.");
+      setEmailToSend(""); // Limpia el email
+    } catch (error) {
+      console.error("Error changing password:", error);
+      setFeedbackMessage("Failed to send the email. Please try again.");
+    }
   };
 
   return (
@@ -32,6 +43,7 @@ const ChangePassword = () => {
           />
           <div className="flex space-x-2">
             <button
+              type="button"
               onClick={handleSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
@@ -45,9 +57,11 @@ const ChangePassword = () => {
               Cancel
             </button>
           </div>
+         
         </div>
       ) : (
         <button
+          type="button"
           onClick={() => setShowForm(true)}
           className="text-blue-500 underline"
         >
@@ -57,6 +71,5 @@ const ChangePassword = () => {
     </div>
   );
 };
-
 
 export default ChangePassword;
