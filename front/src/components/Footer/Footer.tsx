@@ -4,6 +4,8 @@ import Link from "next/link";
 import React from "react";
 import { useEffect } from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Image from "next/image";
+import logo from "../../../public/logoApp.png"
 
 
 declare let Landbot: any;
@@ -41,46 +43,27 @@ const Footer = () => {
     }, []);
     
 
-    // return(
-    //     <div className="bg-purple-900 flex flex-col items-center py-2">
-    //         <div className="flex gap-16">
-    //             <Link href="https://www.whatsapp.com/" target="_blank" className="text-white hover:text-gray-500">
-    //              <i className="fab fa-whatsapp fa-2x"></i>
-    //             </Link>
-    //             <Link href="https://facebook.com/" target="_blank" className="text-white hover:text-gray-500">
-    //              <i className="fab fa-facebook fa-2x"></i>
-    //             </Link>
-    //             <Link href="https://x.com/" target="_blank" className="text-white hover:text-gray-500">
-    //              <i className="fab fa-x fa-2x"></i>
-    //            </Link>
-    //         </div>
-    //         <div>
-    //         <p>@ Reservados todos los derechos - 2024</p>
-    //         <div id="landbot-iframe-container"></div>
-    //         </div>
-    //     </div>
-    // )
-
     return (
         <footer className="bg-gray-900 w-full shadow dark:bg-gray-900">
             <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
                 <div className="sm:flex sm:items-center sm:justify-between">
-                    <Link href="https://flowbite.com/" className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                        <img src="https://s3-alpha-sig.figma.com/img/9b24/ab51/4afde8507a88429e72fe3362ccbebe43?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dRsBfIogFmR3yUGOV6dEjMC0MH7NFtW4-NXo6eeUhCZ3JbHKzWNMKHYg08~IiruoGURhyL1PcSY~phZaTgFvbBsq7DxAE0LJF3UNRglelYEi4dt7GPmHhDSk-LbBkQ6to1ddesbQGtU4m-jfMaaT3ShKm82V0aFOFJoT9ng8chimHLKaxz5qYkZC1JCP158GzA3worP-RIqK9QObZ3gjouw2-9MYaRKhnpuS9CSIbOCoAZaGZskMAlo~KjXAs3-q03rEtEeTW~J3eAeUhU-Xmwt5ruo7KEkOG1Arycn-wCaLsDBkyWbWegXNEqgKj8LcDCD2GFSQyHjKeHg9X6DX3Q__" className="h-8" alt="Flowbite Logo" />
+                    <Link href="/home" className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                        {/* <img src="https://s3-alpha-sig.figma.com/img/9b24/ab51/4afde8507a88429e72fe3362ccbebe43?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dRsBfIogFmR3yUGOV6dEjMC0MH7NFtW4-NXo6eeUhCZ3JbHKzWNMKHYg08~IiruoGURhyL1PcSY~phZaTgFvbBsq7DxAE0LJF3UNRglelYEi4dt7GPmHhDSk-LbBkQ6to1ddesbQGtU4m-jfMaaT3ShKm82V0aFOFJoT9ng8chimHLKaxz5qYkZC1JCP158GzA3worP-RIqK9QObZ3gjouw2-9MYaRKhnpuS9CSIbOCoAZaGZskMAlo~KjXAs3-q03rEtEeTW~J3eAeUhU-Xmwt5ruo7KEkOG1Arycn-wCaLsDBkyWbWegXNEqgKj8LcDCD2GFSQyHjKeHg9X6DX3Q__" className="h-8" alt="Flowbite Logo" /> */}
+                        <Image src={logo} alt="" className="h-8 w-8"></Image>
                         <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">CyberGames</span>
                     </Link>
                     <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-300 sm:mb-0 dark:text-gray-400">
                         <li>
-                            <Link href="#" className="hover:underline me-4 md:me-6">About</Link>
+                            <Link href="/" className="hover:underline me-4 md:me-6">About</Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link href="#" className="hover:underline me-4 md:me-6">Privacy Policy</Link>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                             <Link href="#" className="hover:underline me-4 md:me-6">Licensing</Link>
-                        </li>
+                        </li> */}
                         <li>
-                            <Link href="#" className="hover:underline">Contact</Link>
+                            <Link href="/" className="hover:underline">Contact</Link>
                         </li>
                     </ul>
                 </div>

@@ -24,6 +24,7 @@ const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleClose = () => {
+    
     localStorage.clear();
     setUserData(null);
     const Toast = Swal.mixin({
@@ -55,19 +56,19 @@ const NavBar = () => {
 
   return (
     <div className="w-full bg-[#232323] p-4 md:p-8 z-50">
-      <div className="w-full max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-y-4 md:gap-y-0">
+      <div className="w-full max-w-[1500px] mx-auto flex justify-evenly items-center gap-y-4 md:gap-y-0">
         <Link href="/" className="flex items-center justify-evenly md:justify-start">
           <Image
             src={logoApp}
             alt="Logo"
             className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
           />
-          <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 md:ml-4">
+          <span className="text-[24px] md:text-[40px] font-Tilt-neon text-[#A065FF] ml-2 hidden md:block md:ml-4">
             Cybergames
           </span>
         </Link>
 
-        <div className="flex justify-center md:justify-center w-full">
+        <div className="flex justify-center md:justify-center w-1/2 md:w-full">
           <Search />
         </div>
 
@@ -75,21 +76,20 @@ const NavBar = () => {
           <ProfileClient />
 
           {role === undefined ? (
-            <div className="bg-[#A065FF] text-white rounded-xl px-4 py-2 text-center">
-              <span className="text-[16px] md:text-[25px] font-Tilt-neon">
-                <Link href="/login">Log In</Link> / <Link href="/register">Register</Link>
-              </span>
+            <div className="w-[100px] md:w-[300px] flex flex-col md:flex-row justify-center items-center md:gap-3">
+              <Link href="/login" className=" rounded-md w-full md:px-4 md:py-2 text-white text-[20px]  md:text-[30px] font-extralight text-center neon-text md:hover:text-[40px] ">Log In</Link>
+              <Link href="/register" className="rounded-md w-full md:px-4 md:py-2 text-white text-[20px] font-extralight text-center neon-text md:hover:text-[40px]">Register</Link>
             </div>
           ) : (
-            <div className="hidden md:block">
+            <div className="md:block">
               <div
-                className="bg-white rounded-full w-[100px] h-[100px] flex justify-center items-center cursor-pointer relative"
+                className="bg-white rounded-full w-[50px] h-[50px] md:w-[100px] md:h-[100px] flex justify-center items-center cursor-pointer relative"
                 onClick={() => setMenuOpen(!menuOpen)}
               >
-                <FontAwesomeIcon icon={faUser} className="text-[50px]" />
+                <FontAwesomeIcon icon={faUser} className="text-[30px] md:text-[50px]" />
                 {menuOpen && (
                   <div className="absolute top-[110%] right-0 bg-white shadow-lg rounded-lg p-4 text-[#232323] w-[150px]">
-                    <Link href="/dashboard" className="block text-sm hover:text-[#A065FF]">
+                    <Link href="/dashboard" className="block text-sm hover:text-[#A065FF] ">
                       Dashboard
                     </Link>
                     <button
@@ -109,18 +109,18 @@ const NavBar = () => {
       <div className="mt-4 w-full max-w-[1500px] mx-auto h-[3px] bg-[#A065FF] rounded-3xl" />
 
       <div className="w-full max-w-[1500px] mx-auto flex flex-wrap justify-between mt-4 px-4 md:px-8">
-        <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href="/home" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff] hover:text-[30px]">
           Home
         </Link>
-        <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href="/products" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff] hover:text-[30px]">
           Games
         </Link>
-        <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+        <Link href="/subscription" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff] hover:text-[30px]">
           Subscription
         </Link>
 
         {role === "user" && (
-          <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff]">
+          <Link href="/cart" className="text-[#4046FF] text-[16px] md:text-[25px] font-Tilt-neon hover:text-[#606cff] hover:text-[30px]">
             <FontAwesomeIcon icon={faCartShopping} bounce={cartCount > 0} />
             {cartCount > 0 && <span className="ml-2 text-sm font-semibold text-white">{cartCount}</span>}
           </Link>

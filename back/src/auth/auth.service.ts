@@ -25,12 +25,12 @@ export class AuthService {
         try {
             await this.notificationService.sendEmailService(
                 newUser.email,
-                'Confirmación de cuenta',
+                'Account Confirmation',
                 'email/register-notification',
-                { nombre: newUser.name }
+                { name: newUser.name }
             )
         } catch (error) {
-            console.log('Error al enviar el correo de confirmación:', error);
+            console.log('Error sending the confirmation email:', error);
         }
 
         return newUser
@@ -41,13 +41,13 @@ export class AuthService {
         const user = await this.usersService.findUserByEmailService(email)
 
         if (!user) {
-            throw new UnauthorizedException('Email o contraseña incorrectos')
+            throw new UnauthorizedException('Incorrect email or password')
         }
 
         const isPasswordMatching = await bcrypt.compare(password, user.password)
 
         if (!isPasswordMatching) {
-            throw new UnauthorizedException('Email o contraseña incorrectos')
+            throw new UnauthorizedException('Incorrect email or password')
         }
 
         const token = await this.createToken(user)
@@ -155,9 +155,9 @@ export class AuthService {
         try {
             await this.notificationService.sendEmailService(
                 user.email,
-                'Restablecer contraseña',
+                'Reset Password',
                 'email/forgot-password-notification',
-                { nombre: user.name, resetLink }
+                { name: user.name, resetLink }
             )
         } catch (error) {
             console.log('Error at sending email:', error);

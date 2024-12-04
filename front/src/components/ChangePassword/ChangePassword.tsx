@@ -26,9 +26,9 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="text-sm text-gray-600">
+    <div className="text-sm text-gray-600 w-full">
       {showForm ? (
-        <div className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2">
+        <div className="w-full flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2">
           <label htmlFor="email" className="text-gray-700">
             Enter your email:
           </label>

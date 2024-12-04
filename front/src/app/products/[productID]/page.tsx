@@ -17,7 +17,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     debugger
     return (
         <div>
-            <div className="max-w-[1500px] w-full mx-auto flex flex-col justify-center items-center">
+            <div className="max-w-[1500px] p-4 w-full mx-auto flex flex-col justify-center items-center">
                 <ProductDetail 
                     product={productByID} 
                 />

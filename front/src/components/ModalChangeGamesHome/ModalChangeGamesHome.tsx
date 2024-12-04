@@ -77,15 +77,18 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
       <div className="w-[800px] md:w-[1500px] flex justify-evenly items-center">
         <div className="w-1/2 md:w-full flex flex-wrap md:flex-nowrap justify-evenly items-center">
           {productInCard.map((game, index) => (
-            <div className="w-1/2 flex justify-center" key={index}>
+            <div className="w-1/2 flex justify-center p-3 md:p-0" key={index}>
               <HomeCardGame
                 imagenUrl={
                   game.image &&
-                  Array.isArray(game.image) &&
-                  game.image.length > 0
+                    Array.isArray(game.image) &&
+                    game.image.length > 0
                     ? game.image[0]
                     : undefined
                 }
+                id={game.id}
+                title={game.name}
+                price={game.price}
               />
             </div>
           ))}
@@ -97,12 +100,20 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   return (
     <div className="top-0">
       <div className="flex flex-col w-[1500px] justify-center items-center">
-        <div className="w-full flex justify-evenly items-center">
+        <div className="w-1/4 md:w-full flex flex-wrap md:flex-nowrap justify-evenly items-center">
           {productInCard.map((game, index) => (
-            <HomeCardGame key={index} imagenUrl={game.image[0]} />
+            <div className="w-1/2 flex justify-center p-3 md:p-0" key={index}>
+              <HomeCardGame
+                key={index}
+                id={game.id}
+                imagenUrl={game.image[0]}
+                title={game.name}
+                price={game.price}
+              />
+            </div>
           ))}
         </div>
-        <div className="mt-10">
+        <div className="md:mt-10">
           <button
             className="bg-violet-600 text-white text-[34px] w-[300px] h-[50px] tracking-widest font-bold rounded-md hover:bg-violet-400 transition"
             onClick={openModal}
@@ -113,8 +124,8 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1000px] h-[700px]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-6">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-[1000px] h-auto md:h-[700px]">
             <h2 className="text-2xl mb-4">Choose 4 games for change</h2>
             <div className="w-full">
               <div className="overflow-y-auto max-h-[400px]">

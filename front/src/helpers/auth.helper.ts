@@ -217,7 +217,7 @@ export async function getTokken() {
 
 export const getToken2Prueba = async () => {
   try {
-    const res = await fetch('http://localhost:3000/auth/login', {
+    const res = await fetch(`${APIURL}/auth/login`, {
       method: 'GET',
       credentials: 'include', // Para enviar cookies o encabezados de autenticación
       headers: {
