@@ -14,12 +14,12 @@ export class ProductsService {
 
   async findProducts(): Promise<Products[]> {
     const product = await this.productsRepository.findProductsData();
-    const now = new Date(); 
+    const now = new Date();
 
     console.log("Hora actual local:", now);
     return product.map(product => {
       let discountedPrice = product.price;
-    
+
       if (product.discount > 0 &&
         product.discountStartDate &&
         product.discountEndDate &&
@@ -54,20 +54,26 @@ export class ProductsService {
     discountedPrice = Math.floor(discountedPrice * 100) / 100;
     return {
       ...ProductId,
-      discountedPrice, 
-  };
+      discountedPrice,
+    };
 
   }
 
-  async createProducts(products: CreateProductDto, files: Express.Multer.File[], categoriesId:string): Promise<Products> {
-    
+  async createProducts(products: CreateProductDto, files: Express.Multer.File[], categoriesId: string): Promise<Products> {
+
+    if(typeof products.suscription === 'string'){
+      if (products.suscription === 'true'){
+        products.suscription = true;
+      } 
+    }
+
     const newProducts = {
       ...products,
       discountStartDate: products.discountStartDate || null,
       discountEndDate: products.discountEndDate || null,
 
     }
-    
+
     const imageUrls: string[] = [];
 
     if (files && files.length > 0) {
@@ -75,6 +81,20 @@ export class ProductsService {
         const imageUrl = await this.cloudinaryService.uploadImage(file);
         imageUrls.push(imageUrl.secure_url);
       }
+    }
+
+    
+
+    if(products.stock <= 0){
+      throw new NotFoundException("El stock del producto es invalido")
+    }
+
+    if(products.price < 0){
+      throw new NotFoundException("El precio del producto es invalido")
+    }
+
+    if(products.discount <= 0){
+      throw new NotFoundException("El discount del producto es invalido")
     }
     
 
@@ -84,8 +104,31 @@ export class ProductsService {
   async updateProducts(id: string, products: UpdateProductDto, files: Express.Multer.File[]): Promise<Products> {
     const product = await this.productsRepository.findOneByProductsId(id);
 
+    if (typeof products.suscription === 'string') {
+      if (products.suscription === 'true') {
+          products.suscription = true;
+      } else if (products.suscription === 'false') {
+          products.suscription = false;
+      } else {
+          throw new BadRequestException('Invalid value for suscription. It must be "true" or "false".');
+      }
+    }
+  
+
     if (!product) {
       throw new NotFoundException(`Products with ID ${id} not found`);
+    }
+
+    if(products.stock <= 0){
+      throw new NotFoundException("El stock del producto es invalido")
+    }
+
+    if(products.price < 0){
+      throw new NotFoundException("El precio del producto es invalido")
+    }
+
+    if(products.discount <= 0){
+      throw new NotFoundException("El discount del producto es invalido")
     }
 
     const imageUrls: string[] = Array.isArray(product.image) ? [...product.image] : []
@@ -145,51 +188,118 @@ export class ProductsService {
     return await this.productsRepository.arrayOfProductsHomeRepository()
   }
 
+  async arrayOfProductsSuscriptionService() {
+    return await this.productsRepository.arrayOfProductsSuscriptionRepository()
+  }
+
   async updateArrayOfProductsHomeService(products: Products[]) {
     if (!products || products.length === 0) {
       throw new Error('The product list cannot be empty');
     }
-  
+
     // Obtén los productos actualmente destacados
     const currentFeaturedProducts = await this.productsRepository.arrayOfProductsHomeRepository();
-  
+
     // Calcula los productos que serán destacados y deseleccionados
-    const productsToFeature = products.filter(p => 
+    const productsToFeature = products.filter(p =>
       !currentFeaturedProducts.some(cfp => cfp.id === p.id) && !p.isFeatured
     );
-    const productsToUnfeature = products.filter(p => 
+    const productsToUnfeature = products.filter(p =>
       currentFeaturedProducts.some(cfp => cfp.id === p.id)
     );
-  
-    const totalFeaturedCount = 
+
+    const totalFeaturedCount =
       currentFeaturedProducts.length - productsToUnfeature.length + productsToFeature.length;
-  
+
     if (totalFeaturedCount > 4) {
       throw new Error('Cannot mark more than 4 products as featured');
     }
-  
+
     const updatedProducts = [];
-  
+
     for (const product of products) {
       // Verifica si el producto existe en la base de datos
       const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
       if (!existingProduct) {
         throw new NotFoundException(`Product with ID ${product.id} not found`);
       }
-  
+
       // Alterna el estado de `isFeatured` basado en el valor recibido
       existingProduct.isFeatured = !existingProduct.isFeatured;
-  
+
       // Actualiza el producto en la base de datos
       updatedProducts.push(await this.productsRepository.updateArrayOfProductsHomeRepository(product.id, existingProduct.isFeatured));
     }
-  
+
     return {
       message: 'Products updated successfully',
       updatedProducts,
     };
   }
-  
 
+  async updateArrayOfProductSuscriptionService(products: { id: string }[]) {
+    if (!products || products.length === 0) {
+      throw new Error('The product list cannot be empty');
+    }
+
+    // Obtén los productos actualmente destacados
+    const currentFeaturedProducts = await this.productsRepository.arrayOfProductsSuscriptionRepository();
+
+    // Identifica productos a añadir o quitar de suscripción
+    const productIds = products.map((p) => p.id);
+
+    const productsToUnfeature = currentFeaturedProducts.filter((cfp) =>
+      productIds.includes(cfp.id)
+    );
+
+    const productsToFeature = products.filter(
+      (p) => !currentFeaturedProducts.some((cfp) => cfp.id === p.id)
+    );
+
+    // Mantener un máximo de 2 productos con `suscription: true`
+    const updatedProducts = [];
+
+    // Retirar productos de suscripción
+    for (const product of productsToUnfeature) {
+      const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
+      if (!existingProduct) {
+        throw new NotFoundException(`Product with ID ${product.id} not found`);
+      }
+
+      existingProduct.suscription = false;
+      await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, false);
+      updatedProducts.push(existingProduct);
+    }
+
+    // Agregar productos a suscripción
+    for (const product of productsToFeature) {
+      if (updatedProducts.filter((p) => p.suscription).length >= 2) break;
+
+      const existingProduct = await this.productsRepository.findOneByProductsId(product.id);
+      if (!existingProduct) {
+        throw new NotFoundException(`Product with ID ${product.id} not found`);
+      }
+
+      existingProduct.suscription = true;
+      await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, true);
+      updatedProducts.push(existingProduct);
+    }
+
+    // Si hay más de 2 productos con suscripción, corregir automáticamente
+    const extraFeatured = updatedProducts.filter((p) => p.suscription).slice(2);
+    for (const product of extraFeatured) {
+      product.suscription = false;
+      await this.productsRepository.updateArrayOfProductsSuscriptionRepository(product.id, false);
+    }
+
+    return {
+      message: 'Products updated successfully',
+      updatedProducts: updatedProducts.slice(0, 2), // Devuelve los 2 productos finales con suscripción
+    };
+  }
+
+  async findTopDiscountedProductsService(limit: number = 3) {
+    return this.productsRepository.findTopDiscountedProductsRepository(limit)
+  }
 
 }

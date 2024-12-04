@@ -10,8 +10,6 @@ const cart = async () => {
             <div className="w-full mx-auto max-w-[1500px] min-h-[700px]">
                 <CartView />
             </div>
-            
-
         </div>
     )
 }

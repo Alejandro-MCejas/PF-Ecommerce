@@ -77,9 +77,11 @@ export const addProduct = async (product: AddProductProps, token: string): Promi
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
-    product.categories.forEach((category: { id: string; name: string }) => {
-        formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
-    });
+    formData.append('categories', product.categories.toString())
+
+    // product.categories.forEach((category: { id: string; name: string }) => {
+    //     formData.append('categories', JSON.stringify(category)); // Serializar cada categoría como un string JSON
+    // });
 
     console.log("Las categorias inyectadas son", product.categories)
     debugger
@@ -154,6 +156,18 @@ export const addReview = async (review: AddReviewProps, token: string) => {
     }
 };
 
+export const averageProductReview = async (id: string) => {
+    try {
+        const response = await fetch(`${API_URL}/reviews/${id}/average`);
+        const data = await response.json();
+        return data; // Asegúrate de devolver el objeto completo (con averageRating)
+    } catch (error) {
+        console.error("Error fetching average product review:", error);
+        return null; // Devuelve null si hay un error
+    }
+};
+
+
 export const deleteReview = async (id: string) => {
     try {
         const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
@@ -212,3 +226,56 @@ export const changeProductsHome = async (
 };
 
 
+export const getProductSuscription = async () => {
+    try {
+        const response = await fetch(`${API_URL}/products/productSuscription`)
+        const products = await response.json()
+        console.log(products)
+        return products;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+interface productId {
+    id: string;
+}
+
+export const changeProductSuscription = async (
+    productsIdArr: productId[],
+    token: string
+) => {
+    try {
+        const response = await fetch(`${API_URL}/products/editProductSuscription`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json", // Indica que el body es JSON
+            },
+            body: JSON.stringify(productsIdArr), // Convierte el objeto a JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const products = await response.json(); // Espera a que se resuelva la promesa
+        console.log("Response JSON:", products);
+        return products;
+    } catch (error) {
+        console.error("Error in changeProductsHome:", error);
+        throw error; // Relanzar el error para manejarlo en el código que llama esta función
+    }
+};
+
+export const reclaimeProduct = async(userId:string , productId:string) => {
+    try {
+        const response = await fetch(`${API_URL}/users/${userId}/claim/${productId}`,{
+            method:"POST",
+        })
+        const messageResponse = await response.json()
+        return messageResponse;
+    } catch (error) {
+        console.log(error)
+    }
+}

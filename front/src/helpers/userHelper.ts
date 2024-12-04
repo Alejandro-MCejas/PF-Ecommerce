@@ -1,6 +1,20 @@
+import { IOrder } from "@/interfaces/IOrder";
+import { IProduct } from "@/interfaces/IProduct";
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
-export const getUserById = async (userId:string) =>{
+
+interface userById {
+  id: string;
+  name: string; 
+  email: string; 
+  address: string; 
+  phone: string;
+  isSuscription: boolean;
+  orders: IOrder[];
+  claimedProducts:IProduct[]
+}
+
+export const getUserById = async (userId:string) : Promise<userById | undefined> =>{
     try {
         const res = await fetch(`${APIURL}/users/${userId}`, {
             method: "GET",
@@ -14,4 +28,41 @@ export const getUserById = async (userId:string) =>{
     } catch (error) {
         console.log("The error was", error)
     }
+}
+
+
+export const getFavorites = async (userId:string) : Promise<IProduct[] | undefined >=>{
+  try {
+    const response = await fetch(`${APIURL}/users/${userId}/favorites`)
+    const favoriteProducts = response.json()
+    return favoriteProducts
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const eliminateFavorite = async (userId:string , productId:string) : Promise<IProduct[] | undefined >=>{
+  try {
+    const response = await fetch(`${APIURL}/users/${userId}/favorites/${productId}`, {
+      method:"DELETE",
+    })
+    const favoriteProducts = response.json()
+    return favoriteProducts
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+export const addFavorite = async (userId:string , productId:string) : Promise<IProduct[] | undefined >=>{
+  try {
+    const response = await fetch(`${APIURL}/users/${userId}/favorites/${productId}`, {
+      method:"POST",
+    })
+    const favoriteProducts = response.json()
+    return favoriteProducts
+  } catch (error) {
+    console.log(error)
+  }
 }

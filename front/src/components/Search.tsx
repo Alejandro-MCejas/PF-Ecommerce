@@ -17,7 +17,7 @@ const Search = () => {
     
         try {
             // Traemos todos los productos
-            const products = await fetchingProducts(""); // No pasamos query, traemos todos los productos
+            const products = await fetchingProducts(); // No pasamos query, traemos todos los productos
             // Filtramos los productos por el nombre
             const filteredProducts = products.filter(product =>
                 product.name.toLowerCase().includes(value.toLowerCase()) // Filtramos por nombre

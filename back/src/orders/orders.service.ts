@@ -13,98 +13,109 @@ export class OrdersService {
     private readonly usersService: UsersService,
     private readonly productsService: ProductsService,
     private readonly orderDetailService: OrderDetailService
-  ) { }
+  ) {}
 
   async findAllOrdersService() {
     return await this.ordersRepository.findAllOrdersRepository();
   }
 
   async findOneOrderService(id: string) {
-    const order = await this.ordersRepository.findOneOrderRepository(id)
-
+    const order = await this.ordersRepository.findOneOrderRepository(id);
+  
     if (!order) {
-      throw new Error('La orden no existe')
+      throw new Error('La orden no existe');
     }
-
-    const orderDetail = await this.orderDetailService.findOneOrderDetailService(order.id)
-
+  
+    const orderDetail = await this.orderDetailService.findOneOrderDetailService(order.id);
+  
+    if (!orderDetail) {
+      throw new Error('No se encontró un detalle de la orden asociado a esta orden');
+    }
+  
+    const formattedProducts = orderDetail.orderProducts.map(op => ({
+      productId: op.product.id,
+      productName: op.product.name,
+      quantity: op.quantity,
+    }));
+  
     const orderResponse = {
       order,
-      orderDetail: orderDetail.products
-    }
-
-    return orderResponse
+      orderDetail: {
+        id: orderDetail.id,
+        price: orderDetail.price,
+        products: formattedProducts,
+      },
+    };
+  
+    return orderResponse;
   }
-
-
+  
+  
 
   async createOrderService(createOrderDto: CreateOrderDto) {
-    const { userId, products } = createOrderDto
-    const user = await this.usersService.findOneUserService(userId)
+    const { userId, products } = createOrderDto;
+    const user = await this.usersService.findOneUserService(userId);
 
     if (!user) {
       throw new BadRequestException('User not found');
     }
 
-    const productsWithStock = await this.productsService.getProductsWithStock(products)
+    const productsWithStock = await this.productsService.getProductsWithStock(products);
 
     if (productsWithStock.length === 0) {
-      throw new Error('No hay stock en ninguno de los productos recibidos')
+      throw new Error('No hay stock en ninguno de los productos recibidos');
     }
 
     if (productsWithStock.length < products.length) {
-      throw new Error('No hay stock en algunos de los productos recibidos')
+      throw new Error('No hay stock en algunos de los productos recibidos');
     }
 
     const structureOfOrder = {
       user,
-      products: productsWithStock
-    }
+      products: productsWithStock,
+    };
 
-    const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder)
+    const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder);
 
     if (!newOrder) {
-      throw new Error('La orden no pudo ser creada')
+      throw new Error('La orden no pudo ser creada');
     }
-
 
     for (const { id, quantity } of productsWithStock) {
-      await this.productsService.reduceProductStockService(id, quantity)
+      await this.productsService.reduceProductStockService(id, quantity);
     }
 
-    const total = await this.calculateTotal(productsWithStock)
+    const total = await this.calculateTotal(productsWithStock);
 
-
-    const orderDetail = new CreateOrderDetailDto()
-    orderDetail.price = total
-    orderDetail.order = newOrder
-    orderDetail.products = productsWithStock
-
-    const newOrderDetail = await this.orderDetailService.createOrderDetailService(orderDetail)
+    const orderDetail = await this.orderDetailService.createOrderDetailService({
+      price: total,
+      orderId: newOrder.id,
+      products: productsWithStock.map(({ id, quantity }) => ({ productId: id, quantity })),
+    });
 
     const orderResponse = {
       order: {
         id: newOrder.id,
         date: newOrder.date,
-        user: newOrder.user
+        user: newOrder.user,
       },
-      price: newOrderDetail.price,
-      orderDetailId: newOrderDetail.id
-    }
+      price: orderDetail.price,
+      orderDetailId: orderDetail.id,
+    };
 
-    return orderResponse
+    return orderResponse;
   }
 
   async deleteOrderService(id: string) {
     return await this.ordersRepository.deleteOrderRepository(id);
   }
 
-  private async calculateTotal(products: Array<{ id: string, price: number, quantity: number }>) {
+  private async calculateTotal(products: Array<{ id: string; price: number; quantity: number }>) {
     let total: number = 0;
     for (const product of products) {
-      total += product.price * product.quantity;  // Multiplicamos el precio por la cantidad
+      total += product.price * product.quantity; // Multiplicamos el precio por la cantidad
     }
-  
+
     return total;
   }
 
@@ -121,7 +132,7 @@ export class OrdersService {
 
     if (currentIndex === -1 || currentIndex === statuses.length - 1) {
       throw new BadRequestException(
-        `Cannot change status for order ${orderId}. Current status: ${currentStatus}`
+        `Cannot change status for order ${orderId}. Current status: ${currentStatus}`,
       );
     }
 
@@ -133,6 +144,4 @@ export class OrdersService {
 
     return { message: `Order status updated to ${nextStatus}`, order };
   }
-
-
 }

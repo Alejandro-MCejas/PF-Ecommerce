@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getOrderDetailById } from '@/helpers/orderHelper';
 import { useAuth } from '@/context/Authcontext';
-import OrderDetailInformation from '../OrderDetailInformation/OrderDetailInformation';
+// import OrderDetailInformation from '../OrderDetailInformation/OrderDetailInformation';
 import { useCart } from '@/context/CartContext';
 
 interface FeedbackData {
@@ -71,7 +71,7 @@ const PaymentResultView: React.FC = () => {
       });
 
       if (orderDetailId && userData?.token) {
-        getOrderDetailById(orderDetailId, userData.token);
+        getOrderDetailById(orderDetailId);
 
       }
     }

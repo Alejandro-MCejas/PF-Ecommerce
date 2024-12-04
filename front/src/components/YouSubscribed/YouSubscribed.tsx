@@ -1,59 +1,47 @@
 "use client"
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "@/context/Authcontext";
+import { AuthContext, useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { cancelSuscription, getSuscriptionInformation } from "@/helpers/suscriptionHelper";
 
 const SubscriptionStatus = () => {
-  const { userData, setUserData } = useContext(AuthContext);
-  const [expirationDate, setExpirationDate] = useState("");
+  // const { userData, setUserData } = useContext(AuthContext);
+  const [expirationDate, setExpirationDate] = useState<string>("");
+  const { userData } = useAuth()
   const router = useRouter();
-  const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
-  
-  // Verificar si el usuario está suscrito o no
-  const isSubscribed = true; // Cambiar a false para probar el estado "no suscrito"
-  
+
+
+
+
   useEffect(() => {
-    // Asegurarse de que el userData y userData.user.id estén disponibles
-    if (userData?.user?.id && isSubscribed) {
-      fetchExpirationDate(userData.user.id);
-    }
-  }, [userData, isSubscribed]); // Asegurarse de que la verificación de userData esté en las dependencias
+    const fechUserInfo = async () => {
+      if (userData) {
+        try {
+          const expirationDate = await getSuscriptionInformation(userData?.user.id);
 
-  const fetchExpirationDate = async (userId: string) => {
-    try {
-      const response = await fetch(`${APIURL}/suscrption/${userId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setExpirationDate(data.expirationDate);
-      } else {
-        console.error("Failed to fetch expiration date");
+          if (expirationDate?.suscription?.endDate) {
+            setExpirationDate(expirationDate.suscription.endDate);
+          } else {
+            console.warn("Invalid subscription data", expirationDate);
+          }
+        } catch (error) {
+          console.error("Failed to fetch subscription information:", error);
+        }
       }
-    } catch (error) {
-      console.error("Error fetching expiration date:", error);
-    }
-  };
+    };
+
+    fechUserInfo();
+  }, [userData]);
+
 
   const handleCancelSubscription = async () => {
     try {
-      const response = await fetch("${APIURL}/suscrption/${userId}", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
-        },
-      });
-
-      if (response.ok) {
-        alert("Subscription canceled successfully");
-      } else {
-        alert("Failed to cancel subscription");
+      if (userData) {
+        const cancelMessage = await cancelSuscription(userData?.user.id)
+        console.log(cancelMessage)
       }
+
     } catch (error) {
       console.error("Error canceling subscription:", error);
     }
@@ -61,7 +49,7 @@ const SubscriptionStatus = () => {
 
   return (
     <div>
-      {isSubscribed ? (
+      {userData?.user.isSuscription ? (
         <>
           <div className="text-sm text-gray-600">
             You are subscribed at{" "}
@@ -74,7 +62,7 @@ const SubscriptionStatus = () => {
                 type="text"
                 className="p-2 border border-gray-300 rounded-lg"
                 placeholder="12/12/2024"
-                value={expirationDate}
+                value={expirationDate.toString()}
                 disabled
               />
             </div>

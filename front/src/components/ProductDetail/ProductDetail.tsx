@@ -6,10 +6,16 @@ import StarRating from "../StarRating/StarRating";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
 import AddToCart from "../AddToCart/AddToCart";
-import { deleteProductByID, editProductInformationByID } from "@/helpers/productHelper";
+import { deleteProductByID, editProductInformationByID, reclaimeProduct } from "@/helpers/productHelper";
 import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
 import ModalApplyDiscount from "../ModalAddDiscount/ModalAddDiscount";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { addFavorite, eliminateFavorite, getFavorites } from "@/helpers/userHelper";
+import Favorites from "../Dashboard/Favorites";
+import FavoriteButton from "../FavoriteButton/FavoriteButton";
+import Link from "next/link";
 
 interface ProductDetail {
     product: IProduct;
@@ -20,6 +26,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     const [rating, setRating] = useState(0);
     const [activeImage, setActiveImage] = useState(product.image[0]);
     const router = useRouter()
+    // const [favorite, setFavorite] = useState<boolean>(false)
 
     const price = typeof product.price === "string" ? parseFloat(product.price) : product.price;
     const discount = typeof product.discount === "string" ? parseFloat(product.discount) : product.discount;
@@ -99,8 +106,56 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
         }
     };
 
+    const handleClaimeProduct = async () => {
+        if (userData?.user.isSuscription === true && product.suscription === true) {
+            try {
+                const result = await Swal.fire({
+                    title: "You will reclaime this free product?",
+                    text: "Are you ready?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, reclaime it!",
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        const response = await reclaimeProduct(userData.user.id, product.id);
+
+                        if (response.ok) {
+                            Swal.fire({
+                                title: "Reclaime!",
+                                text: "Your product has been reclaimed.",
+                                icon: "success",
+                            });
+                        } else {
+                            // Maneja los errores que no lanzan excepción pero devuelven un error HTTP
+                            throw new Error("Failed to reclaime product");
+                        }
+                    } catch (error) {
+                        console.log(error)
+                        Swal.fire({
+                            title: "Ups,you have already take it!",
+                            text: "Check your email",
+                            icon: "warning",
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                Swal.fire({
+                    title: "Ups, something went wrong!",
+                    text: "Try again later",
+                    icon: "warning",
+                });
+            }
+        }
+    };
+
+
     return (
-        <div>
+        <div className="w-full">
             {/* Imagen e informacion */}
             < div className="flex w-full justify-evenly items-center " >
                 {/* Imagen */}
@@ -121,16 +176,44 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 {/* Informacion */}
                 < div className="w-1/2 min-w-[700px] min-h-[750px] max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
                     <div className="w-full h-[750px] flex flex-col justify-evenly items-start p-10">
+                        <div className="w-full flex justify-end items-end">
+                            <FavoriteButton
+                                userId={userData?.user.id || ""}
+                                productId={product.id}
+                            />
+                        </div>
                         <div className="flex flex-col justify-evenly items-start h-[200px] mt-0">
                             <h2 className="text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
                             <div>
-                                <StarRating
-                                    rating={rating}
-                                    setRating={setRating}
-                                />
+                                {
+                                    userData ? (
+                                        <StarRating
+                                            productId={product.id}
+                                            userId={userData?.user.id}
+                                            token={userData?.token}
+                                            onReviewSubmitted={() => {
+                                                // Actualiza la lista de reseñas o realiza otra acción
+                                                console.log("Review submitted successfully!");
+                                            }}
+                                        />
+                                    ) : (
+                                        <div>
+                                            You must be loggin to vote
+                                        </div>
+                                    )
+                                }
+
                             </div>
-                            <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                            {
+                                product.suscription === true ? (
+                                    <h3 className="bg-violet-500 p-1 text-white font-italic text-[20px]">Play with CyberGamer</h3>
+                                ) : (
+                                    <div>
+
+                                    </div>
+                                )
+                            }
                         </div>
                         <div>
                             {/* Mostrar el precio dinámicamente */}
@@ -172,7 +255,22 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             {userData?.user.admin !== "admin" ? (
                                 userData?.user.admin !== "user" ? (
                                     // Mostrar solo botón de comprar si el rol no es admin ni user
-                                    <button className="bg-blue-500 text-white px-4 py-2 rounded">Buy Now</button>
+                                    <Link href="/login" className="bg-blue-500 text-white px-4 py-2 rounded">Buy now</Link>
+                                ) : userData.user.isSuscription === true && product.suscription === true ? (
+                                    <div className="w-full flex items-center flex-col gap-3">
+                                        <AddToCart
+                                            id={product.id}
+                                            name={product.name}
+                                            description={product.description}
+                                            stock={product.stock}
+                                            price={discountedPrice !== price ? discountedPrice : price}
+                                            image={product.image}
+                                        />
+                                        <button
+                                            onClick={handleClaimeProduct}
+                                            className=" w-[300px] h-[50px] bg-purple-500 text-white px-4 py-2 rounded"
+                                        >Reclaime product</button>
+                                    </div>
                                 ) : (
                                     // Mostrar botones de "Add to Cart" y "Buy Now" si el rol es user
                                     <div className="w-full flex items-center flex-col gap-3">

@@ -57,11 +57,12 @@ const Login = () => {
         confirmButtonText: "OK",
       });
 
+
       // Redirige según el rol del usuario
       if (user.admin === "admin") {
-        router.push("/dashboardAdmin");
+        router.push("/home");
       } else if (user.admin === "user") {
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         router.push("/"); // Redirige a la página principal si no tiene un rol específico
       }
@@ -154,7 +155,9 @@ const Login = () => {
             <div className="text-sm text-gray-600">
         Don&apos;t remember your password?{" "}
        
-        <ChangePassword />
+        <ChangePassword 
+          
+        />
       </div>
           </div>
         </div>

@@ -12,8 +12,8 @@ const SuscriptionView = () => {
 
     if (userData?.user.admin === "admin") {
         return (
-            <div className="w-full max-w-[1500px] mx-auto h-[700px] bg-gray-300 my-3">
-                <SideMenuAdmin />
+            <div>
+                <CyberGamer />
             </div>
         )
     } else if (userData?.user.admin === "user" && userData.user.isSuscription) {

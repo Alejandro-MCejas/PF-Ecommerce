@@ -27,7 +27,7 @@ export class AuthService {
                 newUser.email,
                 'Confirmación de cuenta',
                 'email/register-notification',
-                { nombre: newUser.name}
+                { nombre: newUser.name }
             )
         } catch (error) {
             console.log('Error al enviar el correo de confirmación:', error);
@@ -134,4 +134,55 @@ export class AuthService {
 
         return this.jwtService.sign(payload)
     }
+
+    async forgotPasswordService(email: string) {
+        const user = await this.usersService.findUserByEmailService(email)
+
+        if (!user) {
+            return
+        }
+
+        const resetToken = this.jwtService.sign(
+            { id: user.id },
+            { secret: process.env.JWT_RESET_SECRET, expiresIn: '15m' }
+        )
+
+        console.log(resetToken);
+        
+
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
+
+        try {
+            await this.notificationService.sendEmailService(
+                user.email,
+                'Restablecer contraseña',
+                'email/forgot-password-notification',
+                { nombre: user.name, resetLink }
+            )
+        } catch (error) {
+            console.log('Error at sending email:', error);
+        }
+    }
+
+    async resetPasswordService(token: string, newPassword: string) {
+
+        try {
+            const payload = this.jwtService.verify(token, { secret: process.env.JWT_RESET_SECRET });
+            const user = await this.usersService.findOneUserService(payload.id);
+
+            if (!user) {
+                throw new UnauthorizedException('Invalid token or user not found');
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await this.usersService.updateUserService(user.id, { password: hashedPassword });
+
+            return { message: 'Password updated successfully' };
+
+        } catch (error) {
+            console.log(error)
+            throw new UnauthorizedException('Invalid token or expired');
+        }
+    }
+
 }

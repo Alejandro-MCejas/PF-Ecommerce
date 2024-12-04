@@ -13,6 +13,7 @@ const MyInformation = () => {
     const [userPhone, setUserPhone] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false); // Control de estado para guardar
+  
 
     // Sincronizar valores iniciales cuando `userData` cambia
     useEffect(() => {
@@ -44,57 +45,89 @@ const MyInformation = () => {
         }
     };
 
-    // const handleSave = async () => {
-    //     const userId = userData?.user?.id;
-    //     const token = userData?.token;
-
-    //     if (!userId || !token) {
-    //         Swal.fire({
-    //             title: "Error",
-    //             text: "No se encontró el ID del usuario o el token. Por favor, inicie sesión nuevamente.",
-    //             icon: "error",
-    //             confirmButtonText: "OK",
-    //         });
-    //         return;
-    //     }
-
-    //     setIsSaving(true); // Activar el indicador de carga
-    //     try {
-    //         const updatedUser = await updateUser(
-    //             userId,
-    //             {
-    //                 name: userName,
-    //                 email: userEmail,
-    //                 address: userAddress,
-    //                 phone: userPhone,
-    //             },
-    //             token
-    //         );
-
-    //         setUserData({
-    //             token: userData.token, // Mantener el token
-    //             user: updatedUser, // Actualizar los datos del usuario en el contexto
-    //         });
-
-    //         setIsEditing(false); // Salir del modo de edición
-    //         Swal.fire({
-    //             title: "Actualización exitosa",
-    //             text: "Los datos del usuario se actualizaron correctamente.",
-    //             icon: "success",
-    //             confirmButtonText: "OK",
-    //         });
-    //     } catch (error: any) {
-    //         Swal.fire({
-    //             title: "Error al actualizar",
-    //             text: error.message || "No se pudieron actualizar los datos del usuario.",
-    //             icon: "error",
-    //             confirmButtonText: "OK",
-    //         });
-    //     } finally {
-    //         setIsSaving(false); // Desactivar el indicador de carga
-    //     }
-    // };
-
+    const handleSave = async () => {
+        const userId = userData?.user?.id;
+        const token = userData?.token;
+      
+        if (!userId || !token) {
+          Swal.fire({
+            title: "Error",
+            text: "No se encontró el ID del usuario o el token. Por favor, inicie sesión nuevamente.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      
+        setIsSaving(true);
+      
+        try {
+          // Llamada a la API para actualizar al usuario
+          const updatedUser = await updateUser(
+            userId,
+            {
+              name: userName,
+              email: userEmail,
+              address: userAddress,
+              phone: userPhone,
+            },
+            token
+          );
+      
+          // Validar que `updatedUser` tenga los datos necesarios
+          if (!updatedUser || !updatedUser.id) {
+            throw new Error("Error: Los datos del usuario actualizado son inválidos.");
+          }
+      
+          // Actualizar el estado global/local del usuario
+          setUserData({
+            token, // Mantener el token actual
+            user: updatedUser,
+          });
+      
+          // Sincronizar los estados locales del formulario con los datos actualizados
+          setUserName(updatedUser.name || "");
+          setUserEmail(updatedUser.email || "");
+          setUserAddress(updatedUser.address || "");
+          setUserPhone(updatedUser.phone || "");
+      
+          Swal.fire({
+            title: "Actualización exitosa",
+            text: "Los datos del usuario se actualizaron correctamente.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error: any) {
+          // Manejo de errores específicos, como un token inválido
+          if (error.response?.status === 401) {
+            Swal.fire({
+              title: "Sesión expirada",
+              text: "Por favor, inicie sesión nuevamente.",
+              icon: "warning",
+              confirmButtonText: "OK",
+            });
+            // Opcional: Limpia el estado del usuario o redirige al login
+            setUserData(null);
+            return;
+          }
+      
+          // Mensaje genérico para otros errores
+          Swal.fire({
+            title: "Error al actualizar",
+            text: error.message || "No se pudieron actualizar los datos del usuario.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        } finally {
+          setIsSaving(false);
+        }
+      };
+      
+      if (!userData || !userData.user) {
+        return <p>Loading...</p>; // Puedes personalizar este mensaje o agregar un spinner
+      }
+      
+     
     return (
         <form className="space-y-4">
             <div className="flex flex-col">
@@ -154,7 +187,7 @@ const MyInformation = () => {
                 {isEditing ? (
                     <button
                         type="button"
-                        // onClick={handleSave}
+                        onClick={handleSave}
                         disabled={isSaving} // Desactivar mientras se guarda
                         className={`px-6 py-3 rounded-lg font-semibold mt-4 ${isSaving ? "bg-gray-400" : "bg-purple-500 text-white"
                             }`}

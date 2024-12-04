@@ -20,7 +20,13 @@ export class Suscription{
     startDate: Date; 
 
     @Column("date")
-    endDate: Date; 
+    endDate: Date;
+    
+    @Column({ nullable: true }) // Asegúrate de que puede ser nulo inicialmente
+    paymentId: string;
+
+    @Column({ default: 'active' }) // Valores posibles: 'active', 'cancelled'
+    status: string;
 
     @ManyToOne(() => Users, (user) => user.suscriptions, { eager: true })
     @JoinColumn({ name: 'userId' })
@@ -29,4 +35,6 @@ export class Suscription{
     @ManyToOne(() => Products, (product) => product.suscriptions, { eager: true })
     @JoinColumn({ name: 'productId' })
     product: Products;
+
+
 }

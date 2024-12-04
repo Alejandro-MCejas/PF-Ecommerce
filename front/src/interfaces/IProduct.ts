@@ -34,10 +34,19 @@ export interface IProduct {
     discountEndDate?:Date
 }
 
+export interface IProductOrderDetailInfo {
+    id:string,
+    name: string,
+    image: string[],
+    categories: Categories[],
+    price:number
+}
+
 export interface IProductCart { 
     id:string,
     name: string,
     image: string[],
+    quantity?:number
     price:number,
     stock:number,
     suscription?: boolean,
@@ -57,7 +66,7 @@ export interface AddProductProps{
     stock:number,
     suscription:boolean,
     price:number,
-    categories: ICategories[]
+    categories: string,
     discount:number
 }
 
@@ -73,8 +82,8 @@ export interface EditGameInformationProps{
     suscription?:boolean,
     description?:string
     discount?:number
-    discountStartDate: Date,
-    discountEndDate:Date
+    discountStartDate?: Date,
+    discountEndDate?:Date
 }
 
 
@@ -84,5 +93,6 @@ export interface CardCartProp {
     image:string[],
     stock:number,
     price:number,
+    quantity?:number,
     onDelete: () => void
 }

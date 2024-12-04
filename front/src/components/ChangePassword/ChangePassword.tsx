@@ -1,64 +1,41 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
+import { changePassword } from "@/helpers/auth.helper";
+import { useState } from "react";
 
 const ChangePassword = () => {
-  const [email, setEmail] = useState("");
-  const [showForm, setShowForm] = useState(false);
+  const [emailToSend, setEmailToSend] = useState<string>(""); // Estado para el email
+  const [showForm, setShowForm] = useState(false); // Estado para mostrar/ocultar el formulario
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null); // Mensaje de retroalimentación
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    setEmailToSend(event.target.value); // Actualiza el estado del email
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Previene el comportamiento por defecto
+    event.stopPropagation(); // Evita que el evento burbujee al formulario padre
 
     try {
-      // Realizar el POST al backend
-      const response = await fetch("http://localhost:3000/api/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        Swal.fire({
-          title: "Email Sent!",
-          text: "Check your inbox to reset your password.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        setEmail(""); // Limpiar el campo de email
-        setShowForm(false); // Cerrar el formulario
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
+      const response = await changePassword(emailToSend); // Llamada a la API para cambiar la contraseña
+      console.log("Response from password change:", response);
+      setFeedbackMessage("An email has been sent to reset your password.");
+      setEmailToSend(""); // Limpia el email
     } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text: error instanceof Error ? error.message : "Failed to send email.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      console.error("Error changing password:", error);
+      setFeedbackMessage("Failed to send the email. Please try again.");
     }
   };
 
   return (
     <div className="text-sm text-gray-600">
       {showForm ? (
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2"
-        >
+        <div className="flex flex-col items-start bg-gray-100 p-4 rounded-md shadow-md space-y-2">
           <label htmlFor="email" className="text-gray-700">
             Enter your email:
           </label>
           <input
             id="email"
             type="email"
-            value={email}
+            value={emailToSend}
             onChange={handleInputChange}
             className="w-full border rounded-md px-2 py-1"
             placeholder="example@example.com"
@@ -66,7 +43,8 @@ const ChangePassword = () => {
           />
           <div className="flex space-x-2">
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Send Email
@@ -79,9 +57,11 @@ const ChangePassword = () => {
               Cancel
             </button>
           </div>
-        </form>
+         
+        </div>
       ) : (
         <button
+          type="button"
           onClick={() => setShowForm(true)}
           className="text-blue-500 underline"
         >

@@ -83,8 +83,26 @@ export class ProductsRepository {
 
     }
 
+    async arrayOfProductsSuscriptionRepository() {
+
+        return await this.productsRepository.find({
+            where: {
+                suscription: true
+            },
+            take: 2,
+            relations: ['categories']
+        })
+
+    }
+
     async updateArrayOfProductsHomeRepository(id: string, isFeatured: boolean) {
         await this.productsRepository.update(id, { isFeatured })
+
+        return this.productsRepository.findOneBy({ id })
+    }
+
+    async updateArrayOfProductsSuscriptionRepository(id: string, suscription: boolean) {
+        await this.productsRepository.update(id, { suscription })
 
         return this.productsRepository.findOneBy({ id })
     }
@@ -92,6 +110,16 @@ export class ProductsRepository {
     async updateProductStock(id: string, stock: number) {
         if (stock < 0) throw new BadRequestException('El stock no puede ser negativo');
         await this.productsRepository.update(id, { stock });
+    }
+
+    async findTopDiscountedProductsRepository(limit: number){
+        return await this.productsRepository.find({
+            order: {
+                discount: 'DESC',
+            }, 
+            take: limit,
+            relations: ['categories']
+        })
     }
 
 
