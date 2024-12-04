@@ -85,7 +85,7 @@ const SuscriptionInformationCard = () => {
                             <p className="text-[20px] md:text-[20px] font-semibold text-white">And enjoy of every game</p>
                         </div>
                         <div className="w-full h-1/6 flex justify-center items-center">
-                            <p className="text-[30px] md:text-[60px] font-bold text-white">$10/month</p>
+                            <p className="text-[30px] md:text-[60px] font-bold text-white">$5/month</p>
                         </div>
                         <div className="w-full h-4/6 flex flex-col justify-evenly items-center p-10 gap-3">
                             <h3 className="text-[20px] md:text-[48px] font-bold text-violet-400">Have access to:</h3>

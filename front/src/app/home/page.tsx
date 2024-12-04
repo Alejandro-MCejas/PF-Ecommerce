@@ -58,7 +58,7 @@ const home = async () => {
                     <div className="w-full h-full">
                         <div className="w-full h-1/3 flex flex-col justify-evenly items-center">
                             <h2 className="text-[30x] md:text-[48px] font-black neon-text">CyberGamer fan</h2>
-                            <p className="text-[40px] md:text-[60px] font-bold text-violet-500">$10/month</p>
+                            <p className="text-[40px] md:text-[60px] font-bold text-violet-500">$5/month</p>
                         </div>
                         <div className="w-full h-2/3 flex flex-col justify-evenly items-center">
                             <h3 className="text-[20px] md:text-[48px] font-bold text-violet-400">Have access to:</h3>
