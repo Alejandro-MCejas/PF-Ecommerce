@@ -95,11 +95,11 @@ export class AuthController {
 
 
       const userSessionEncoded = encodeURIComponent(JSON.stringify(userSession));
-      res.redirect(`http://localhost:4000/dashboard?userSession=${userSessionEncoded}`);
+      res.redirect(`${process.env.FRONTEND_URL}/dashboard?userSession=${userSessionEncoded}`);
     }
     catch (error) {
       console.error('Error en el callback:', error);
-      res.redirect('http://localhost:3000/?error=callback_failed');
+      res.redirect(`${process.env.AUTH0_BASE_URL}/?error=callback_failed`);
     }
   }
 

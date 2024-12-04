@@ -83,7 +83,7 @@ export class AuthService {
             client_id: process.env.AUTH0_CLIENT_ID,
             client_secret: process.env.AUTH0_CLIENT_SECRET,
             code: code,
-            redirect_uri: 'http://localhost:3000/auth/callback'
+            redirect_uri: `${process.env.AUTH0_BASE_URL}/auth/callback'`
         }))
 
         return response.data

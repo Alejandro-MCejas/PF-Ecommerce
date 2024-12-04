@@ -34,14 +34,14 @@ const teamMembers = [
         "profession":"BackEnd Developer",
         "image":" https://st4.depositphotos.com/29453910/37778/v/380/depositphotos_377785296-stock-illustration-hand-drawn-modern-woman-avatar.jpg",
         // "linkFacebook":"",
-        "linkGitHub":"https://github.com/Agustina-NBlanco",
+        "linkGitHub":"https://res.cloudinary.com/dvpenabty/image/upload/v1733353761/WhatsApp_Image_2024-12-04_at_19.58.03_zb3sc4.jpg",
         "linkLinkedIn":""
     },
     {
         "id": 5,
         "name": "Alejandro Cejas",
         "profession":"BackEnd Developer",
-        "image":"https://st4.depositphotos.com/29453910/37778/v/380/depositphotos_377785406-stock-illustration-hand-drawn-modern-man-avatar.jpg",
+        "image":"https://res.cloudinary.com/dvpenabty/image/upload/v1733353890/WhatsApp_Image_2024-12-04_at_09.36.05_uceps2.jpg",
         // "linkFacebook":"",
         "linkGitHub":"https://github.com/Alejandro-MCejas",
         "linkLinkedIn":"https://www.linkedin.com/in/alejandro-manuel-cejas-7296a42bb?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
