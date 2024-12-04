@@ -180,6 +180,7 @@ export class AuthService {
             return { message: 'Password updated successfully' };
 
         } catch (error) {
+            console.log(error)
             throw new UnauthorizedException('Invalid token or expired');
         }
     }

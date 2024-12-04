@@ -31,7 +31,7 @@ export class UsersRepository {
         const user = await this.usersRepository.findOne({
             where: { id },
             select: ['id', 'name', 'email', 'address', 'phone', 'isSuscription',],
-            relations: ['orders']
+            relations: ['orders', 'favoriteProducts', 'claimedProducts'],
         })
 
 
