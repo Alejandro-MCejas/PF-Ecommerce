@@ -1,24 +1,28 @@
-import { BadRequestException, Body, Controller, Delete, Get,Param, Post, Res,} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get,Param, Post, Res, UseGuards,} from '@nestjs/common';
 import { SuscriptionService } from './suscription.service';
 import { CreateSuscriptionDto } from './dto/create-suscription.dto';
 import { UUIDValidationPipe } from 'src/validator/uuid-validation.pipes';
 import { Response } from 'express';
+import { HybridAuthGuard } from 'src/auth/hybridAuthGuard.guard';
 
 @Controller('suscription')
 export class SuscriptionController {
   constructor(private readonly suscriptionService: SuscriptionService) { }
 
   @Get(':userId')
+  @UseGuards(HybridAuthGuard)
   async suscription(@Param('userId') userId:string){
     return await this.suscriptionService.getSuscription(userId)
   }
 
   @Post('create')
+  @UseGuards(HybridAuthGuard)
   async createSuscription(@Body() createSuscriptionDto: CreateSuscriptionDto) {
     return await this.suscriptionService.createSuscription(createSuscriptionDto);
   }
 
   @Post('cancel/:userId')
+  @UseGuards(HybridAuthGuard)
   async cancelSubscription(@Param('userId') userId: string): Promise<{ message: string }> {
     if (!userId) {
         throw new BadRequestException('userId is required');

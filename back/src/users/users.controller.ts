@@ -24,18 +24,21 @@ export class UsersController {
   }
 
   @Get(':id/favorites')
+  @UseGuards(HybridAuthGuard)
   async findAllFavoritesProductsController(@Param('id') userId: string, @Res() res: Response) {
     const favoriteProducts = await this.usersService.findAllFavoritesProductsService(userId);
     return res.json(favoriteProducts);
   }
 
   @Post(':id/favorites/:productId')
+  @UseGuards(HybridAuthGuard)
   async addFavoriteProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
     const favoriteProduct = await this.usersService.addFavoriteProductService(userId, productId);
     return res.json({ message: `The product ${favoriteProduct.name} was added to favorites` });
   }
 
   @Delete(':id/favorites/:productId')
+  @UseGuards(HybridAuthGuard)
   async removeFavoriteProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
     const favoriteProduct = await this.usersService.removeFavoriteProductService(userId, productId);
     return res.json({ message: `The product ${favoriteProduct.name} was removed from favorites` });
@@ -50,6 +53,7 @@ export class UsersController {
   }
 
   @Post(':id/claim/:productId')
+  @UseGuards(HybridAuthGuard)
   async claimProductController(@Param('id') userId: string, @Param('productId') productId: string, @Res() res: Response) {
     const claimedProduct = await this.usersService.claimProductService(userId, productId);
     return res.json({ message: `The product ${claimedProduct.name} was claimed` })
@@ -66,7 +70,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  // @UseGuards(HybridAuthGuard)
+  @UseGuards(HybridAuthGuard)
   async updateUserController(
       @Param('id') id: string,
       @Body() updateUserDto: UpdateUserDto,

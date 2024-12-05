@@ -93,7 +93,7 @@ export class ProductsService {
       throw new NotFoundException("El precio del producto es invalido")
     }
 
-    if(products.discount <= 0){
+    if(products.discount < 0){
       throw new NotFoundException("El discount del producto es invalido")
     }
     
