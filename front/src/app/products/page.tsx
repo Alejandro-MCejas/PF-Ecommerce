@@ -1,23 +1,55 @@
+"use client";
 
-import { CardProductsView } from "@/components/CardProductsView/CardProductsView"
-import { FilterForm } from "@/components/FilterForm/FilterForm"
-import FilterFormMobile from "@/components/FilterFormMobile/FilterFormMobile"
-import AddGame from "@/components/ModalAddGame/ModalAddGame"
-import { fetchingCategories } from "@/helpers/categoiresHelper"
-import { fetchingProducts } from "@/helpers/productHelper"
+import { useEffect, useState } from "react";
+import { CardProductsView } from "@/components/CardProductsView/CardProductsView";
+import { FilterForm } from "@/components/FilterForm/FilterForm";
+import FilterFormMobile from "@/components/FilterFormMobile/FilterFormMobile";
+import AddGame from "@/components/ModalAddGame/ModalAddGame";
+import { fetchingCategories } from "@/helpers/categoiresHelper";
+import { fetchingProducts } from "@/helpers/productHelper";
+import { IProduct } from "@/interfaces/IProduct";
+import { ICategories } from "@/interfaces/ICategories";
 
-const products = async () => {
-    const products = await fetchingProducts();
-    const allCategories = await fetchingCategories()
+const ProductsPage = () => {
+    const [products, setProducts] = useState<IProduct[]>([]); // Estado para los productos
+    const [categories, setCategories] = useState<ICategories[]>([]); // Estado para las categorías
+    const [isLoading, setIsLoading] = useState(true); // Estado para mostrar un spinner de carga
+
+    // Función para obtener los datos desde la API
+    const fetchProductsAndCategories = async () => {
+        setIsLoading(true); // Mostrar el estado de carga
+        try {
+            const productsData = await fetchingProducts();
+            const categoriesData = await fetchingCategories();
+            setProducts(productsData);
+            setCategories(categoriesData);
+        } catch (error) {
+            console.error("Error fetching products or categories:", error);
+        } finally {
+            setIsLoading(false); // Ocultar el estado de carga
+        }
+    };
+
+    useEffect(() => {
+        fetchProductsAndCategories(); // Llamar a la API al montar el componente
+    }, []);
+
+    // Función para manejar la actualización de productos después de agregar un nuevo juego
+    const handleAddGame = async () => {
+        await fetchProductsAndCategories(); // Actualiza los productos y categorías
+    };
+
+    if (isLoading) {
+        return <p>Loading...</p>; // Puedes personalizar un spinner aquí
+    }
+
     return (
         <div>
             <div className="w-full h-[70px] bg-white flex justify-center items-center shadow-inner">
                 <h1 className="font-bold text-[30px] md:text-[48px]">All games</h1>
             </div>
             <div className="max-w-[1500px] w-full mx-auto flex justify-center items-center z-50">
-                <AddGame
-                    categories={allCategories}
-                />
+                <AddGame categories={categories} />
             </div>
             <div className="block md:hidden">
                 <FilterFormMobile />
@@ -29,18 +61,14 @@ const products = async () => {
                     </div>
 
                     <div className="w-full md:w-10/12 flex flex-wrap justify-center gap-3">
-                        {
-                            products.map((game, index) => (
-                                <CardProductsView
-                                    key={index}
-                                    product={game}
-                                />
-                            ))
-                        }
+                        {products.map((game, index) => (
+                            <CardProductsView key={index} product={game} />
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
-export default products
+    );
+};
+
+export default ProductsPage;
