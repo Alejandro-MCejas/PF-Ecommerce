@@ -65,12 +65,13 @@ export const CartView = () => {
   
       if (orderResponse) {
         console.log("Orden creada:", orderResponse);
-        const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id);
-  
-        if (mercadoPagoOrder && mercadoPagoOrder.id) {
-          setPreferenceId(mercadoPagoOrder.id);
-        } else {
-          throw new Error("Error al obtener la preferencia de Mercado Pago");
+        if(userData){
+          const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id, userData?.token);
+          if (mercadoPagoOrder && mercadoPagoOrder.id) {
+            setPreferenceId(mercadoPagoOrder.id);
+          } else {
+            throw new Error("Error al obtener la preferencia de Mercado Pago");
+          }
         }
       } else {
         console.log("Error al crear la orden.");

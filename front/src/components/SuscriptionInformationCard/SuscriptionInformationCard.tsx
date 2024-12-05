@@ -33,7 +33,7 @@ const SuscriptionInformationCard = () => {
     
         try {
             if (userData?.user.id) {
-                const response = await suscribeCybergamer(userData.user.id);
+                const response = await suscribeCybergamer(userData.user.id , userData.token);
                 console.log('Preference ID recibido:', response.preferenceId);
                 if (response.preferenceId) {
                     setPreferenceId(response.preferenceId);

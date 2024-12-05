@@ -7,12 +7,15 @@ interface PreferenceResponse {
     preferenceId: string;
 }
 
-export const suscribeCybergamer = async (userId: string): Promise<PreferenceResponse> => {
+
+
+export const suscribeCybergamer = async (userId: string , token:string): Promise<PreferenceResponse> => {
     try {
         const response = await fetch(`${API_URL}/suscription/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 userId,
@@ -33,10 +36,13 @@ export const suscribeCybergamer = async (userId: string): Promise<PreferenceResp
 };
 
 
-export const cancelSuscription = async (userId:string):Promise<string | undefined> =>{
+export const cancelSuscription = async (userId:string , token:string):Promise<string | undefined> =>{
     try {
         const response = await fetch(`${API_URL}/suscription/cancel/${userId}`,{
-            method:"POST"
+            method:"POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
         })
         const cancelResponse = await response.json()
         return cancelResponse
@@ -64,9 +70,13 @@ interface Suscription {
     products: IProduct[];
   }
 
-export const getSuscriptionInformation = async (userId:string): Promise <SubscriptionResponse | undefined>=>{
+export const getSuscriptionInformation = async (userId:string , token:string): Promise <SubscriptionResponse | undefined>=>{
     try {
-        const response = await fetch(`${API_URL}/suscription/${userId}`)
+        const response = await fetch(`${API_URL}/suscription/${userId}`,{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
         const information = await response.json()
         console.log(information)
         // debugger

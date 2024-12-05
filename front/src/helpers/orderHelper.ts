@@ -36,7 +36,7 @@ interface PreferenceResponse {
   id: string;
 }
 
-export const createPaymentMercadoPago = async (orderId: string) => {
+export const createPaymentMercadoPago = async (orderId: string , token:string) => {
   try {
     const response = await fetch(`${API_URL}/mercado-pago/create-pago/${orderId}`, {
       method: 'POST',
@@ -57,11 +57,11 @@ export const createPaymentMercadoPago = async (orderId: string) => {
   }
 };
 
-export const getOrderDetailById = async (orderId: string): Promise<IOrderResponse | null> => {
+export const getOrderDetailById = async (orderId: string , token:string): Promise<IOrderResponse | null> => {
   try {
     const response = await fetch(`${API_URL}/orders/${orderId}`, {
       headers: {
-        // Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -95,7 +95,7 @@ export const changeStatus = async (orderId: string, token: string): Promise<chan
     const response = await fetch(`${API_URL}/orders/changeStatus`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Asegúrate de que el backend reconozca el formato JSON
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ orderId }), // Convertir el objeto a JSON
