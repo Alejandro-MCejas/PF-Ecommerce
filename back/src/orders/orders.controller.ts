@@ -14,7 +14,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
   @Get()
-  // @UseGuards(HybridAuthGuard, RoleGuard)
+  @UseGuards(HybridAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   async findAllOrdersController(@Res() res: Response) {
     const orders = await this.ordersService.findAllOrdersService();
@@ -22,14 +22,14 @@ export class OrdersController {
   }
 
   @Get(':id')
-  // @UseGuards(HybridAuthGuard)
+  @UseGuards(HybridAuthGuard)
   async findOneOrderController(@Param('id') id: string, @Res() res: Response) {
     const order = await this.ordersService.findOneOrderService(id);
     return res.status(200).json(order);
   }
 
   @Post()
-  // @UseGuards(HybridAuthGuard)
+  @UseGuards(HybridAuthGuard)
   async createOrderController(@Body() createOrderDto: CreateOrderDto, @Res() res: Response) {
     const newOrder = await this.ordersService.createOrderService(createOrderDto);
     return res.status(201).json(newOrder);
@@ -45,6 +45,7 @@ export class OrdersController {
 
   @Post("changeStatus")
   @HttpCode(HttpStatus.OK)
+  @UseGuards(HybridAuthGuard)
   async changeStatus(@Body("orderId") orderId: string) {
     if (!orderId) {
       throw new BadRequestException("orderId is required.");
