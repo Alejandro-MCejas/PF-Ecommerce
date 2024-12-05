@@ -32,9 +32,9 @@ const teamMembers = [
         "id": 4,
         "name": "Agustina Blanco",
         "profession":"BackEnd Developer",
-        "image":" https://st4.depositphotos.com/29453910/37778/v/380/depositphotos_377785296-stock-illustration-hand-drawn-modern-woman-avatar.jpg",
+        "image":"https://res.cloudinary.com/dvpenabty/image/upload/v1733353761/WhatsApp_Image_2024-12-04_at_19.58.03_zb3sc4.jpg",
         // "linkFacebook":"",
-        "linkGitHub":"https://res.cloudinary.com/dvpenabty/image/upload/v1733353761/WhatsApp_Image_2024-12-04_at_19.58.03_zb3sc4.jpg",
+        "linkGitHub":"",
         "linkLinkedIn":""
     },
     {
