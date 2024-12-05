@@ -8,10 +8,10 @@ export interface ProductIdAndQuantity {
 }
 
 export enum OrderStatus {
-    PAYMENT_PENDING = "Pago pendiente",
-    PAYMENT_CONFIRMED = "Pago confirmado, preparacion del envio",
-    SHIPPED = "Enviado",
-    RECEIVED = "Recibido",
+    PAYMENT_PENDING = "Payment Pending",
+    PAYMENT_CONFIRMED = "Payment confirmed, order is being prepared",
+    SHIPPED = "Sent",
+    RECEIVED = "Received",
 }
 
 export interface OrderStatusResponse{
