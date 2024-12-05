@@ -3,7 +3,6 @@ import { CreateOrderDto, OrderStatus } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
-import { CreateOrderDetailDto } from 'src/order-detail/dto/create-order-detail.dto';
 import { OrderDetailService } from 'src/order-detail/order-detail.service';
 
 @Injectable()
@@ -23,13 +22,13 @@ export class OrdersService {
     const order = await this.ordersRepository.findOneOrderRepository(id);
   
     if (!order) {
-      throw new Error('La orden no existe');
+      throw new Error('The order does not exist');
     }
   
     const orderDetail = await this.orderDetailService.findOneOrderDetailService(order.id);
   
     if (!orderDetail) {
-      throw new Error('No se encontró un detalle de la orden asociado a esta orden');
+      throw new Error('No order detail associated with this order was found');
     }
   
     const formattedProducts = orderDetail.orderProducts.map(op => ({
@@ -63,11 +62,11 @@ export class OrdersService {
     const productsWithStock = await this.productsService.getProductsWithStock(products);
 
     if (productsWithStock.length === 0) {
-      throw new Error('No hay stock en ninguno de los productos recibidos');
+      throw new Error('There is no stock for any of the received products');
     }
 
     if (productsWithStock.length < products.length) {
-      throw new Error('No hay stock en algunos de los productos recibidos');
+      throw new Error('There is no stock for some of the received products');
     }
 
     const structureOfOrder = {
@@ -78,7 +77,7 @@ export class OrdersService {
     const newOrder = await this.ordersRepository.createOrderRepository(structureOfOrder);
 
     if (!newOrder) {
-      throw new Error('La orden no pudo ser creada');
+      throw new Error('The order could not be created');
     }
 
     for (const { id, quantity } of productsWithStock) {
