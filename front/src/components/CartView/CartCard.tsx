@@ -25,52 +25,53 @@ export const CartView = () => {
         const quantity = product.quantity ?? 1; // Usa nullish coalescing para evitar `undefined`
         return sum + (isNaN(price) ? 0 : price * quantity);
       }, 0);
-  
+
       // Redondear a 2 decimales para evitar discrepancias
       const roundedTotal = Math.round(totalAmount * 100) / 100;
-  
+
       setOrderData((prevOrderData) => ({
         ...prevOrderData,
         amount: roundedTotal, // Actualizar el monto total calculado
       }));
     }
   }, [cart, setOrderData]);
-  
+
   const handleOnClick = async () => {
     setIsButtonVisible(false);
     setIsLoading(true);
-  
+
     try {
       const productsData = cart.map((product) => ({
         id: product.id,
         quantity: product.quantity ?? 1, // Asegúrate de que la cantidad siempre esté definida
       }));
-  
+
       const totalAmount = cart.reduce((sum, product) => {
         const price = typeof product.price === "number" ? product.price : parseFloat(product.price as string);
         const quantity = product.quantity ?? 1; // Usa nullish coalescing
         return sum + (isNaN(price) ? 0 : price * quantity);
       }, 0);
-  
+
       const roundedTotal = Math.round(totalAmount * 100) / 100; // Redondear a 2 decimales
-  
+
       // Crear los datos para enviar al backend
       const orderDataToSend = {
         userId: userData?.user.id,
         products: productsData,
         amount: roundedTotal,
       };
-  
-      const orderResponse = await createOrder(orderDataToSend);
-  
-      if (orderResponse) {
-        console.log("Orden creada:", orderResponse);
-        if(userData){
-          const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id, userData?.token);
-          if (mercadoPagoOrder && mercadoPagoOrder.id) {
-            setPreferenceId(mercadoPagoOrder.id);
-          } else {
-            throw new Error("Error al obtener la preferencia de Mercado Pago");
+
+      if (userData) {
+        const orderResponse = await createOrder(orderDataToSend, userData?.token);
+        if (orderResponse) {
+          console.log("Orden creada:", orderResponse);
+          if (userData) {
+            const mercadoPagoOrder = await createPaymentMercadoPago(orderResponse.order.id, userData?.token);
+            if (mercadoPagoOrder && mercadoPagoOrder.id) {
+              setPreferenceId(mercadoPagoOrder.id);
+            } else {
+              throw new Error("Error al obtener la preferencia de Mercado Pago");
+            }
           }
         }
       } else {
@@ -83,8 +84,8 @@ export const CartView = () => {
       setIsLoading(false);
     }
   };
-  
-  
+
+
 
   const renderSpinner = () => {
     if (isLoading) {

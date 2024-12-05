@@ -179,12 +179,12 @@ export const averageProductReview = async (id: string) => {
 };
 
 
-export const deleteReview = async (id: string) => {
+export const deleteReview = async (id: string , token:string) => {
     try {
         const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
             method: "DELETE",
             headers: {
-                // 'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });

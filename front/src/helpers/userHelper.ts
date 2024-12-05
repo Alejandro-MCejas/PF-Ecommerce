@@ -31,15 +31,33 @@ export const getUserById = async (userId: string, token: string): Promise<userBy
 }
 
 
-export const getFavorites = async (userId: string): Promise<IProduct[] | undefined> => {
+export const getFavorites = async (userId: string , token:string): Promise<IProduct[]> => {
   try {
-    const response = await fetch(`${APIURL}/users/${userId}/favorites`)
-    const favoriteProducts = response.json()
-    return favoriteProducts
+    const response = await fetch(`${APIURL}/users/${userId}/favorites`, {
+      headers:{
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch favorites: ${response.statusText}`);
+    }
+
+    const favoriteProducts = await response.json();
+
+    // Asegúrate de que `favoriteProducts` sea un arreglo
+    if (Array.isArray(favoriteProducts)) {
+      return favoriteProducts;
+    } else {
+      console.warn("Favorites data is not an array:", favoriteProducts);
+      return []; // Retorna un arreglo vacío si no es un arreglo
+    }
   } catch (error) {
-    console.log(error)
+    console.error("Error fetching favorites:", error);
+    return []; // Retorna un arreglo vacío en caso de error
   }
-}
+};
+
 
 export const eliminateFavorite = async (userId: string, productId: string, token: string): Promise<IProduct[] | undefined> => {
   try {
