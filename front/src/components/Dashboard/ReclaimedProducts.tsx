@@ -11,7 +11,7 @@ const ReclaimedProducts = () => {
         if (userData) {
             const fetchingProductsReclaimed = async () => {
                 try {
-                    const userInformation = await getUserById(userData?.user.id);
+                    const userInformation = await getUserById(userData?.user.id , userData.token);
                     if(userInformation){
                         setClaimedProducts(userInformation.claimedProducts || []); 
                     }

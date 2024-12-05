@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { changeStatus, getOrderDetailById } from "@/helpers/orderHelper";
+import { changeStatus} from "@/helpers/orderHelper";
 import { useAuth } from "@/context/Authcontext";
 import { useCart } from "@/context/CartContext";
 

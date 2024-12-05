@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { changeNewPassword } from "@/helpers/auth.helper";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState<string>("");
@@ -40,23 +41,14 @@ const ResetPassword = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/auth/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+      const newPassword = await changeNewPassword(requestData)
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to reset password.");
+      if(newPassword.ok){
+        setSuccessMessage("Password reset successful. Redirecting...");
+        setTimeout(() => {
+          router.push("/login"); // Redirigir al login después de 2 segundos
+        }, 2000);
       }
-
-      setSuccessMessage("Password reset successful. Redirecting...");
-      setTimeout(() => {
-        router.push("/login"); // Redirigir al login después de 2 segundos
-      }, 2000);
     } catch (err: any) {
       setError(err.message || "An error occurred. Please try again.");
     }

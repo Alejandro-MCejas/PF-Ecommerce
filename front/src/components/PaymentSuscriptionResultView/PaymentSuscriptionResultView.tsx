@@ -71,7 +71,7 @@ const PaymentResultView: React.FC = () => {
       });
 
       if (orderDetailId && userData?.token) {
-        getOrderDetailById(orderDetailId);
+        getOrderDetailById(orderDetailId , userData.token) ;
 
       }
     }
