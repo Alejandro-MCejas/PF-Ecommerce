@@ -12,6 +12,7 @@ const ProductReviewCard = ({ review, id }: { review: string, id: string }) => {
     const router = useRouter()
 
     const handleDeleteComment = async (id: string) => {
+
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -21,25 +22,27 @@ const ProductReviewCard = ({ review, id }: { review: string, id: string }) => {
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
         });
-
-        if (result.isConfirmed) {
-            try {
-                await deleteReview(id); // Llama a la función deleteReview con el id
-                await Swal.fire({
-                    title: "Deleted!",
-                    text: "Your review has been deleted.",
-                    icon: "success"
-                });
-                router.refresh()
-            } catch (error) {
-                console.error("Error deleting the review:", error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "There was an error deleting the review. Please try again.",
-                    icon: "error"
-                });
+        if (userData?.token) {
+            if (result.isConfirmed) {
+                try {
+                    await deleteReview(id, userData?.token); // Llama a la función deleteReview con el id
+                    await Swal.fire({
+                        title: "Deleted!",
+                        text: "Your review has been deleted.",
+                        icon: "success"
+                    });
+                    router.refresh()
+                } catch (error) {
+                    console.error("Error deleting the review:", error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "There was an error deleting the review. Please try again.",
+                        icon: "error"
+                    });
+                }
             }
         }
+
     };
 
 

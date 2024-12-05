@@ -6,13 +6,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 
-export const createOrder = async (orderData: OrderData): Promise<OrderResponse | null> => {
+export const createOrder = async (orderData: OrderData , token:string): Promise<OrderResponse | null> => {
   try {
     const response = await fetch(`${API_URL}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${orderData.token}`, // si es necesario
+        'Authorization': `Bearer ${token}`, // si es necesario
       },
       body: JSON.stringify({
         userId: orderData.userId,

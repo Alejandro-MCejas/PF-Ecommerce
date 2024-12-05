@@ -126,11 +126,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                             text: "Your product has been reclaimed.",
                             icon: "success",
                         });
-                        // if (response) {
-                        // } else {
-                        //     // Maneja los errores que no lanzan excepción pero devuelven un error HTTP
-                        //     throw new Error("Failed to reclaime product");
-                        // }
                     } catch (error) {
                         console.log(error)
                         Swal.fire({

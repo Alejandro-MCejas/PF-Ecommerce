@@ -10,6 +10,9 @@ import { useAuth } from "@/context/Authcontext";
 import ChangePassword from "../ChangePassword/ChangePassword";
 import { userSession } from "@/interfaces/ISession";
 
+const AUTH0_BASE_URL: string | undefined = process.env.NEXT_PUBLIC_AUTH0_BASE_URL;
+
+// console.log(AUTH0_BASE_URL)
 
 const Login = () => {
   const { setUserData } = useAuth();
@@ -74,7 +77,7 @@ const Login = () => {
 
 
   const handleLoginGoogle = async () => {
-    window.location.href = "http://localhost:3000/auth/login";
+    window.location.href = `${AUTH0_BASE_URL}/auth/login`;
   };
 
   return (

@@ -9,12 +9,14 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/Authcontext';
 import { fetchingCategories } from '@/helpers/categoiresHelper';
 import { ICategories } from '@/interfaces/ICategories';
+import Swal from 'sweetalert2';
 
 const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const { userData } = useAuth()
@@ -64,20 +66,68 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
         console.log("New game submitted:", newGame);
 
         if (!userData?.token) {
-            console.error('User token is missing. Please log in again.');
-            return; // Salir de la función si el token no está presente
+            if (!userData?.token) {
+                Swal.fire({
+                    title: "Error",
+                    text: "User token is missing. Please log in again.",
+                    icon: "error"
+                });
+                return; // Salir de la función si el token no está presente
+            }
         }
 
-        try {
-            const newProduct = await addProduct(newGame, userData.token);
-            console.log(newProduct)
-            debugger
-            window.location.reload();
-            console.log('Product added:', newProduct);
-        } catch (error) {
-            console.error('Error adding product:', error);
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You will add this game to CyberGamer",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, add it!"
+        });
+
+        if (result.isConfirmed) {
+            setIsLoading(true); // Mostrar el spinner de carga
+            try {
+                const newProduct = await addProduct(newGame, userData.token);
+                console.log("Product added:", newProduct);
+
+                Swal.fire({
+                    title: "Added successfully!",
+                    text: "The game is now in CyberGamer",
+                    icon: "success"
+                }).then(() => {
+                    window.location.reload(); // Recargar la página tras la confirmación
+                });
+            } catch (error) {
+                console.error("Error adding product:", error);
+
+                Swal.fire({
+                    title: "Ups, something went wrong!",
+                    text: "The game couldn't be added",
+                    icon: "error"
+                });
+            } finally {
+                setIsLoading(false); // Ocultar el spinner de carga
+            }
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex justify-center items-center w-full">
+                <div className="flex-col gap-4 w-full flex items-center justify-center">
+                    <div
+                        className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full"
+                    >
+                        <div
+                            className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const handleDiscountChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseFloat(event.target.value); // Convertir a número

@@ -5,6 +5,8 @@ import { IProduct, EditGameModalProps } from "@/interfaces/IProduct";
 import { HomeCardGame } from "../HomeCardGame/HomeCardGame";
 import { useAuth } from "@/context/Authcontext";
 import { changeProductsHome, getProductsHome } from "@/helpers/productHelper";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +14,7 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   const [tempSelectedGames, setTempSelectedGames] = useState<IProduct[]>([]); // Temporal en el modal
   const [productInCard, setProductInCard] = useState<IProduct[]>([]); // Los juegos traídos por el backend
   const { userData } = useAuth();
+  const router = useRouter()
 
   // Obtener los juegos del backend al cargar el componente
   useEffect(() => {
@@ -35,26 +38,57 @@ export const EditGameModal: React.FC<EditGameModalProps> = ({ games }) => {
   const handleApplyChanges = async () => {
     try {
       if (tempSelectedGames.length !== 4) {
-        alert("You must select exactly 4 games.");
+        await Swal.fire({
+          title: "Invalid Selection",
+          text: "You must select exactly 4 games.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
         return;
       }
-
+  
       if (userData?.token) {
-        // Combinar los IDs de los productos traídos por el backend y los seleccionados
-        const idsArray = [
-          ...productInCard.map((game) => ({ id: game.id })), // IDs del backend
-          ...tempSelectedGames.map((game) => ({ id: game.id })), // IDs seleccionados
-        ];
-
-        const changeProducts = await changeProductsHome(idsArray, userData.token);
-        console.log("Productos cambiados con éxito:", changeProducts);
-
-        setSelectedGames(tempSelectedGames); // Actualizar los juegos seleccionados
-        setIsOpen(false);
-        return changeProducts;
+        const confirmResult = await Swal.fire({
+          title: "Are you sure?",
+          text: "You are about to update the home games.",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, apply changes!",
+        });
+  
+        if (confirmResult.isConfirmed) {
+          // Combinar los IDs de los productos traídos por el backend y los seleccionados
+          const idsArray = [
+            ...productInCard.map((game) => ({ id: game.id })), // IDs del backend
+            ...tempSelectedGames.map((game) => ({ id: game.id })), // IDs seleccionados
+          ];
+  
+          const changeProducts = await changeProductsHome(idsArray, userData.token);
+          console.log("Productos cambiados con éxito:", changeProducts);
+  
+          await Swal.fire({
+            title: "Changes Applied!",
+            text: "The home games have been updated successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          
+          setSelectedGames(tempSelectedGames); // Actualizar los juegos seleccionados
+          setIsOpen(false);
+          window.location.reload()
+          return changeProducts;
+        }
       }
     } catch (error) {
       console.error("El error fue:", error);
+      await Swal.fire({
+        title: "Error",
+        text: "Something went wrong while applying changes.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
