@@ -19,34 +19,36 @@ const MyOrders = ({ userId }: { userId: string }) => {
   // Cargar todas las órdenes del usuario
   useEffect(() => {
     const fetchOrders = async () => {
-      try {
-        const userInformation = await getUserById(userId);
-        if (!userInformation || !userInformation.orders) {
-          console.error("No orders found for this user.");
-          return;
+      if (userData) {
+        try {
+          const userInformation = await getUserById(userId, userData?.token);
+          if (!userInformation || !userInformation.orders) {
+            console.error("No orders found for this user.");
+            return;
+          }
+
+          const ordersData: IOrderResponse[] = userInformation.orders.map((order: any) => ({
+            order: {
+              id: order.id,
+              date: order.date,
+              status: order.status,
+              user: order.user,
+            },
+            orderDetail: {
+              id: "", // No se requiere cargar detalle completo inicialmente
+              price: 0,
+              products: [],
+            },
+          }));
+
+          setOrders(ordersData);
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        } finally {
+          setIsLoading(false);
         }
-
-        const ordersData: IOrderResponse[] = userInformation.orders.map((order: any) => ({
-          order: {
-            id: order.id,
-            date: order.date,
-            status: order.status,
-            user: order.user,
-          },
-          orderDetail: {
-            id: "", // No se requiere cargar detalle completo inicialmente
-            price: 0,
-            products: [],
-          },
-        }));
-
-        setOrders(ordersData);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      };
+    }
 
     fetchOrders();
   }, [userId]);
@@ -54,29 +56,31 @@ const MyOrders = ({ userId }: { userId: string }) => {
   // Manejar la carga de detalles de una orden y abrir el modal
   const handleViewDetails = async (orderId: string) => {
     setIsLoadingDetails(true);
-    try {
-      const orderDetail = await getOrderDetailById(orderId);
-      if (!orderDetail) {
-        console.error("Order detail not found.");
-        return;
-      }
+    if (userData) {
+      try {
+        const orderDetail = await getOrderDetailById(orderId, userData.token);
+        if (!orderDetail) {
+          console.error("Order detail not found.");
+          return;
+        }
 
-      const foundOrder = orders.find((o) => o.order.id === orderId);
-      if (!foundOrder) {
-        console.error("Order not found.");
-        return;
-      }
+        const foundOrder = orders.find((o) => o.order.id === orderId);
+        if (!foundOrder) {
+          console.error("Order not found.");
+          return;
+        }
 
-      const detailedOrder = {
-        order: foundOrder.order,
-        orderDetail: orderDetail.orderDetail,
-      };
-      setSelectedOrder(detailedOrder);
-      setIsModalOpen(true);
-    } catch (error) {
-      console.error("Error fetching order details:", error);
-    } finally {
-      setIsLoadingDetails(false);
+        const detailedOrder = {
+          order: foundOrder.order,
+          orderDetail: orderDetail.orderDetail,
+        };
+        setSelectedOrder(detailedOrder);
+        setIsModalOpen(true);
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+      } finally {
+        setIsLoadingDetails(false);
+      }
     }
   };
 

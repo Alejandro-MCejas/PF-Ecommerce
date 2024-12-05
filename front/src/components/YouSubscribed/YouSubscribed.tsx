@@ -18,7 +18,7 @@ const SubscriptionStatus = () => {
     const fechUserInfo = async () => {
       if (userData) {
         try {
-          const expirationDate = await getSuscriptionInformation(userData?.user.id);
+          const expirationDate = await getSuscriptionInformation(userData?.user.id , userData.token);
 
           if (expirationDate?.suscription?.endDate) {
             setExpirationDate(expirationDate.suscription.endDate);
@@ -38,7 +38,7 @@ const SubscriptionStatus = () => {
   const handleCancelSubscription = async () => {
     try {
       if (userData) {
-        const cancelMessage = await cancelSuscription(userData?.user.id)
+        const cancelMessage = await cancelSuscription(userData?.user.id, userData.token)
         console.log(cancelMessage)
       }
 

@@ -5,46 +5,67 @@ const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
 
 interface userById {
   id: string;
-  name: string; 
-  email: string; 
-  address: string; 
+  name: string;
+  email: string;
+  address: string;
   phone: string;
   isSuscription: boolean;
   orders: IOrder[];
-  claimedProducts:IProduct[]
+  claimedProducts: IProduct[]
 }
 
-export const getUserById = async (userId:string) : Promise<userById | undefined> =>{
-    try {
-        const res = await fetch(`${APIURL}/users/${userId}`, {
-            method: "GET",
-            headers: {
-              "Content-type": "application/json",
-              'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4ZTFhODY3LTM0ODctNGI1OC05NDZjLTgwM2IyZjQyYmRkYyIsImVtYWlsIjoiYWRtaW4xQGdtYWlsLmNvbSIsInJvbGVzIjoiYWRtaW4iLCJpYXQiOjE3MzI2MjkyNDEsImV4cCI6MTczMjYzMjg0MX0.EYVTdYfTnQMBrl18cS5bp--JC1HKdPgtKo_VqMl8bFU`, // si es necesario
-            },            
-          });
-        const userInformation = res.json()
-        return userInformation
-    } catch (error) {
-        console.log("The error was", error)
+export const getUserById = async (userId: string, token: string): Promise<userById | undefined> => {
+  try {
+    const res = await fetch(`${APIURL}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        'Authorization': `Bearer ${token}`, // si es necesario
+      },
+    });
+    const userInformation = res.json()
+    return userInformation
+  } catch (error) {
+    console.log("The error was", error)
+  }
+}
+
+
+export const getFavorites = async (userId: string , token:string): Promise<IProduct[]> => {
+  try {
+    const response = await fetch(`${APIURL}/users/${userId}/favorites`, {
+      headers:{
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch favorites: ${response.statusText}`);
     }
-}
 
+    const favoriteProducts = await response.json();
 
-export const getFavorites = async (userId:string) : Promise<IProduct[] | undefined >=>{
-  try {
-    const response = await fetch(`${APIURL}/users/${userId}/favorites`)
-    const favoriteProducts = response.json()
-    return favoriteProducts
+    // Asegúrate de que `favoriteProducts` sea un arreglo
+    if (Array.isArray(favoriteProducts)) {
+      return favoriteProducts;
+    } else {
+      console.warn("Favorites data is not an array:", favoriteProducts);
+      return []; // Retorna un arreglo vacío si no es un arreglo
+    }
   } catch (error) {
-    console.log(error)
+    console.error("Error fetching favorites:", error);
+    return []; // Retorna un arreglo vacío en caso de error
   }
-}
+};
 
-export const eliminateFavorite = async (userId:string , productId:string) : Promise<IProduct[] | undefined >=>{
+
+export const eliminateFavorite = async (userId: string, productId: string, token: string): Promise<IProduct[] | undefined> => {
   try {
     const response = await fetch(`${APIURL}/users/${userId}/favorites/${productId}`, {
-      method:"DELETE",
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
     })
     const favoriteProducts = response.json()
     return favoriteProducts
@@ -55,10 +76,13 @@ export const eliminateFavorite = async (userId:string , productId:string) : Prom
 
 
 
-export const addFavorite = async (userId:string , productId:string) : Promise<IProduct[] | undefined >=>{
+export const addFavorite = async (userId: string, productId: string, token: string): Promise<IProduct[] | undefined> => {
   try {
     const response = await fetch(`${APIURL}/users/${userId}/favorites/${productId}`, {
-      method:"POST",
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
     })
     const favoriteProducts = response.json()
     return favoriteProducts
@@ -67,10 +91,10 @@ export const addFavorite = async (userId:string , productId:string) : Promise<IP
   }
 }
 
-export const logout = async ()=>{
+export const logout = async () => {
   try {
-    
+
   } catch (error) {
-    
+
   }
 }

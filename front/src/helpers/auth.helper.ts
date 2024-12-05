@@ -235,4 +235,30 @@ export const getToken2Prueba = async () => {
   }
 };
 
+interface reqData{
+  token:string,
+  newPassword:string,
+  confirmPassword:string
+}
+
+export const changeNewPassword = async (requestData:reqData) => {
+  try {
+    const response = await fetch(`${API_URL}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to reset password.");
+    }
+    const newPasswordResponse = response.json()
+    return newPasswordResponse
+  } catch (err: any) {
+    console.log(err)
+  }
+}
 
