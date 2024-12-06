@@ -121,7 +121,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 if (result.isConfirmed) {
                     try {
                         const response = await reclaimeProduct(userData.user.id, product.id , userData.token);
-                        if(response.ok){
+                        if(response){
                             Swal.fire({
                                 title: "Reclaime!",
                                 text: "Your product has been reclaimed.",
