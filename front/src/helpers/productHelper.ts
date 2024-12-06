@@ -179,7 +179,7 @@ export const averageProductReview = async (id: string) => {
 };
 
 
-export const deleteReview = async (id: string , token:string) => {
+export const deleteReview = async (id: string, token: string) => {
     try {
         const response = await fetch(`${API_URL}/reviews/delete/${id}`, {
             method: "DELETE",
@@ -260,7 +260,7 @@ export const changeProductSuscription = async (
         const response = await fetch(`${API_URL}/products/editProductSuscription`, {
             method: "PUT",
             headers: {
-                Authorization: `Bearer ${token}`,
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json", // Indica que el body es JSON
             },
             body: JSON.stringify(productsIdArr), // Convierte el objeto a JSON
@@ -279,10 +279,13 @@ export const changeProductSuscription = async (
     }
 };
 
-export const reclaimeProduct = async(userId:string , productId:string) => {
+export const reclaimeProduct = async (userId: string, productId: string, token: string) => {
     try {
-        const response = await fetch(`${API_URL}/users/${userId}/claim/${productId}`,{
-            method:"POST",
+        const response = await fetch(`${API_URL}/users/${userId}/claim/${productId}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
         })
         const messageResponse = await response.json()
         return messageResponse;

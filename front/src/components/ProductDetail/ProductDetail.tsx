@@ -107,7 +107,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     };
 
     const handleClaimeProduct = async () => {
-        if (userData?.user.isSuscription === true && product.suscription === true) {
+        if (userData?.user.isSuscription === true && product.suscription === true && userData) {
             try {
                 const result = await Swal.fire({
                     title: "You will reclaime this free product?",
@@ -120,7 +120,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
 
                 if (result.isConfirmed) {
                     try {
-                        const response = await reclaimeProduct(userData.user.id, product.id);
+                        const response = await reclaimeProduct(userData.user.id, product.id , userData.token);
                         if(response.ok){
                             Swal.fire({
                                 title: "Reclaime!",
