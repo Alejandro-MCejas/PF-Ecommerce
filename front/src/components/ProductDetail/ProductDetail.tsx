@@ -121,11 +121,13 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                 if (result.isConfirmed) {
                     try {
                         const response = await reclaimeProduct(userData.user.id, product.id);
-                        Swal.fire({
-                            title: "Reclaime!",
-                            text: "Your product has been reclaimed.",
-                            icon: "success",
-                        });
+                        if(response.ok){
+                            Swal.fire({
+                                title: "Reclaime!",
+                                text: "Your product has been reclaimed.",
+                                icon: "success",
+                            });
+                        }
                     } catch (error) {
                         console.log(error)
                         Swal.fire({
@@ -305,9 +307,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                             product={product}
                                         />
                                         <button className="w-[300px] h-[50px] bg-red-500 text-white px-4 py-2 rounded" onClick={handleDeleteGame}>Delete</button>
-                                    {/* <div className="flex flex-col gap-4">
-                                        <button className="w-[300px] h-[50px] bg-violet-600 text-white px-4 py-2 rounded" onClick={handleAddCyberGamer}>Subscription</button>
-                                    </div> */}
                                 </div>
                             )}
                         </div>
