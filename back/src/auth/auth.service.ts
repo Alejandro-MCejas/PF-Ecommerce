@@ -74,7 +74,7 @@ export class AuthService {
     }
 
     getLogouAuth0UrlService() {
-        return `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${process.env.AUTH0_BASE_URL}`;
+        return `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${process.env.FRONTEND_URL}/login`;
     }
 
     async exchangeCodeForTokenService(code: string) {
