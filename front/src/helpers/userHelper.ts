@@ -94,9 +94,15 @@ export const addFavorite = async (userId: string, productId: string, token: stri
 
 export const logout = async () => {
   try {
-    const response = await fetch(`${APIURL}/auth/logout`)
-    const finalRes = response.json()
-    return finalRes
+    const response = await fetch(`${APIURL}/auth/logout`, {
+      method: 'GET',
+      mode: 'no-cors',
+    })
+    if (!response.ok) {
+      console.log('Logout failed');
+    } else {
+      console.log('Logout request sent successfully');
+    }
   } catch (error) {
     console.log("Error en el logout")
   }
