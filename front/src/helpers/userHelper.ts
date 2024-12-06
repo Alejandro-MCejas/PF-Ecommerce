@@ -2,6 +2,7 @@ import { IOrder } from "@/interfaces/IOrder";
 import { IProduct } from "@/interfaces/IProduct";
 
 const APIURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
+const AUTH0: string | undefined = process.env.NEXT_PUBLIC_AUTH0_BASE_URL;
 
 interface userById {
   id: string;
