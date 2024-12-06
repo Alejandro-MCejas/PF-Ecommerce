@@ -1,29 +1,27 @@
-"use client"
-import { useContext, useState, useEffect } from "react";
-import { AuthContext, useAuth } from "@/context/Authcontext";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cancelSuscription, getSuscriptionInformation } from "@/helpers/suscriptionHelper";
+import Swal from "sweetalert2";
 
 const SubscriptionStatus = () => {
-  // const { userData, setUserData } = useContext(AuthContext);
   const [expirationDate, setExpirationDate] = useState<string>("");
-  const { userData } = useAuth()
+  const { userData, setUserData } = useAuth();
   const router = useRouter();
 
-
-
-
   useEffect(() => {
-    const fechUserInfo = async () => {
-      if (userData) {
+    const fetchUserInfo = async () => {
+      if (userData?.user?.id && userData?.token) {
         try {
-          const expirationDate = await getSuscriptionInformation(userData?.user.id , userData.token);
+          const subscriptionData = await getSuscriptionInformation(userData.user.id, userData.token);
 
-          if (expirationDate?.suscription?.endDate) {
-            setExpirationDate(expirationDate.suscription.endDate);
+          if (subscriptionData?.suscription?.endDate) {
+            setExpirationDate(subscriptionData.suscription.endDate);
           } else {
-            console.warn("Invalid subscription data", expirationDate);
+            console.warn("Invalid subscription data", subscriptionData);
           }
         } catch (error) {
           console.error("Failed to fetch subscription information:", error);
@@ -31,28 +29,59 @@ const SubscriptionStatus = () => {
       }
     };
 
-    fechUserInfo();
+    fetchUserInfo();
   }, [userData]);
 
-
   const handleCancelSubscription = async () => {
-    try {
-      if (userData) {
-        const cancelMessage = await cancelSuscription(userData?.user.id, userData.token)
-        console.log(cancelMessage)
-      }
+    if (!userData?.user?.id || !userData?.token) {
+      console.error("User ID or token is missing.");
+      return;
+    }
 
-    } catch (error) {
-      console.error("Error canceling subscription:", error);
+    const confirmResult = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to cancel your subscription.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+        const cancelMessage = await cancelSuscription(userData.user.id, userData.token);
+        console.log(cancelMessage);
+
+        await Swal.fire({
+          title: "Subscription Cancelled",
+          text: "Your subscription has been cancelled successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+
+        // Limpiar sesión
+        localStorage.removeItem("Token");
+        setUserData(null); // Limpia los datos del contexto
+        router.push("/login"); // Redirige al login
+      } catch (error) {
+        console.error("Error cancelling subscription:", error);
+        await Swal.fire({
+          title: "Error",
+          text: "Something went wrong while cancelling your subscription.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
     }
   };
 
   return (
     <div>
-      {userData?.user.isSuscription ? (
+      {userData?.user?.isSuscription ? (
         <>
           <div className="text-sm text-gray-600">
-            You are subscribed at{" "}
+            You are subscribed to{" "}
             <span className="text-blue-500 font-semibold">CyberGamer</span>
           </div>
           <div className="flex items-center space-x-4">
@@ -62,7 +91,7 @@ const SubscriptionStatus = () => {
                 type="text"
                 className="p-2 border border-gray-300 rounded-lg"
                 placeholder="12/12/2024"
-                value={expirationDate.toString()}
+                value={expirationDate}
                 disabled
               />
             </div>
@@ -77,7 +106,7 @@ const SubscriptionStatus = () => {
       ) : (
         <>
           <div className="text-sm text-gray-600">
-            You aren’t subscribed at{" "}
+            You aren’t subscribed to{" "}
             <span className="text-blue-500 font-semibold">CyberGamer</span>
           </div>
           <Link href="/subscription">
@@ -92,3 +121,4 @@ const SubscriptionStatus = () => {
 };
 
 export default SubscriptionStatus;
+
