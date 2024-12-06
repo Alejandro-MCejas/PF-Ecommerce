@@ -38,7 +38,7 @@ export class CategoriesController {
   @Roles(UserRole.ADMIN)
   async updateCategoryController(@Param('id') id: string, @Body() category: { name: string }, @Res() res: Response) {
     const updatedCategory = await this.categoriesService.updateCategoryService(id, category);
-    return res.status(200).json({ message: `La categoria con el id: ${updatedCategory.id} ha sido actualizada` });
+    return res.status(200).json({ message: `the category with the id : ${updatedCategory.id} has been updated` });
 
   }
 
@@ -48,6 +48,6 @@ export class CategoriesController {
   @Roles(UserRole.ADMIN)
   async deleteCategoryController(@Param('id') id: string, @Res() res: Response) {
     const deletedCategory = await this.categoriesService.deleteCategoryService(id);
-    return res.status(200).json({ message: `La categoria con el id: ${deletedCategory.id} ha sido eliminada` })
+    return res.status(200).json({ message: `the category with the id:  ${deletedCategory.id} has been deleted` })
   }
 }

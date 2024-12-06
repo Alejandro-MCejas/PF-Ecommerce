@@ -27,7 +27,7 @@ export class MercadoPagoController {
     console.log('Parámetros:', { payment_id, status, merchant_order_id });
     
     return {
-      message: 'Feedback recibido correctamente',
+      message: 'feedback successfully received',
       data: { payment_id, status, merchant_order_id },
     };
   }

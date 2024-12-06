@@ -88,6 +88,6 @@ export class UsersController {
   @Roles(UserRole.ADMIN)
   async deleteUserController(@Param('id') id: string, @Res() res: Response) {
     const deletedUser = await this.usersService.deleteUserService(id);
-    return res.status(200).json({ message: `El usuario ${deletedUser.name} ha sido eliminado` })
+    return res.status(200).json({ message: `User ${deletedUser.name} was eliminated` })
   }
 }
