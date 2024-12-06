@@ -22,7 +22,7 @@ export class Reviews{
     @JoinColumn({ name: 'user_id' })
     user:Users;
 
-    @ManyToOne(() => Products, (products) => products.reviews)
+    @ManyToOne(() => Products, (products) => products.reviews, {onDelete: 'CASCADE'})
     @JoinColumn({ name: 'product_id' })
     products:Products;
 }
