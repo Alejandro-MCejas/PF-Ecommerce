@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "@/context/Authcontext";
 import ChangePassword from "../ChangePassword/ChangePassword";
 import { userSession } from "@/interfaces/ISession";
+import Cookies from "js-cookie";
 
 const AUTH0_BASE_URL: string | undefined = process.env.NEXT_PUBLIC_AUTH0_BASE_URL;
 
@@ -50,6 +51,7 @@ const Login = () => {
         name: "",
         picture: ""
       };
+      // Cookies.set('token',token)
 
       setUserData(userSessionData);
 

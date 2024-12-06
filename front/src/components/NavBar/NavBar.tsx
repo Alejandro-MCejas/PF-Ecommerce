@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 
 import logoApp from "../../../public/logoApp.png";
 import Image from "next/image";
+import Cookies from "js-cookie";
+import { logout } from "@/helpers/userHelper";
 
 const NavBar = () => {
   const { cartCount } = useCart();
@@ -23,8 +25,7 @@ const NavBar = () => {
   const [clientRendered, setClientRendered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleClose = () => {
-    
+  const handleClose = async () => {
     localStorage.clear();
     setUserData(null);
     const Toast = Swal.mixin({
@@ -43,7 +44,9 @@ const NavBar = () => {
       icon: "success",
       title: "Thank you for visiting our website, come back soon",
     });
-    router.push("/");
+    await logout()
+    // Cookies.remove('token', { path: '/login' });
+    // router.push("/");
   };
 
   useEffect(() => {
@@ -78,7 +81,7 @@ const NavBar = () => {
           {role === undefined ? (
             <div className="w-[100px] md:w-[300px] flex flex-col md:flex-row justify-center items-center md:gap-3">
               <Link href="/login" className=" rounded-md w-full md:px-4 md:py-2 text-white text-[20px]  md:text-[30px] font-extralight text-center neon-text md:hover:text-[40px] ">Log In</Link>
-              <Link href="/register" className="rounded-md w-full md:px-4 md:py-2 text-white text-[20px] font-extralight text-center neon-text md:hover:text-[40px]">Register</Link>
+              <Link href="/register" className="rounded-md w-full md:px-4 md:py-2 text-white text-[20px] md:text-[30px] font-extralight text-center neon-text md:hover:text-[40px]">Register</Link>
             </div>
           ) : (
             <div className="md:block">
