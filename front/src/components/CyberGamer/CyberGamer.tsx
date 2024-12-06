@@ -4,9 +4,10 @@ import RandomProductsComponent from "@/components/RandomProductCard/RandomProduc
 import { fetchingProducts } from "@/helpers/productHelper";
 import EditGameSuscriptionModal from "../EditGameSuscriptionModal/EditGameSuscriptionModal";
 import SubscriptionStatus from "../YouSubscribed/YouSubscribed";
+import { useAuth } from "@/context/Authcontext";
 
 const CyberGamer = () => {
-
+    const {userData} = useAuth()
     // const productList = await fetchingProducts()
     return (
         <div className="w-full min-h-screen">
@@ -23,7 +24,14 @@ const CyberGamer = () => {
                     </div>
                 </div>
             </div>
-            <SubscriptionStatus />
+            {
+                userData?.user.admin === "user" ? (
+                    <SubscriptionStatus />
+                ) : (
+                    <div>
+                    </div>
+                )
+            }
         </div>
     )
 }
