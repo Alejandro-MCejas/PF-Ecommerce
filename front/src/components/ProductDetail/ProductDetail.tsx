@@ -53,15 +53,28 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await deleteProductByID(product.id, userData.token);
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
-                router.push("/products");
+                try {
+                    const deletedProduct = await deleteProductByID(product.id, userData.token);
+                    console.log("Deleted product:", deletedProduct);
+        
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+        
+                    router.push("/products");
+                } catch (error) {
+                    console.error("Error deleting product:", error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Failed to delete the product. Please try again later.",
+                        icon: "error"
+                    });
+                }
             }
         });
+        
     };
 
 

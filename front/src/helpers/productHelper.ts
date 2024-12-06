@@ -138,13 +138,22 @@ export const deleteProductByID = async (id: string, token: string) => {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
-        })
-        const productByID = await response.json()
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error response from server:", errorData);
+            throw new Error(`Error deleting product: ${response.status} - ${response.statusText}`);
+        }
+
+        const productByID = await response.json();
         return productByID;
     } catch (error) {
+        console.error("Fetch error:", error);
         throw new Error(`HTTP error! status: ${error}`);
     }
-}
+};
+
 
 export const addReview = async (review: AddReviewProps, token: string) => {
     console.log(review);

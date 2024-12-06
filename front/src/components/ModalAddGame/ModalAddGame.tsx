@@ -47,11 +47,18 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = event.target;
+    
+        // Convertir a número si es necesario (para stock y price)
+        const parsedValue = (type === 'number' && (name === 'stock' || name === 'price'))
+            ? parseFloat(value) || 0
+            : value;
+    
         setNewGame((prevGame) => ({
             ...prevGame,
-            [name]: type === 'number' ? parseFloat(value) || 0 : value,
+            [name]: parsedValue, // parsedValue siempre tendrá el tipo correcto
         }));
     };
+    
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
@@ -63,19 +70,28 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("New game submitted:", newGame);
-
-        if (!userData?.token) {
-            if (!userData?.token) {
-                Swal.fire({
-                    title: "Error",
-                    text: "User token is missing. Please log in again.",
-                    icon: "error"
-                });
-                return; // Salir de la función si el token no está presente
-            }
+    
+        // Validación adicional antes de enviar
+        if (newGame.stock < 0 || newGame.price < 0) {
+            Swal.fire({
+                title: "Error",
+                text: "Stock and price cannot be negative.",
+                icon: "error",
+            });
+            return;
         }
-
+    
+        console.log("New game submitted:", newGame);
+    
+        if (!userData?.token) {
+            Swal.fire({
+                title: "Error",
+                text: "User token is missing. Please log in again.",
+                icon: "error",
+            });
+            return; // Salir de la función si el token no está presente
+        }
+    
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "You will add this game to CyberGamer",
@@ -83,29 +99,29 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, add it!"
+            confirmButtonText: "Yes, add it!",
         });
-
+    
         if (result.isConfirmed) {
             setIsLoading(true); // Mostrar el spinner de carga
             try {
                 const newProduct = await addProduct(newGame, userData.token);
                 console.log("Product added:", newProduct);
-
+    
                 Swal.fire({
                     title: "Added successfully!",
                     text: "The game is now in CyberGamer",
-                    icon: "success"
+                    icon: "success",
                 }).then(() => {
                     window.location.reload(); // Recargar la página tras la confirmación
                 });
             } catch (error) {
                 console.error("Error adding product:", error);
-
+    
                 Swal.fire({
                     title: "Ups, something went wrong!",
                     text: "The game couldn't be added",
-                    icon: "error"
+                    icon: "error",
                 });
             } finally {
                 setIsLoading(false); // Ocultar el spinner de carga
@@ -182,9 +198,6 @@ const AddProductForm = ({ categories }: { categories: ICategories[] }) => {
     const removeImage = (index: number) => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
-
-
-
 
     if (userData?.user.admin !== "admin") return null;
 
