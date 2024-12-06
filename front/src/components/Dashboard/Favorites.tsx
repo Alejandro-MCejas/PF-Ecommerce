@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/Authcontext";
 import { getFavorites } from "@/helpers/userHelper";
 import { IProduct } from "@/interfaces/IProduct";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Favorites = () => {
@@ -36,16 +37,16 @@ const Favorites = () => {
       <h2 className="text-2xl font-semibold text-gray-800">Your Favorite Games</h2>
       <div className="flex flex-wrap gap-5">
         {favoriteGames.map(game => (
-          <div key={game.id} className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-between">
-            <div>
-              <h3 className="text-lg font-bold text-gray-700">{game.name}</h3>
-              <p className="text-sm text-gray-600 mt-2">{game.description}</p>
-              <p className="text-sm text-gray-600 mt-2">${game.price}</p>
+          <Link href={`/products/${game.id}`} key={game.id}>
+            <div className="bg-gray-100 p-4 rounded-lg shadow-md flex flex-col justify-between">
+              <div className="w-full flex justify-center items-center ">
+                <h3 className="text-lg font-bold text-gray-700">{game.name}</h3>
+              </div>
+              <div className="">
+                <img src={game.image[0]} alt="logoJuego" />
+              </div>
             </div>
-            <div className="">
-              <img src={game.image[0]} alt="logoJuego" />
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

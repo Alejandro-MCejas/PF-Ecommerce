@@ -181,7 +181,7 @@ const MyInformation = () => {
                 </div>
             </div>
 
-            <SubscriptionStatus />
+
 
             <div className="flex justify-center">
                 {isEditing ? (

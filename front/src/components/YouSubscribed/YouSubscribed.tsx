@@ -38,71 +38,79 @@ const SubscriptionStatus = () => {
       return;
     }
 
-    const confirmResult = await Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to cancel your subscription.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, cancel it!",
-    });
+    try {
+      const confirmResult = await Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to cancel your subscription.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it!",
+      });
 
-    if (confirmResult.isConfirmed) {
-      try {
-        const cancelMessage = await cancelSuscription(userData.user.id, userData.token);
-        console.log(cancelMessage);
-
-        await Swal.fire({
-          title: "Subscription Cancelled",
-          text: "Your subscription has been cancelled successfully.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-
-        // Limpiar sesión
-        localStorage.removeItem("Token");
-        setUserData(null); // Limpia los datos del contexto
-        router.push("/login"); // Redirige al login
-      } catch (error) {
-        console.error("Error cancelling subscription:", error);
-        await Swal.fire({
-          title: "Error",
-          text: "Something went wrong while cancelling your subscription.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+      if (!confirmResult.isConfirmed) {
+        console.log("Cancellation aborted by user.");
+        return; // El usuario canceló la acción
       }
+
+      const cancelMessage = await cancelSuscription(userData.user.id, userData.token);
+      console.log("Subscription cancelled:", cancelMessage);
+
+      // Mostrar mensaje de éxito
+      await Swal.fire({
+        title: "Subscription Cancelled",
+        text: "Your subscription has been cancelled successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
+      // Limpiar sesión después de que el usuario cierre el mensaje de éxito
+      localStorage.clear();
+      setUserData(null); // Limpia los datos del contexto
+      router.push("/login"); // Redirige al login
+    } catch (error) {
+      console.error("Error cancelling subscription:", error);
+
+      // Mostrar mensaje de error
+      await Swal.fire({
+        title: "Error",
+        text: "Something went wrong while cancelling your subscription.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
   return (
     <div>
       {userData?.user?.isSuscription ? (
-        <>
-          <div className="text-sm text-gray-600">
-            You are subscribed to{" "}
-            <span className="text-blue-500 font-semibold">CyberGamer</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex-1 flex flex-col">
-              <label className="text-gray-700">Expiration date</label>
-              <input
-                type="text"
-                className="p-2 border border-gray-300 rounded-lg"
-                placeholder="12/12/2024"
-                value={expirationDate}
-                disabled
-              />
+        <div className="p-10">
+          <div className="bg-white w-full max-w-[800px] font-bold mx-auto p-4 flex justify-center items-center flex-col rounded-lg">
+            <div className="text-[20px] md:text-[40px] text-black">
+              You are subscribed to{" "}
+              <span className="text-violet-500 font-semibold">CyberGamer</span>
             </div>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-              onClick={handleCancelSubscription}
-            >
-              Cancel subscription
-            </button>
+            <div className="flex flex-col justify-center items-center space-x-4 gap-5 w-full">
+              <div className="flex-1 flex flex-col justify-start items-start w-3/4">
+                <label className="text-gray-700 font-semibold">Expiration date</label>
+                <input
+                  type="text"
+                  className="p-2 border border-gray-300 rounded-lg w-full"
+                  placeholder="12/12/2024"
+                  value={expirationDate}
+                  disabled
+                />
+              </div>
+              <button
+                className="bg-violet-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 w-3/4"
+                onClick={handleCancelSubscription}
+              >
+                Cancel subscription
+              </button>
+            </div>
           </div>
-        </>
+        </div>
       ) : (
         <>
           <div className="text-sm text-gray-600">

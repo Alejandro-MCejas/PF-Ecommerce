@@ -3,6 +3,7 @@ import gifImage from "../../../public/gif.gif"
 import RandomProductsComponent from "@/components/RandomProductCard/RandomProductCard";
 import { fetchingProducts } from "@/helpers/productHelper";
 import EditGameSuscriptionModal from "../EditGameSuscriptionModal/EditGameSuscriptionModal";
+import SubscriptionStatus from "../YouSubscribed/YouSubscribed";
 
 const CyberGamer = () => {
 
@@ -22,7 +23,7 @@ const CyberGamer = () => {
                     </div>
                 </div>
             </div>
-
+            <SubscriptionStatus />
         </div>
     )
 }
