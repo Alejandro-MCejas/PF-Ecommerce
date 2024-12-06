@@ -1,7 +1,7 @@
 "use client"
 
 import { IProduct } from "@/interfaces/IProduct";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarRating from "../StarRating/StarRating";
 import Swal from "sweetalert2";
 import ModalEditGame from "../ModalEditGame/ModalEditGame";
@@ -16,11 +16,11 @@ import { addFavorite, eliminateFavorite, getFavorites } from "@/helpers/userHelp
 import Favorites from "../Dashboard/Favorites";
 import FavoriteButton from "../FavoriteButton/FavoriteButton";
 import Link from "next/link";
+import { searchYoutubeVideo } from "@/components/Youtube/Youtube";
 
 interface ProductDetail {
     product: IProduct;
 }
-
 const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct }) => {
     const { userData } = useAuth()
     const [rating, setRating] = useState(0);
@@ -31,6 +31,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
     const price = typeof product.price === "string" ? parseFloat(product.price) : product.price;
     const discount = typeof product.discount === "string" ? parseFloat(product.discount) : product.discount;
     const discountedPrice = discount > 0 ? Math.floor((price - (price * discount) / 100) * 100) / 100 : price;
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
     // console.log(discountedPrice)
 
     const handleDeleteGame = () => {
@@ -63,9 +64,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         });
     };
-
-
-
     const handleAddCyberGamer = async () => {
         if (!userData?.token) {
             Swal.fire({
@@ -105,7 +103,6 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         }
     };
-
     const handleClaimeProduct = async () => {
         if (userData?.user.isSuscription === true && product.suscription === true) {
             try {
@@ -147,8 +144,14 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
             }
         }
     };
-
-
+    useEffect(() => {
+        const fetchVideo = async () => {
+            const video = await searchYoutubeVideo(product.name);
+            setVideoUrl(video);
+        };
+        fetchVideo();
+    }, [product.name]);
+   
     return (
         <div className="w-full">
             {/* Imagen e informacion */}
@@ -184,7 +187,7 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
 
 
                 {/* Informacion */}
-                < div className="w-full md:w-1/2 md:min-w-[700px] md:min-h-[750px]  md:max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
+                < div className="w-full md:w-1/2 md:min-w-[700px] md:min-h-[780px]  md:max-h-[750px] bg-white border-2 border-black flex justify-center items-start rounded-md" >
                     <div className="w-full md:h-[750px] flex flex-col justify-evenly items-start p-10">
                         <div className="w-full flex justify-end items-end">
                             <FavoriteButton
@@ -192,6 +195,21 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                 productId={product.id}
                             />
                         </div>
+                        <div >
+                        {videoUrl && (
+                            <div className=" flex flex-col items-center">
+                                <h3 className="text-[20px] md:text-[38px] font-semibold">Official Video</h3>
+                                <iframe
+                                    width="100%"
+                                    height="315"
+                                    src={videoUrl}
+                                    title="YouTube video player"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        )}
+</div>
                         <div className="flex flex-col justify-evenly items-start h-[200px] mt-0">
                             <h2 className="text-[30px] md:text-[48px] font-semibold">{product.name}</h2>
                             {/* Sistema de puntuacion de estrellas */}
@@ -225,8 +243,11 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                 )
                             }
                         </div>
-                        <div>
+                        <div className=" flex flex-col md:flex-row w-full">
                             {/* Mostrar el precio dinámicamente */}
+                            <div className="p-4 flex-1">
+                                <div>
+                          
                             {
                                 discount === 0 ? (
                                     <div>
@@ -260,6 +281,8 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                 </div>
                             )
                         }
+                    </div>   
+                     <div className="p-4 flex-1">
                         <div className="w-full">
                             {/* Lógica de botones según el rol */}
                             {userData?.user.admin !== "admin" ? (
@@ -309,6 +332,9 @@ const ProductDetail: React.FC<ProductDetail> = ({ product }: { product: IProduct
                                         <button className="w-[300px] h-[50px] bg-red-500 text-white px-4 py-2 rounded" onClick={handleDeleteGame}>Delete</button>
                                 </div>
                             )}
+                                      
+                                      </div>
+                            </div>
                         </div>
                     </div>
                 </div >
