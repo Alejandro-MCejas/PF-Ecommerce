@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { createOrder, createPaymentMercadoPago } from "@/helpers/orderHelper";
 import { useAuth } from "@/context/Authcontext";
+import Link from "next/link";
 
 export const CartView = () => {
   const { cart, removeFromCart, clearCart, orderData, setOrderData } = useCart();
@@ -156,12 +157,12 @@ export const CartView = () => {
           </div>
         ) : (
           <div className="flex flex-col justify-evenly min-h-[500px] items-center">
-            <h2 className="text-violet-500 font-tilt-neon text-[60px] text-center ">
+            <h2 className="text-violet-500 font-tilt neon-text text-[60px] text-center ">
               You don&apos;t have anything in your cart
             </h2>
-            <button className="w-[200px] h-[50px] bg-purple-500 rounded-md shadow-violet-400 shadow-2xl font-semibold text-white text-[20px]">
-              Start Shopping
-            </button>
+            <Link href={"/products"} className="w-[200px] h-[50px] flex justify-center items-center bg-purple-500 shadow-violet-400 rounded-md">
+                <h1 className="font-semibold text-white text-[20px]">Start shopping</h1>
+            </Link>
           </div>
         )}
       </div>

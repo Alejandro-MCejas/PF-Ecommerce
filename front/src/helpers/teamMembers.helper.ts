@@ -34,8 +34,8 @@ const teamMembers = [
         "profession":"BackEnd Developer",
         "image":"https://res.cloudinary.com/dvpenabty/image/upload/v1733353761/WhatsApp_Image_2024-12-04_at_19.58.03_zb3sc4.jpg",
         // "linkFacebook":"",
-        "linkGitHub":"",
-        "linkLinkedIn":""
+        "linkGitHub":"https://github.com/Agustina-NBlanco",
+        "linkLinkedIn":"https://www.linkedin.com/in/agustina-nahir-blanco-2392672bb?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
     },
     {
         "id": 5,

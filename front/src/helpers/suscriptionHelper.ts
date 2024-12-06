@@ -45,7 +45,10 @@ export const cancelSuscription = async (userId:string , token:string):Promise<st
             }
         })
         const cancelResponse = await response.json()
+        console.log(cancelResponse)
+        debugger
         return cancelResponse
+    
     } catch (error) {
         console.log(error)
     }
