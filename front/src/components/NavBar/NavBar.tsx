@@ -28,6 +28,7 @@ const NavBar = () => {
   const handleClose = async () => {
     localStorage.clear();
     setUserData(null);
+    await logout()
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -44,7 +45,7 @@ const NavBar = () => {
       icon: "success",
       title: "Thank you for visiting our website, come back soon",
     });
-    await logout()
+
     // Cookies.remove('token', { path: '/login' });
     // router.push("/");
   };

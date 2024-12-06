@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ProductReviewCard from "../ProductReviewCard/ProductReviewCard";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const ReviewGames = ({ product }: { product: IProduct }) => {
     const { userData } = useAuth();
@@ -33,12 +34,45 @@ const ReviewGames = ({ product }: { product: IProduct }) => {
     };
 
     const handleSumbitReview = async () => {
-        try {
-            const review = await addReview(reviewProduct, userData?.token || "");
-            console.log("Review submitted:", review);
-            router.refresh()
-        } catch (error) {
-            console.error("Error submitting review:", error);
+        // Mostrar confirmación con SweetAlert2
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to submit your review?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, submit it!",
+            cancelButtonText: "No, cancel",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const review = await addReview(reviewProduct, userData?.token || "");
+                console.log("Review submitted:", review);
+
+                // Mostrar confirmación de éxito
+                await Swal.fire({
+                    title: "Review Submitted!",
+                    text: "Your review has been added successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+
+                router.refresh();
+            } catch (error) {
+                console.error("Error submitting review:", error);
+
+                // Mostrar error en SweetAlert2
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong while submitting your review.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        } else {
+            console.log("Review submission canceled by user.");
         }
     };
 
